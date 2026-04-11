@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#1B2F5E" />
+  <title>Amigo Care ABA — Trial-Based FA</title>
+  <link rel="manifest" href="manifest.json" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#1B2F5E', light: '#2A4177', dark: '#0F1D3D' },
+            coral: { DEFAULT: '#E8705A', light: '#F09080', dark: '#D4523B' },
+            cond: {
+              ignore: '#6366F1',
+              attention: '#F59E0B',
+              escape: '#EF4444',
+              tangible: '#8B5CF6',
+            }
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    body { overscroll-behavior: none; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes pulseRing { 0%,100% { box-shadow: 0 0 0 0 rgba(232,112,90,0.4); } 50% { box-shadow: 0 0 0 12px rgba(232,112,90,0); } }
+    @keyframes countPulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+    @keyframes flashGreen { 0% { background-color: rgba(16,185,129,0.15); } 100% { background-color: transparent; } }
+    @keyframes flashRed { 0% { background-color: rgba(239,68,68,0.12); } 100% { background-color: transparent; } }
+    .animate-slideUp { animation: slideUp 0.3s ease-out; }
+    .animate-fadeIn { animation: fadeIn 0.35s ease-out; }
+    .animate-flashGreen { animation: flashGreen 0.6s ease-out; }
+    .animate-flashRed { animation: flashRed 0.6s ease-out; }
+    .animate-countPulse { animation: countPulse 0.3s ease-out; }
+    .animate-pulseRing { animation: pulseRing 1.5s infinite; }
+    .btn-press { transition: transform 0.08s; }
+    .btn-press:active { transform: scale(0.96); }
+    .timer-mono { font-variant-numeric: tabular-nums; }
+    .drag-over { border-color: #E8705A !important; background-color: rgba(232,112,90,0.06) !important; }
+    input:focus, textarea:focus, select:focus { outline: none; box-shadow: 0 0 0 3px rgba(27,47,94,0.15); }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    @media print { .no-print { display: none !important; } }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js" crossorigin></script>
+  <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin></script>
+
+  <script type="text/babel">
+// ═══════════════════════════════════════════════════
+// AMIGO CARE ABA — Trial-Based Functional Analysis
+// Based on Bloom (2011, 2013) TBFA methodology
+// ═══════════════════════════════════════════════════
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+// ─── CONDITION CONFIG ───────────────────────────
+const COND_META = {
+  ignore: {
+    color: '#6366F1', bg: 'bg-indigo-500', bgLight: 'bg-indigo-50', text: 'text-indigo-700',
+    hasControl: false, testCount: 2,
+  },
+  attention: {
+    color: '#F59E0B', bg: 'bg-amber-500', bgLight: 'bg-amber-50', text: 'text-amber-700',
+    hasControl: true, testCount: 1,
+  },
+  tangible: {
+    color: '#8B5CF6', bg: 'bg-violet-500', bgLight: 'bg-violet-50', text: 'text-violet-700',
+    hasControl: true, testCount: 1,
+  },
+  escape: {
+    color: '#EF4444', bg: 'bg-red-500', bgLight: 'bg-red-50', text: 'text-red-700',
+    hasControl: true, testCount: 1,
+  },
+};
+
+const DEFAULT_TRIAL_DURATION = 120; // 2 minutes
+const DEFAULT_PAIRS = 5;
+
+// ─── TRANSLATIONS ───────────────────────────────
+const T = {
+  en: {
+    appTitle: 'Trial-Based FA',
+    sessionSetup: 'Session Setup',
+    clientName: 'Client First Name',
+    bcbaName: 'BCBA Name',
+    sessionDate: 'Session Date',
+    targetBehaviors: 'Target Behaviors (receiving consequences)',
+    targetBehaviorsHint: 'e.g., SIB, AGG, PD',
+    nonConsequenceBehaviors: 'Behaviors NOT receiving consequences',
+    nonConsequenceBehaviorsHint: 'e.g., vocal stereotypy',
+    blockedBehaviors: 'Permanently blocked behaviors',
+    blockedBehaviorsHint: 'e.g., elopement',
+    protectiveEquipment: 'Protective equipment criteria',
+    protectiveEquipmentHint: 'e.g., helmet when head-hitting > 3x',
+    mechanicalRestraint: 'Mechanical restraint / blocking criteria',
+    mechanicalRestraintHint: 'e.g., arm blocking for face hits',
+    trialDuration: 'Trial duration (seconds)',
+    location: 'Location',
+    livingArea: 'Living area',
+    bedroom: 'Bedroom',
+    pairsPerCondition: 'Trial pairs per condition',
+    preferredItems: 'Highly preferred items (for Tangible)',
+    preferredItemsHint: 'e.g., iPad, toy cars',
+    demandItems: 'Demand materials (for Escape)',
+    demandItemsHint: 'e.g., worksheets, puzzle pieces',
+    conditionOrder: 'Condition Order',
+    conditionOrderHint: 'Drag to reorder',
+    beginSession: 'Begin Session',
+    ignore: 'Ignore',
+    attention: 'Attention',
+    tangible: 'Tangible',
+    escape: 'Escape',
+    control: 'CONTROL',
+    test: 'TEST',
+    test1: 'TEST 1',
+    test2: 'TEST 2',
+    // Ignore instructions
+    ignoreTestInstr: '"We are going to hangout for a while. I will not be available."',
+    ignoreTestDesc: 'No toys available. Do not look at or engage with the client. Ignore all problem behavior and mands for attention.',
+    // Attention instructions
+    attentionControlInstr: '"We\'re going to hangout for a while."',
+    attentionControlDesc: 'Provide high-quality vocal + physical attention. Low preferred toys available.',
+    attentionTestInstr: '"I need to do some work and my attention will not be available for a while."',
+    attentionTestDesc: 'Pretend to be busy. Low preferred toys available. Ignore appropriate mands. Contingent on target behavior: provide statement of concern + brief physical contact, then terminate trial.',
+    // Tangible instructions
+    tangibleControlInstr: '"You may play with your item for a little while."',
+    tangibleControlDesc: 'Client has noncontingent access to highly preferred item.',
+    tangibleTestInstr: '"Time to put this away."',
+    tangibleTestDesc: 'Remove item at trial start. Contingent on target behavior: say "okay", return item, terminate trial.',
+    // Escape instructions
+    escapeControlInstr: '"We\'re going to hangout for a while."',
+    escapeControlDesc: 'No demands present. No toys available. Do not place any demands.',
+    escapeTestInstr: '"We are going to do some work for a while."',
+    escapeTestDesc: 'Present instructional trials using three-step guided compliance. Contingent on target behavior: remove demands, state "Okay, you don\'t have to", turn away, terminate trial.',
+    // Trial UI
+    pair: 'Pair',
+    of: 'of',
+    trialTimer: 'Trial Time',
+    behaviorOccurred: 'Behavior Occurred',
+    waitingForTimer: 'Waiting...',
+    noBehaviorRecorded: 'No behavior — trial complete',
+    behaviorRecorded: 'Behavior occurred',
+    latency: 'Latency',
+    seconds: 'sec',
+    nextTrial: 'Next Trial',
+    nextCondition: 'Next Condition',
+    nextPair: 'Next Pair',
+    finishSession: 'Finish Session',
+    // Pair result
+    pairResult: 'Pair Result',
+    occurred: 'Behavior',
+    noOccurrence: 'No behavior',
+    // Condition summary
+    conditionComplete: 'Condition Complete',
+    controlTrials: 'Control Trials',
+    testTrials: 'Test Trials',
+    withBehavior: 'with behavior',
+    // Session summary
+    sessionSummary: 'Session Summary',
+    sessionComplete: 'Session Complete',
+    condition: 'Condition',
+    controlRate: 'Control %',
+    testRate: 'Test %',
+    differentiated: 'Differentiated',
+    suspectedFunction: 'Suspected Function(s)',
+    interpretation: 'Interpretation',
+    noFunction: 'No differentiation observed',
+    autoReinforcement: 'Automatic reinforcement',
+    socialAttention: 'Social attention',
+    accessTangibles: 'Access to tangibles',
+    escapeFromDemands: 'Escape from demands',
+    copySummary: 'Copy Summary',
+    exportPDF: 'Export PDF',
+    copied: 'Copied!',
+    generating: 'Generating PDF...',
+    // Ignore analysis
+    ignoreAnalysis: 'Ignore Analysis',
+    ignorePositive: 'Behavior occurred during ignore trials, suggesting possible automatic reinforcement.',
+    ignoreNegative: 'No behavior during ignore trials.',
+    // History
+    pastSessions: 'Past Sessions',
+    noSessions: 'No completed sessions yet.',
+    searchPlaceholder: 'Search by client name...',
+    viewSummary: 'View Summary',
+    deleteSession: 'Delete',
+    yes: 'Yes',
+    no: 'No',
+    // Resume
+    resume: 'Resume Session',
+    resumeMessage: 'You have an in-progress session. Resume?',
+    discard: 'Discard & Start New',
+    // General
+    back: 'Back',
+    newSession: 'New Session',
+    language: 'ES',
+    required: 'Required',
+    beginTrial: 'Begin Trial',
+    trialInProgress: 'Trial in progress',
+    ready: 'Ready',
+  },
+  es: {
+    appTitle: 'AF Basado en Ensayos',
+    sessionSetup: 'Configuracion de Sesion',
+    clientName: 'Nombre del Cliente',
+    bcbaName: 'Nombre del BCBA',
+    sessionDate: 'Fecha de Sesion',
+    targetBehaviors: 'Conductas objetivo (con consecuencias)',
+    targetBehaviorsHint: 'ej., autolesion, agresion, destruccion',
+    nonConsequenceBehaviors: 'Conductas SIN consecuencias',
+    nonConsequenceBehaviorsHint: 'ej., estereotipia vocal',
+    blockedBehaviors: 'Conductas bloqueadas permanentemente',
+    blockedBehaviorsHint: 'ej., fuga',
+    protectiveEquipment: 'Criterios de equipo protector',
+    protectiveEquipmentHint: 'ej., casco para golpes en cabeza > 3x',
+    mechanicalRestraint: 'Criterios de restriccion mecanica / bloqueo',
+    mechanicalRestraintHint: 'ej., bloqueo de brazo para golpes en cara',
+    trialDuration: 'Duracion del ensayo (segundos)',
+    location: 'Ubicacion',
+    livingArea: 'Sala',
+    bedroom: 'Dormitorio',
+    pairsPerCondition: 'Pares de ensayos por condicion',
+    preferredItems: 'Items altamente preferidos (para Tangible)',
+    preferredItemsHint: 'ej., iPad, carros de juguete',
+    demandItems: 'Materiales de demanda (para Escape)',
+    demandItemsHint: 'ej., hojas de trabajo, rompecabezas',
+    conditionOrder: 'Orden de Condiciones',
+    conditionOrderHint: 'Arrastra para reordenar',
+    beginSession: 'Iniciar Sesion',
+    ignore: 'Ignorar',
+    attention: 'Atencion',
+    tangible: 'Tangible',
+    escape: 'Escape',
+    control: 'CONTROL',
+    test: 'PRUEBA',
+    test1: 'PRUEBA 1',
+    test2: 'PRUEBA 2',
+    ignoreTestInstr: '"Vamos a pasar el rato por un momento. No estare disponible."',
+    ignoreTestDesc: 'Sin juguetes disponibles. No mirar ni interactuar con el cliente. Ignorar toda conducta problematica.',
+    attentionControlInstr: '"Vamos a pasar el rato por un momento."',
+    attentionControlDesc: 'Proporcionar atencion vocal + fisica de alta calidad. Juguetes de baja preferencia disponibles.',
+    attentionTestInstr: '"Necesito hacer un trabajo y mi atencion no estara disponible por un rato."',
+    attentionTestDesc: 'Fingir estar ocupado. Juguetes de baja preferencia disponibles. Ignorar mandos apropiados. Contingente a conducta objetivo: declaracion de preocupacion + contacto fisico breve, luego terminar ensayo.',
+    tangibleControlInstr: '"Puedes jugar con tu item por un ratito."',
+    tangibleControlDesc: 'El cliente tiene acceso no contingente al item altamente preferido.',
+    tangibleTestInstr: '"Es hora de guardar esto."',
+    tangibleTestDesc: 'Retirar item al inicio. Contingente a conducta objetivo: decir "esta bien", devolver item, terminar ensayo.',
+    escapeControlInstr: '"Vamos a pasar el rato por un momento."',
+    escapeControlDesc: 'Sin demandas presentes. Sin juguetes disponibles.',
+    escapeTestInstr: '"Vamos a hacer un poco de trabajo por un rato."',
+    escapeTestDesc: 'Presentar ensayos instruccionales con guia de cumplimiento de tres pasos. Contingente a conducta objetivo: retirar demandas, decir "Esta bien, no tienes que hacerlo", voltear, terminar ensayo.',
+    pair: 'Par',
+    of: 'de',
+    trialTimer: 'Tiempo del Ensayo',
+    behaviorOccurred: 'Conducta Ocurrio',
+    waitingForTimer: 'Esperando...',
+    noBehaviorRecorded: 'Sin conducta — ensayo completo',
+    behaviorRecorded: 'Conducta ocurrio',
+    latency: 'Latencia',
+    seconds: 'seg',
+    nextTrial: 'Siguiente Ensayo',
+    nextCondition: 'Siguiente Condicion',
+    nextPair: 'Siguiente Par',
+    finishSession: 'Finalizar Sesion',
+    pairResult: 'Resultado del Par',
+    occurred: 'Conducta',
+    noOccurrence: 'Sin conducta',
+    conditionComplete: 'Condicion Completa',
+    controlTrials: 'Ensayos Control',
+    testTrials: 'Ensayos Prueba',
+    withBehavior: 'con conducta',
+    sessionSummary: 'Resumen de Sesion',
+    sessionComplete: 'Sesion Completa',
+    condition: 'Condicion',
+    controlRate: '% Control',
+    testRate: '% Prueba',
+    differentiated: 'Diferenciado',
+    suspectedFunction: 'Funcion(es) Sospechada(s)',
+    interpretation: 'Interpretacion',
+    noFunction: 'No se observo diferenciacion',
+    autoReinforcement: 'Reforzamiento automatico',
+    socialAttention: 'Atencion social',
+    accessTangibles: 'Acceso a tangibles',
+    escapeFromDemands: 'Escape de demandas',
+    copySummary: 'Copiar Resumen',
+    exportPDF: 'Exportar PDF',
+    copied: 'Copiado!',
+    generating: 'Generando PDF...',
+    ignoreAnalysis: 'Analisis de Ignorar',
+    ignorePositive: 'La conducta ocurrio durante ensayos de ignorar, sugiriendo posible reforzamiento automatico.',
+    ignoreNegative: 'Sin conducta durante ensayos de ignorar.',
+    pastSessions: 'Sesiones Anteriores',
+    noSessions: 'No hay sesiones completadas.',
+    searchPlaceholder: 'Buscar por nombre de cliente...',
+    viewSummary: 'Ver Resumen',
+    deleteSession: 'Eliminar',
+    yes: 'Si',
+    no: 'No',
+    resume: 'Reanudar Sesion',
+    resumeMessage: 'Tiene una sesion en progreso. Desea reanudarla?',
+    discard: 'Descartar e Iniciar Nueva',
+    back: 'Volver',
+    newSession: 'Nueva Sesion',
+    language: 'EN',
+    required: 'Requerido',
+    beginTrial: 'Iniciar Ensayo',
+    trialInProgress: 'Ensayo en progreso',
+    ready: 'Listo',
+  }
+};
+
+// ─── HELPERS ────────────────────────────────────
+const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const today = () => new Date().toISOString().split('T')[0];
+const fmtTime = (s) => { const m = Math.floor(s/60); return `${m}:${(s%60).toString().padStart(2,'0')}`; };
+const pct = (n, d) => d === 0 ? 0 : Math.round((n / d) * 100);
+
+function playBeep(freq = 880, dur = 0.12) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = freq; o.type = 'sine'; g.gain.value = 0.12;
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    o.start(); o.stop(ctx.currentTime + dur);
+  } catch(e) {}
+}
+function vibrate() { try { navigator.vibrate && navigator.vibrate(50); } catch(e) {} }
+
+// ─── STORAGE ────────────────────────────────────
+const SK = { current: 'tbfa_current', sessions: 'tbfa_sessions', lang: 'tbfa_lang', bcba: 'tbfa_bcba' };
+const load = (k, fb) => { try { const d = localStorage.getItem(k); return d ? JSON.parse(d) : fb; } catch { return fb; } };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} };
+
+// ─── WAKE LOCK ──────────────────────────────────
+function useWakeLock(active) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (active && 'wakeLock' in navigator) {
+      navigator.wakeLock.request('screen').then(w => { ref.current = w; }).catch(() => {});
+    }
+    return () => { if (ref.current) { ref.current.release(); ref.current = null; } };
+  }, [active]);
+}
+
+// ─── BUILD TRIAL SEQUENCE ───────────────────────
+// Returns an array of { condKey, trialType, pairIndex } objects
+function buildTrialSequence(conditionOrder, pairsPerCondition) {
+  const seq = [];
+  for (const cond of conditionOrder) {
+    const meta = COND_META[cond];
+    for (let p = 0; p < pairsPerCondition; p++) {
+      if (cond === 'ignore') {
+        seq.push({ condKey: cond, trialType: 'test1', pairIndex: p });
+        seq.push({ condKey: cond, trialType: 'test2', pairIndex: p });
+      } else {
+        seq.push({ condKey: cond, trialType: 'control', pairIndex: p });
+        seq.push({ condKey: cond, trialType: 'test', pairIndex: p });
+      }
+    }
+  }
+  return seq;
+}
+
+// ─── CHART COMPONENT ────────────────────────────
+function BarChart({ data, t }) {
+  // data: [{ cond, condName, color, controlRate, testRate }]
+  const w = 500, h = 260;
+  const pad = { top: 20, right: 20, bottom: 55, left: 45 };
+  const cw = w - pad.left - pad.right;
+  const ch = h - pad.top - pad.bottom;
+  const groupW = cw / data.length;
+  const barW = groupW * 0.3;
+  const gap = groupW * 0.08;
+  const yTicks = [0, 20, 40, 60, 80, 100];
+
+  const sy = (v) => pad.top + ch - (v / 100) * ch;
+
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} className="w-full" style={{maxHeight: h}}>
+      {/* Grid lines */}
+      {yTicks.map(v => (
+        <g key={v}>
+          <line x1={pad.left} y1={sy(v)} x2={w - pad.right} y2={sy(v)} stroke="#E2E8F0" strokeDasharray="3 3" />
+          <text x={pad.left - 8} y={sy(v) + 4} textAnchor="end" fill="#94A3B8" fontSize="11">{v}%</text>
+        </g>
+      ))}
+      {/* Axis */}
+      <line x1={pad.left} y1={pad.top} x2={pad.left} y2={pad.top + ch} stroke="#CBD5E1" />
+      <line x1={pad.left} y1={pad.top + ch} x2={w - pad.right} y2={pad.top + ch} stroke="#CBD5E1" />
+      {/* Bars */}
+      {data.map((d, i) => {
+        const gx = pad.left + i * groupW + groupW / 2;
+        const controlX = gx - barW - gap / 2;
+        const testX = gx + gap / 2;
+        const controlH = (d.controlRate / 100) * ch;
+        const testH = (d.testRate / 100) * ch;
+        return (
+          <g key={d.cond}>
+            {/* Control bar */}
+            {d.controlRate !== null && (
+              <g>
+                <rect x={controlX} y={sy(d.controlRate)} width={barW} height={controlH} rx="4" fill="#CBD5E1" />
+                {d.controlRate > 0 && <text x={controlX + barW/2} y={sy(d.controlRate) - 5} textAnchor="middle" fill="#64748B" fontSize="10" fontWeight="600">{d.controlRate}%</text>}
+              </g>
+            )}
+            {/* Test bar */}
+            <rect x={d.controlRate !== null ? testX : gx - barW/2} y={sy(d.testRate)} width={barW} height={testH} rx="4" fill={d.color} />
+            {d.testRate > 0 && <text x={(d.controlRate !== null ? testX : gx - barW/2) + barW/2} y={sy(d.testRate) - 5} textAnchor="middle" fill={d.color} fontSize="10" fontWeight="600">{d.testRate}%</text>}
+            {/* Label */}
+            <text x={gx} y={pad.top + ch + 18} textAnchor="middle" fill="#1E293B" fontSize="11" fontWeight="500">{d.condName}</text>
+          </g>
+        );
+      })}
+      {/* Legend */}
+      <rect x={w - 160} y={h - 18} width="12" height="8" rx="2" fill="#CBD5E1" />
+      <text x={w - 144} y={h - 11} fontSize="10" fill="#64748B">{t.control}</text>
+      <rect x={w - 90} y={h - 18} width="12" height="8" rx="2" fill="#6366F1" />
+      <text x={w - 74} y={h - 11} fontSize="10" fill="#64748B">{t.test}</text>
+    </svg>
+  );
+}
+
+// ─── HEADER ─────────────────────────────────────
+function Header({ t, lang, setLang, onHistory, showBack, onBack, showHistory }) {
+  return (
+    <header className="bg-navy text-white px-4 py-3 flex items-center justify-between shadow-lg sticky top-0 z-50">
+      <div className="flex items-center gap-3">
+        {showBack && (
+          <button onClick={onBack} className="p-1 rounded-lg hover:bg-navy-light transition-colors btn-press">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
+          </button>
+        )}
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-coral flex items-center justify-center text-xs font-bold overflow-hidden relative">
+            <span>AC</span>
+            <img src="Amigocare.png" alt="" className="absolute inset-0 w-full h-full object-cover" onError={(e) => { e.target.style.display='none'; }} />
+          </div>
+          <div>
+            <div className="text-sm font-bold leading-tight">Amigo Care</div>
+            <div className="text-[10px] text-slate-300 leading-tight">{t.appTitle}</div>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        {showHistory && (
+          <button onClick={onHistory} className="text-xs bg-navy-light px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors btn-press">{t.pastSessions}</button>
+        )}
+        <button onClick={() => setLang(lang === 'en' ? 'es' : 'en')}
+          className="text-xs font-bold bg-coral px-3 py-1.5 rounded-lg hover:bg-coral-dark transition-colors btn-press">{t.language}</button>
+      </div>
+    </header>
+  );
+}
+
+// ─── SETUP SCREEN ───────────────────────────────
+function SetupScreen({ t, lang, onStart }) {
+  const [form, setForm] = useState({
+    clientName: '', bcbaName: load(SK.bcba, ''),
+    targetBehaviors: '', nonConsequenceBehaviors: '', blockedBehaviors: '',
+    protectiveEquipment: '', mechanicalRestraint: '',
+    trialDuration: DEFAULT_TRIAL_DURATION, location: 'living_area',
+    pairsPerCondition: DEFAULT_PAIRS,
+    preferredItems: '', demandItems: '',
+  });
+  const [order, setOrder] = useState(['ignore', 'attention', 'tangible', 'escape']);
+  const [errors, setErrors] = useState({});
+  const [dragIdx, setDragIdx] = useState(null);
+  const condNames = { ignore: t.ignore, attention: t.attention, tangible: t.tangible, escape: t.escape };
+
+  const set = (k, v) => { setForm(f => ({...f, [k]: v})); setErrors(e => ({...e, [k]: false})); };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const errs = {};
+    if (!form.clientName.trim()) errs.clientName = true;
+    if (!form.bcbaName.trim()) errs.bcbaName = true;
+    if (!form.targetBehaviors.trim()) errs.targetBehaviors = true;
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+    save(SK.bcba, form.bcbaName.trim());
+    onStart({ ...form, clientName: form.clientName.trim(), bcbaName: form.bcbaName.trim(), date: form.date || today() }, order);
+  }
+
+  const inputCls = (k) => `w-full px-4 py-3 rounded-xl border-2 text-base transition-colors ${errors[k] ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white focus:border-navy'}`;
+  const labelCls = 'block text-sm font-semibold text-slate-600 mb-1';
+
+  function handleDragStart(i) { setDragIdx(i); }
+  function handleDragOver(e, i) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+  function handleDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+  function handleDrop(e, i) {
+    e.currentTarget.classList.remove('drag-over');
+    if (dragIdx === null || dragIdx === i) return;
+    const o = [...order]; const [m] = o.splice(dragIdx, 1); o.splice(i, 0, m);
+    setOrder(o); setDragIdx(null);
+  }
+
+  return (
+    <div className="animate-fadeIn max-w-xl mx-auto p-5 pb-20">
+      <h2 className="text-2xl font-bold text-navy mb-1">{t.sessionSetup}</h2>
+      <p className="text-xs text-slate-400 mb-5">Bloom (2011, 2013) TBFA Protocol</p>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Row: Client + BCBA */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className={labelCls}>{t.clientName}</label>
+            <input type="text" value={form.clientName} onChange={e => set('clientName', e.target.value)} className={inputCls('clientName')} autoComplete="off" />
+          </div>
+          <div>
+            <label className={labelCls}>{t.bcbaName}</label>
+            <input type="text" value={form.bcbaName} onChange={e => set('bcbaName', e.target.value)} className={inputCls('bcbaName')} autoComplete="off" />
+          </div>
+        </div>
+
+        {/* Target behaviors */}
+        <div>
+          <label className={labelCls}>{t.targetBehaviors} *</label>
+          <input type="text" value={form.targetBehaviors} onChange={e => set('targetBehaviors', e.target.value)} className={inputCls('targetBehaviors')} placeholder={t.targetBehaviorsHint} />
+        </div>
+
+        {/* Non-consequence + Blocked */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className={labelCls}>{t.nonConsequenceBehaviors}</label>
+            <input type="text" value={form.nonConsequenceBehaviors} onChange={e => set('nonConsequenceBehaviors', e.target.value)} className={inputCls('')} placeholder={t.nonConsequenceBehaviorsHint} />
+          </div>
+          <div>
+            <label className={labelCls}>{t.blockedBehaviors}</label>
+            <input type="text" value={form.blockedBehaviors} onChange={e => set('blockedBehaviors', e.target.value)} className={inputCls('')} placeholder={t.blockedBehaviorsHint} />
+          </div>
+        </div>
+
+        {/* Protective equipment */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className={labelCls}>{t.protectiveEquipment}</label>
+            <input type="text" value={form.protectiveEquipment} onChange={e => set('protectiveEquipment', e.target.value)} className={inputCls('')} placeholder={t.protectiveEquipmentHint} />
+          </div>
+          <div>
+            <label className={labelCls}>{t.mechanicalRestraint}</label>
+            <input type="text" value={form.mechanicalRestraint} onChange={e => set('mechanicalRestraint', e.target.value)} className={inputCls('')} placeholder={t.mechanicalRestraintHint} />
+          </div>
+        </div>
+
+        {/* Trial params */}
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <label className={labelCls}>{t.trialDuration}</label>
+            <input type="number" min="30" max="600" value={form.trialDuration} onChange={e => set('trialDuration', parseInt(e.target.value) || 120)} className={inputCls('')} />
+          </div>
+          <div>
+            <label className={labelCls}>{t.location}</label>
+            <select value={form.location} onChange={e => set('location', e.target.value)} className={inputCls('')}>
+              <option value="living_area">{t.livingArea}</option>
+              <option value="bedroom">{t.bedroom}</option>
+            </select>
+          </div>
+          <div>
+            <label className={labelCls}>{t.pairsPerCondition}</label>
+            <input type="number" min="1" max="20" value={form.pairsPerCondition} onChange={e => set('pairsPerCondition', parseInt(e.target.value) || 5)} className={inputCls('')} />
+          </div>
+        </div>
+
+        {/* Condition-specific materials */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className={labelCls}>{t.preferredItems}</label>
+            <input type="text" value={form.preferredItems} onChange={e => set('preferredItems', e.target.value)} className={inputCls('')} placeholder={t.preferredItemsHint} />
+          </div>
+          <div>
+            <label className={labelCls}>{t.demandItems}</label>
+            <input type="text" value={form.demandItems} onChange={e => set('demandItems', e.target.value)} className={inputCls('')} placeholder={t.demandItemsHint} />
+          </div>
+        </div>
+
+        {/* Date */}
+        <div>
+          <label className={labelCls}>{t.sessionDate}</label>
+          <input type="date" value={form.date || today()} onChange={e => set('date', e.target.value)} className={inputCls('')} />
+        </div>
+
+        {/* Condition order */}
+        <div>
+          <label className={labelCls}>{t.conditionOrder} <span className="font-normal text-slate-400">— {t.conditionOrderHint}</span></label>
+          <div className="space-y-2">
+            {order.map((cond, idx) => (
+              <div key={cond} draggable onDragStart={() => handleDragStart(idx)} onDragOver={e => handleDragOver(e, idx)}
+                onDragLeave={handleDragLeave} onDrop={e => handleDrop(e, idx)}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white cursor-grab active:cursor-grabbing transition-all hover:shadow-sm">
+                <svg className="w-4 h-4 text-slate-300" fill="currentColor" viewBox="0 0 24 24"><circle cx="8" cy="6" r="1.5"/><circle cx="16" cy="6" r="1.5"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/></svg>
+                <span className="text-xs font-bold text-white px-2.5 py-0.5 rounded-full" style={{backgroundColor: COND_META[cond].color}}>{idx + 1}</span>
+                <span className="text-base font-medium">{condNames[cond]}</span>
+                {!COND_META[cond].hasControl && <span className="text-[10px] text-slate-400 ml-auto">{t.test} only</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <button type="submit" className="w-full py-4 bg-coral text-white text-xl font-bold rounded-2xl shadow-lg hover:bg-coral-dark transition-all btn-press mt-2">{t.beginSession}</button>
+      </form>
+    </div>
+  );
+}
+
+// ─── TRIAL SCREEN ───────────────────────────────
+function TrialScreen({ t, lang, session, trialInfo, onTrialComplete }) {
+  const { condKey, trialType, pairIndex } = trialInfo;
+  const meta = COND_META[condKey];
+  const condName = t[condKey];
+  const duration = session.trialDuration;
+  const totalPairs = session.pairsPerCondition;
+
+  const [phase, setPhase] = useState('ready'); // ready | active | done
+  const [timer, setTimer] = useState(duration);
+  const [result, setResult] = useState(null); // { occurred: bool, latency: number|null }
+  const startRef = useRef(null);
+  const intervalRef = useRef(null);
+
+  useWakeLock(phase === 'active');
+
+  // Trial type label
+  let typeLabel = t.test;
+  let typeBg = meta.color;
+  if (trialType === 'control') { typeLabel = t.control; typeBg = '#94A3B8'; }
+  else if (trialType === 'test1') typeLabel = t.test1;
+  else if (trialType === 'test2') typeLabel = t.test2;
+
+  // Instructions
+  function getInstructions() {
+    if (condKey === 'ignore') return { instr: t.ignoreTestInstr, desc: t.ignoreTestDesc };
+    const prefix = condKey + (trialType === 'control' ? 'Control' : 'Test');
+    return { instr: t[prefix + 'Instr'], desc: t[prefix + 'Desc'] };
+  }
+  const { instr, desc } = getInstructions();
+
+  function startTrial() {
+    setPhase('active');
+    startRef.current = Date.now();
+    intervalRef.current = setInterval(() => {
+      const elapsed = (Date.now() - startRef.current) / 1000;
+      const rem = Math.max(0, duration - elapsed);
+      setTimer(Math.ceil(rem));
+      if (rem <= 0) {
+        clearInterval(intervalRef.current);
+        endTrial(false);
+      }
+    }, 100);
+  }
+
+  function endTrial(occurred) {
+    if (phase === 'done') return;
+    clearInterval(intervalRef.current);
+    const latency = occurred ? Math.round((Date.now() - startRef.current) / 1000) : null;
+    const elapsed = Math.round((Date.now() - startRef.current) / 1000);
+    setResult({ occurred, latency, duration: elapsed });
+    setPhase('done');
+    playBeep(occurred ? 440 : 880);
+    vibrate();
+  }
+
+  function handleNext() {
+    onTrialComplete(result);
+  }
+
+  // Ready / pre-trial screen
+  if (phase === 'ready') {
+    return (
+      <div className="min-h-[100dvh] flex flex-col animate-fadeIn">
+        <div className="px-4 pt-4 pb-3">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs font-bold text-white px-2.5 py-1 rounded-full" style={{backgroundColor: meta.color}}>{condName}</span>
+            <span className="text-xs font-bold text-white px-2.5 py-1 rounded-full" style={{backgroundColor: typeBg}}>{typeLabel}</span>
+            <span className="text-sm text-slate-400 ml-auto">{t.pair} {pairIndex + 1} {t.of} {totalPairs}</span>
+          </div>
+        </div>
+        {/* Instruction card */}
+        <div className="px-4 mb-4">
+          <div className={`p-4 rounded-xl border-l-4 ${meta.bgLight}`} style={{borderColor: meta.color}}>
+            <p className="text-sm font-semibold text-slate-700 italic mb-2">{instr}</p>
+            <p className={`text-sm ${meta.text}`}>{desc}</p>
+            {condKey === 'tangible' && session.preferredItems && (
+              <p className="text-xs text-slate-500 mt-2 font-medium">Items: {session.preferredItems}</p>
+            )}
+            {condKey === 'escape' && session.demandItems && (
+              <p className="text-xs text-slate-500 mt-2 font-medium">Demands: {session.demandItems}</p>
+            )}
+          </div>
+        </div>
+        {/* Begin button */}
+        <div className="flex-1 flex items-center justify-center px-6">
+          <button onClick={startTrial}
+            className="w-full py-6 bg-coral text-white text-2xl font-bold rounded-2xl shadow-xl hover:bg-coral-dark btn-press animate-pulseRing">
+            {t.beginTrial}
+          </button>
+        </div>
+        <div className="px-6 pb-6 text-center">
+          <p className="text-xs text-slate-400">{t.targetBehaviors}: {session.targetBehaviors}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Active trial
+  if (phase === 'active') {
+    return (
+      <div className="min-h-[100dvh] flex flex-col">
+        {/* Header badges */}
+        <div className="px-4 pt-4 flex items-center gap-2">
+          <span className="text-xs font-bold text-white px-2.5 py-1 rounded-full" style={{backgroundColor: meta.color}}>{condName}</span>
+          <span className="text-xs font-bold text-white px-2.5 py-1 rounded-full" style={{backgroundColor: typeBg}}>{typeLabel}</span>
+          <span className="text-sm text-slate-400 ml-auto">{t.pair} {pairIndex + 1} {t.of} {totalPairs}</span>
+        </div>
+
+        {/* Timer */}
+        <div className="flex-none flex justify-center py-6">
+          <div className="w-32 h-32 rounded-full flex items-center justify-center border-4" style={{borderColor: meta.color, backgroundColor: meta.color + '10'}}>
+            <span className={`text-4xl font-bold timer-mono ${timer <= 10 ? 'animate-countPulse' : ''}`} style={{color: meta.color}}>
+              {fmtTime(timer)}
+            </span>
+          </div>
+        </div>
+
+        {/* Behavior button */}
+        <div className="flex-1 flex flex-col justify-center px-4 gap-4">
+          <button onClick={() => endTrial(true)}
+            className="w-full py-10 bg-coral text-white text-2xl font-bold rounded-2xl shadow-lg hover:bg-coral-dark btn-press">
+            {t.behaviorOccurred}
+          </button>
+          <p className="text-center text-sm text-slate-400">{t.waitingForTimer}</p>
+        </div>
+
+        {/* Target behavior reminder */}
+        <div className="px-6 pb-6 text-center">
+          <p className="text-xs text-slate-400">{session.targetBehaviors}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Done
+  return (
+    <div className={`min-h-[100dvh] flex flex-col items-center justify-center p-6 ${result?.occurred ? 'animate-flashRed' : 'animate-flashGreen'}`}>
+      <div className="w-full max-w-sm text-center animate-slideUp">
+        <div className="flex justify-center gap-2 mb-4">
+          <span className="text-xs font-bold text-white px-2.5 py-1 rounded-full" style={{backgroundColor: meta.color}}>{condName}</span>
+          <span className="text-xs font-bold text-white px-2.5 py-1 rounded-full" style={{backgroundColor: typeBg}}>{typeLabel}</span>
+        </div>
+
+        <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${result?.occurred ? 'bg-red-100' : 'bg-emerald-100'}`}>
+          {result?.occurred ? (
+            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01M12 3l9.66 16.59A1 1 0 0120.66 21H3.34a1 1 0 01-.86-1.41L12 3z"/></svg>
+          ) : (
+            <svg className="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/></svg>
+          )}
+        </div>
+
+        <h3 className="text-lg font-bold text-navy mb-1">
+          {result?.occurred ? t.behaviorRecorded : t.noBehaviorRecorded}
+        </h3>
+        {result?.occurred && result.latency !== null && (
+          <p className="text-slate-500 text-sm">{t.latency}: {result.latency} {t.seconds}</p>
+        )}
+
+        <button onClick={handleNext}
+          className="w-full py-4 bg-navy text-white text-lg font-bold rounded-2xl shadow-lg mt-8 btn-press hover:bg-navy-light transition-colors">
+          {t.nextTrial}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── CONDITION SUMMARY ──────────────────────────
+function ConditionSummary({ t, condKey, trials, onNext, isLast }) {
+  const meta = COND_META[condKey];
+  const condName = t[condKey];
+
+  let controlCount = 0, controlBehavior = 0, testCount = 0, testBehavior = 0;
+  for (const tr of trials) {
+    if (tr.trialType === 'control') { controlCount++; if (tr.occurred) controlBehavior++; }
+    else { testCount++; if (tr.occurred) testBehavior++; }
+  }
+
+  return (
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center p-6 animate-slideUp">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-6">
+          <span className="text-xs font-bold text-white px-3 py-1 rounded-full" style={{backgroundColor: meta.color}}>{condName}</span>
+          <h2 className="text-2xl font-bold text-navy mt-2">{t.conditionComplete}</h2>
+        </div>
+        <div className="bg-white rounded-2xl shadow-lg p-5 space-y-3 mb-6">
+          {controlCount > 0 && (
+            <div className="flex justify-between items-center py-3 border-b border-slate-100">
+              <div>
+                <span className="text-slate-500 text-sm">{t.controlTrials}</span>
+                <span className="text-xs text-slate-400 ml-1">{t.withBehavior}</span>
+              </div>
+              <span className="text-2xl font-bold text-slate-500">{controlBehavior}/{controlCount} <span className="text-base">({pct(controlBehavior, controlCount)}%)</span></span>
+            </div>
+          )}
+          <div className="flex justify-between items-center py-3">
+            <div>
+              <span className="text-sm" style={{color: meta.color}}>{t.testTrials}</span>
+              <span className="text-xs text-slate-400 ml-1">{t.withBehavior}</span>
+            </div>
+            <span className="text-2xl font-bold" style={{color: meta.color}}>{testBehavior}/{testCount} <span className="text-base">({pct(testBehavior, testCount)}%)</span></span>
+          </div>
+        </div>
+        <button onClick={onNext}
+          className="w-full py-4 bg-coral text-white text-lg font-bold rounded-2xl shadow-lg btn-press hover:bg-coral-dark transition-all">
+          {isLast ? t.finishSession : t.nextCondition}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── SESSION SUMMARY ────────────────────────────
+function SessionSummaryScreen({ t, lang, session }) {
+  const [copied, setCopied] = useState(false);
+  const [generating, setGenerating] = useState(false);
+
+  const condOrder = session.conditionOrder;
+
+  // Compute stats per condition
+  const stats = condOrder.map(cond => {
+    const trials = session.trials.filter(tr => tr.condKey === cond);
+    const controlTrials = trials.filter(tr => tr.trialType === 'control');
+    const testTrials = trials.filter(tr => tr.trialType !== 'control');
+    const controlBehavior = controlTrials.filter(tr => tr.occurred).length;
+    const testBehavior = testTrials.filter(tr => tr.occurred).length;
+    const controlR = controlTrials.length > 0 ? pct(controlBehavior, controlTrials.length) : null;
+    const testR = pct(testBehavior, testTrials.length);
+    const differentiated = controlR !== null ? (testR > controlR + 15) : (testR > 30);
+    return {
+      cond, condName: t[cond], color: COND_META[cond].color,
+      controlCount: controlTrials.length, controlBehavior, controlRate: controlR,
+      testCount: testTrials.length, testBehavior, testRate: testR,
+      differentiated,
+    };
+  });
+
+  // Determine functions
+  const functions = [];
+  const ignStat = stats.find(s => s.cond === 'ignore');
+  if (ignStat && ignStat.testRate > 30) functions.push({ key: 'ignore', label: t.autoReinforcement });
+  const attStat = stats.find(s => s.cond === 'attention');
+  if (attStat && attStat.differentiated) functions.push({ key: 'attention', label: t.socialAttention });
+  const tanStat = stats.find(s => s.cond === 'tangible');
+  if (tanStat && tanStat.differentiated) functions.push({ key: 'tangible', label: t.accessTangibles });
+  const escStat = stats.find(s => s.cond === 'escape');
+  if (escStat && escStat.differentiated) functions.push({ key: 'escape', label: t.escapeFromDemands });
+
+  // Interpretation
+  let interp = '';
+  if (functions.length === 0) {
+    interp = lang === 'en'
+      ? 'Results of the trial-based functional analysis do not indicate a clear maintaining variable. Responding was not differentiated across test and control conditions.'
+      : 'Los resultados del analisis funcional basado en ensayos no indican una variable de mantenimiento clara. Las respuestas no se diferenciaron entre condiciones de prueba y control.';
+  } else {
+    const fnNames = functions.map(f => f.label).join(', ');
+    const details = functions.map(f => {
+      const s = stats.find(x => x.cond === f.key);
+      if (f.key === 'ignore') return `${t.ignore}: ${s.testRate}% ${lang === 'en' ? 'of test trials' : 'de ensayos prueba'}`;
+      return `${t[f.key]}: ${s.testRate}% ${lang === 'en' ? 'test' : 'prueba'} vs ${s.controlRate}% ${lang === 'en' ? 'control' : 'control'}`;
+    }).join('; ');
+    interp = lang === 'en'
+      ? `Results of the trial-based functional analysis suggest behavior is maintained by ${fnNames}. ${details}.`
+      : `Los resultados del analisis funcional basado en ensayos sugieren que la conducta es mantenida por ${fnNames}. ${details}.`;
+  }
+
+  // Chart data
+  const chartData = stats.map(s => ({
+    cond: s.cond, condName: s.condName, color: s.color,
+    controlRate: s.controlRate, testRate: s.testRate,
+  }));
+
+  function buildClipboard() {
+    let txt = `${t.sessionSummary}\n`;
+    txt += `${t.clientName}: ${session.clientName}\n`;
+    txt += `${t.bcbaName}: ${session.bcbaName}\n`;
+    txt += `${t.sessionDate}: ${session.date}\n`;
+    txt += `${t.targetBehaviors}: ${session.targetBehaviors}\n\n`;
+    txt += `${t.condition}\t${t.controlRate}\t${t.testRate}\t${t.differentiated}\n`;
+    stats.forEach(s => {
+      txt += `${s.condName}\t${s.controlRate !== null ? s.controlRate + '%' : 'N/A'}\t${s.testRate}%\t${s.differentiated ? 'Yes' : 'No'}\n`;
+    });
+    txt += `\n${t.interpretation}:\n${interp}\n`;
+    return txt;
+  }
+
+  async function copyToClipboard() {
+    try { await navigator.clipboard.writeText(buildClipboard()); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch(e) {}
+  }
+
+  async function exportPDF() {
+    setGenerating(true);
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'letter');
+      const w = doc.internal.pageSize.getWidth();
+
+      // Header
+      doc.setFillColor(27, 47, 94);
+      doc.rect(0, 0, w, 28, 'F');
+      doc.setTextColor(255); doc.setFontSize(18); doc.setFont(undefined, 'bold');
+      doc.text('Amigo Care ABA', 15, 13);
+      doc.setFontSize(11); doc.setFont(undefined, 'normal');
+      doc.text(t.appTitle + ' — Bloom (2011, 2013)', 15, 21);
+
+      let y = 36;
+      doc.setTextColor(27, 47, 94); doc.setFontSize(10);
+      const info = [
+        [t.clientName, session.clientName], [t.bcbaName, session.bcbaName],
+        [t.sessionDate, session.date], [t.targetBehaviors, session.targetBehaviors],
+      ];
+      info.forEach(([k, v]) => {
+        doc.setFont(undefined, 'bold'); doc.text(k + ': ', 15, y);
+        doc.setFont(undefined, 'normal'); doc.text(v, 15 + doc.getTextWidth(k + ': '), y);
+        y += 5;
+      });
+
+      // Table
+      y += 6;
+      doc.setFillColor(241, 245, 249);
+      doc.rect(15, y, w - 30, 7, 'F');
+      doc.setFont(undefined, 'bold'); doc.setFontSize(8); doc.setTextColor(71, 85, 105);
+      doc.text(t.condition, 18, y + 5);
+      doc.text(t.controlRate, 75, y + 5);
+      doc.text(t.testRate, 110, y + 5);
+      doc.text(t.differentiated, 145, y + 5);
+      y += 9;
+      doc.setFont(undefined, 'normal'); doc.setTextColor(30, 41, 59); doc.setFontSize(9);
+      stats.forEach(s => {
+        doc.text(s.condName, 18, y + 4);
+        doc.text(s.controlRate !== null ? s.controlRate + '%' : '—', 80, y + 4);
+        doc.text(s.testRate + '%', 115, y + 4);
+        doc.text(s.differentiated ? 'Yes' : 'No', 150, y + 4);
+        y += 6;
+      });
+
+      // Interpretation
+      y += 6;
+      doc.setFont(undefined, 'bold'); doc.setFontSize(11); doc.setTextColor(27, 47, 94);
+      doc.text(t.interpretation, 15, y); y += 6;
+      doc.setFont(undefined, 'normal'); doc.setFontSize(9); doc.setTextColor(51, 65, 85);
+      const lines = doc.splitTextToSize(interp, w - 30);
+      doc.text(lines, 15, y);
+      y += lines.length * 4.5;
+
+      // Chart
+      const chartEl = document.getElementById('tbfa-chart');
+      if (chartEl) {
+        try {
+          const canvas = await html2canvas(chartEl, { scale: 2, backgroundColor: '#FFF' });
+          const imgData = canvas.toDataURL('image/png');
+          y += 6; if (y > 200) { doc.addPage(); y = 20; }
+          const imgW = w - 30;
+          doc.addImage(imgData, 'PNG', 15, y, imgW, (canvas.height / canvas.width) * imgW);
+        } catch(e) {}
+      }
+
+      doc.save(`TBFA_${session.clientName}_${session.date}.pdf`);
+    } catch(e) { console.error(e); }
+    setGenerating(false);
+  }
+
+  return (
+    <div className="animate-slideUp pb-24">
+      <div className="max-w-2xl mx-auto p-5">
+        <h2 className="text-2xl font-bold text-navy mb-1">{t.sessionSummary}</h2>
+        <p className="text-sm text-slate-400 mb-5">{session.clientName} &middot; {session.date} &middot; {session.targetBehaviors}</p>
+
+        {/* Data table */}
+        <div className="bg-white rounded-2xl shadow-sm overflow-hidden mb-5">
+          <table className="w-full table-fixed">
+            <thead>
+              <tr className="bg-slate-50">
+                <th className="text-left text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 sm:px-4 py-3 w-[30%]">{t.condition}</th>
+                <th className="text-center text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider px-2 py-3 w-[22%]">{t.controlRate}</th>
+                <th className="text-center text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider px-2 py-3 w-[22%]">{t.testRate}</th>
+                <th className="text-center text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider px-2 py-3 w-[26%]">{t.differentiated}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stats.map((s, i) => (
+                <tr key={s.cond} className={i < stats.length - 1 ? 'border-b border-slate-100' : ''}>
+                  <td className="px-3 sm:px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full flex-shrink-0" style={{backgroundColor: s.color}} />
+                      <span className="font-medium text-sm">{s.condName}</span>
+                    </div>
+                  </td>
+                  <td className="text-center text-sm font-semibold text-slate-500 px-2 py-3">{s.controlRate !== null ? s.controlRate + '%' : '—'}</td>
+                  <td className="text-center text-sm font-bold px-2 py-3" style={{color: s.color}}>{s.testRate}%</td>
+                  <td className="text-center px-2 py-3">
+                    {s.differentiated ? (
+                      <span className="text-xs font-bold text-white px-2 py-1 rounded-full bg-coral">Yes</span>
+                    ) : (
+                      <span className="text-xs text-slate-400">No</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Suspected function */}
+        <div className="bg-coral/10 border-2 border-coral/30 rounded-2xl p-4 mb-5">
+          <div className="text-xs font-semibold text-coral uppercase tracking-wider mb-1">{t.suspectedFunction}</div>
+          <div className="text-lg font-bold text-navy">
+            {functions.length > 0 ? functions.map(f => f.label).join(', ') : t.noFunction}
+          </div>
+        </div>
+
+        {/* Chart */}
+        <div className="bg-white rounded-2xl shadow-sm p-4 mb-5">
+          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">{t.controlRate} vs {t.testRate}</h3>
+          <div id="tbfa-chart" className="bg-white">
+            <BarChart data={chartData} t={t} />
+          </div>
+        </div>
+
+        {/* Interpretation */}
+        <div className="bg-white rounded-2xl shadow-sm p-4 mb-5">
+          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">{t.interpretation}</h3>
+          <p className="text-slate-700 text-sm leading-relaxed">{interp}</p>
+        </div>
+      </div>
+
+      {/* Fixed actions */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 p-4 flex gap-3 max-w-2xl mx-auto">
+        <button onClick={copyToClipboard} className="flex-1 py-3.5 bg-navy text-white font-bold rounded-xl btn-press">{copied ? t.copied : t.copySummary}</button>
+        <button onClick={exportPDF} disabled={generating} className="flex-1 py-3.5 bg-coral text-white font-bold rounded-xl btn-press disabled:opacity-50">{generating ? t.generating : t.exportPDF}</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── HISTORY SCREEN ─────────────────────────────
+function HistoryScreen({ t, lang, onViewSession }) {
+  const [sessions, setSessions] = useState(() => load(SK.sessions, []));
+  const [search, setSearch] = useState('');
+  const [confirmDel, setConfirmDel] = useState(null);
+
+  const filtered = sessions.filter(s => s.clientName.toLowerCase().includes(search.toLowerCase())).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  function del(id) {
+    const u = sessions.filter(s => s.id !== id); setSessions(u); save(SK.sessions, u); setConfirmDel(null);
+  }
+
+  return (
+    <div className="animate-fadeIn max-w-xl mx-auto p-5">
+      <h2 className="text-2xl font-bold text-navy mb-4">{t.pastSessions}</h2>
+      <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+        className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-white mb-4" placeholder={t.searchPlaceholder} />
+      {filtered.length === 0 ? (
+        <div className="text-center py-16 text-slate-400">
+          <svg className="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <p>{t.noSessions}</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filtered.map(s => (
+            <div key={s.id} className="bg-white rounded-xl shadow-sm p-4 border border-slate-100">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <div className="font-bold text-navy text-lg">{s.clientName}</div>
+                  <div className="text-sm text-slate-400">{s.date} &middot; {s.targetBehaviors}</div>
+                  <div className="text-xs text-slate-400">{t.bcbaName}: {s.bcbaName}</div>
+                </div>
+                <div className="flex gap-1">
+                  {s.conditionOrder.map(c => <div key={c} className="w-2.5 h-2.5 rounded-full" style={{backgroundColor: COND_META[c].color}} />)}
+                </div>
+              </div>
+              <div className="flex gap-2 mt-3">
+                <button onClick={() => onViewSession(s)} className="flex-1 py-2 bg-navy text-white text-sm font-semibold rounded-lg btn-press">{t.viewSummary}</button>
+                {confirmDel === s.id ? (
+                  <div className="flex gap-1">
+                    <button onClick={() => del(s.id)} className="px-3 py-2 bg-red-500 text-white text-sm font-semibold rounded-lg btn-press">{t.yes}</button>
+                    <button onClick={() => setConfirmDel(null)} className="px-3 py-2 bg-slate-200 text-slate-600 text-sm rounded-lg btn-press">{t.no}</button>
+                  </div>
+                ) : (
+                  <button onClick={() => setConfirmDel(s.id)} className="px-3 py-2 bg-slate-100 text-slate-500 text-sm rounded-lg btn-press">{t.deleteSession}</button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── RESUME PROMPT ──────────────────────────────
+function ResumePrompt({ t, session, onResume, onDiscard }) {
+  return (
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center p-6 animate-fadeIn">
+      <div className="w-full max-w-md text-center">
+        <div className="w-16 h-16 bg-coral/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg className="w-8 h-8 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h2 className="text-xl font-bold text-navy mb-2">{t.resume}</h2>
+        <p className="text-slate-500 mb-1">{t.resumeMessage}</p>
+        <p className="text-sm text-slate-400 mb-8">{session.clientName} &middot; {session.targetBehaviors}</p>
+        <div className="space-y-3">
+          <button onClick={onResume} className="w-full py-4 bg-coral text-white text-lg font-bold rounded-2xl shadow-lg btn-press">{t.resume}</button>
+          <button onClick={onDiscard} className="w-full py-3 bg-white text-slate-500 rounded-2xl border-2 border-slate-200 btn-press">{t.discard}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── MAIN APP ───────────────────────────────────
+function App() {
+  const [lang, setLang] = useState(() => load(SK.lang, 'en'));
+  const [screen, setScreen] = useState('loading');
+  const [session, setSession] = useState(null);
+  const [trialSeq, setTrialSeq] = useState([]);
+  const [trialIdx, setTrialIdx] = useState(0);
+  const [viewSession, setViewSession] = useState(null);
+  // condSummary state
+  const [summaryCondKey, setSummaryCondKey] = useState(null);
+
+  const t = T[lang];
+  useEffect(() => { save(SK.lang, lang); }, [lang]);
+
+  // Load on mount
+  useEffect(() => {
+    const saved = load(SK.current, null);
+    if (saved && !saved.completedAt) {
+      setSession(saved);
+      setTrialSeq(saved._trialSeq || []);
+      setTrialIdx(saved._trialIdx || 0);
+      setScreen('resume');
+    } else {
+      setScreen('setup');
+    }
+  }, []);
+
+  function startSession(formData, conditionOrder) {
+    const sess = {
+      id: genId(),
+      ...formData,
+      date: formData.date || today(),
+      conditionOrder,
+      trials: [], // { condKey, trialType, pairIndex, occurred, latency, duration }
+      completedAt: null,
+    };
+    const seq = buildTrialSequence(conditionOrder, formData.pairsPerCondition);
+    sess._trialSeq = seq;
+    sess._trialIdx = 0;
+    setSession(sess);
+    setTrialSeq(seq);
+    setTrialIdx(0);
+    save(SK.current, sess);
+    setScreen('trial');
+  }
+
+  function handleTrialComplete(result) {
+    const trial = trialSeq[trialIdx];
+    const trialRecord = { ...trial, occurred: result.occurred, latency: result.latency, duration: result.duration };
+
+    const updated = { ...session };
+    updated.trials = [...updated.trials, trialRecord];
+
+    const nextIdx = trialIdx + 1;
+    updated._trialIdx = nextIdx;
+
+    setSession(updated);
+    save(SK.current, updated);
+
+    // Check if we just finished a condition
+    const currentCond = trial.condKey;
+    const nextTrial = trialSeq[nextIdx];
+
+    if (!nextTrial || nextTrial.condKey !== currentCond) {
+      // Condition just finished — show condition summary
+      setSummaryCondKey(currentCond);
+      setTrialIdx(nextIdx);
+      setScreen('condSummary');
+    } else {
+      setTrialIdx(nextIdx);
+      setScreen('trial');
+    }
+  }
+
+  function handleCondSummaryNext() {
+    if (trialIdx >= trialSeq.length) {
+      // All done
+      finishSession();
+    } else {
+      setScreen('trial');
+    }
+  }
+
+  function finishSession() {
+    const final = { ...session, completedAt: new Date().toISOString() };
+    delete final._trialSeq;
+    delete final._trialIdx;
+    setSession(final);
+    const sessions = load(SK.sessions, []);
+    sessions.push(final);
+    save(SK.sessions, sessions);
+    localStorage.removeItem(SK.current);
+    setScreen('summary');
+  }
+
+  function handleResume() {
+    setScreen('trial');
+  }
+
+  function handleDiscard() {
+    localStorage.removeItem(SK.current);
+    setSession(null);
+    setScreen('setup');
+  }
+
+  function handleNewSession() {
+    setSession(null); setViewSession(null); setScreen('setup');
+  }
+
+  // Header visibility
+  const showHeader = !['trial'].includes(screen);
+  const showHistory = screen === 'setup';
+  const showBack = ['history', 'viewHistory', 'summary'].includes(screen);
+  const backAction = () => {
+    if (screen === 'viewHistory') setScreen('history');
+    else if (screen === 'summary') handleNewSession();
+    else setScreen('setup');
+  };
+
+  if (screen === 'loading') return null;
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {showHeader && (
+        <Header t={t} lang={lang} setLang={setLang}
+          onHistory={() => setScreen('history')}
+          showBack={showBack} onBack={backAction} showHistory={showHistory} />
+      )}
+
+      {screen === 'resume' && <ResumePrompt t={t} session={session} onResume={handleResume} onDiscard={handleDiscard} />}
+      {screen === 'setup' && <SetupScreen t={t} lang={lang} onStart={startSession} />}
+
+      {screen === 'trial' && session && trialSeq[trialIdx] && (
+        <TrialScreen t={t} lang={lang} session={session} trialInfo={trialSeq[trialIdx]} onTrialComplete={handleTrialComplete} />
+      )}
+
+      {screen === 'condSummary' && session && summaryCondKey && (
+        <ConditionSummary t={t} condKey={summaryCondKey}
+          trials={session.trials.filter(tr => tr.condKey === summaryCondKey)}
+          onNext={handleCondSummaryNext}
+          isLast={trialIdx >= trialSeq.length} />
+      )}
+
+      {screen === 'summary' && session && <SessionSummaryScreen t={t} lang={lang} session={session} />}
+      {screen === 'history' && <HistoryScreen t={t} lang={lang} onViewSession={s => { setViewSession(s); setScreen('viewHistory'); }} />}
+      {screen === 'viewHistory' && viewSession && <SessionSummaryScreen t={t} lang={lang} session={viewSession} />}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+    }
+  </script>
+</body>
+</html>

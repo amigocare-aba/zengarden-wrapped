@@ -1,0 +1,12 @@
+# Sensitive files
+.env
+zen_garden_wrapped_extract.py
+
+# Backups
+*_backup.html
+
+# Claude Code local config
+.claude/
+
+# macOS
+.DS_Store
