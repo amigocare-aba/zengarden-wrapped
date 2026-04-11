@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,600;0,700;1,400&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 /* ── PREMIUM DESIGN SYSTEM ────────────────────────────────────── */
 :root{
@@ -1015,8 +1016,13 @@ awards.forEach(([person,detail],i)=>{
 })();
 
 // ── CREW CARDS — tap for mini profile modal ───────────────────────
-// (built into the crew card render below via onclick)
+// Modal card IS the share card (html2canvas captures it directly)
 function openCrewProfile(idx) {
+  // Remove any existing modal (for swatch rebuild)
+  var existingModal = document.getElementById('crewProfileModal');
+  if(existingModal) existingModal.remove();
+  window._currentCrewIdx = idx;
+
   const r = D.all_active[idx];
   if (!r) return;
   const fn = r.name.split(' ')[0];
@@ -1029,82 +1035,116 @@ function openCrewProfile(idx) {
   const rank = sorted.findIndex(p => p.name === r.name) + 1;
   const isTop5 = rank <= 5;
 
-  // Neon palette (matches share card)
+  // Neon palette
   const neonMap = {
-    Leadership:{accent:'#B8B0FF',glow:'rgba(127,119,221,'},
-    BCBA:{accent:'#64B5F6',glow:'rgba(55,138,221,'},
-    Admin:{accent:'#FFD54F',glow:'rgba(239,159,39,'},
-    RBT:{accent:'#00FF9F',glow:'rgba(0,255,159,'}
+    Leadership:{accent:'#B8B0FF',glow:'rgba(127,119,221,',dark:'#0D0B1F'},
+    BCBA:{accent:'#64B5F6',glow:'rgba(55,138,221,',dark:'#080F1F'},
+    Admin:{accent:'#FFD54F',glow:'rgba(239,159,39,',dark:'#1A1408'},
+    RBT:{accent:'#00FF9F',glow:'rgba(0,255,159,',dark:'#041A12'}
   };
   const nc = neonMap[r.role] || neonMap.RBT;
 
-  // Labels (same map as share card)
+  // ── Theme-aware colors based on _cardBg ─────────────────
+  const isLightModal = (window._cardBg === 'light');
+  const lightBlue = '#2E7DD4';
+  const mc = isLightModal ? {
+    accent: lightBlue, glow: 'rgba(46,125,212,',
+    text: '#1A1928', sub: 'rgba(26,25,40,0.55)', faint: 'rgba(26,25,40,0.3)',
+    pillBg: 'rgba(46,125,212,0.06)', statBg: 'rgba(46,125,212,0.05)',
+    captionBg: 'rgba(0,0,0,.04)', captionBorder: 'rgba(0,0,0,.08)', captionText: 'rgba(26,25,40,0.75)'
+  } : {
+    accent: nc.accent, glow: nc.glow,
+    text: '#fff', sub: 'rgba(255,255,255,0.4)', faint: 'rgba(255,255,255,0.35)',
+    pillBg: nc.glow + '0.10)', statBg: nc.glow + '0.08)',
+    captionBg: 'rgba(255,255,255,.04)', captionBorder: 'rgba(255,255,255,.08)', captionText: 'rgba(255,255,255,.75)'
+  };
+
+  // ── Card background CSS with glow/holographic orbs ────────
+  const currentBg = window._cardBg || 'dark';
+  const bgLinear = {
+    dark:    'linear-gradient(180deg,#08080F 0%,' + nc.dark + ' 30%,' + nc.dark + ' 70%,#08080F 100%)',
+    midnight:'linear-gradient(180deg,#0B0B2E 0%,#1A1145 40%,#0B0B2E 100%)',
+    forest:  'linear-gradient(180deg,#04342C 0%,#062B1F 40%,#031A14 100%)',
+    slate:   'linear-gradient(180deg,#1C1C2E 0%,#2A2A3D 40%,#16162A 100%)',
+    warm:    'linear-gradient(180deg,#1A1008 0%,#2B1A0A 40%,#120C04 100%)',
+    light:   'linear-gradient(180deg,#F7F4EE 0%,#EDE9DF 40%,#E2DDD3 100%)'
+  };
+  let cardBgCSS;
+  if(isLightModal){
+    cardBgCSS = 'radial-gradient(circle at 19% 16%, rgba(99,102,241,0.12) 0%, transparent 40%),'
+      + 'radial-gradient(circle at 81% 10%, rgba(0,229,255,0.10) 0%, transparent 35%),'
+      + 'radial-gradient(circle at 50% 37%, rgba(29,158,117,0.10) 0%, transparent 45%),'
+      + 'radial-gradient(circle at 15% 57%, rgba(217,70,239,0.08) 0%, transparent 35%),'
+      + 'radial-gradient(circle at 83% 52%, rgba(239,159,39,0.08) 0%, transparent 35%),'
+      + 'radial-gradient(circle at 50% 78%, rgba(46,125,212,0.10) 0%, transparent 40%),'
+      + bgLinear.light;
+  } else {
+    cardBgCSS = 'radial-gradient(circle at 50% 22%, ' + nc.glow + '0.20) 0%, transparent 50%),'
+      + 'radial-gradient(circle at 15% 47%, ' + nc.glow + '0.06) 0%, transparent 40%),'
+      + 'radial-gradient(circle at 83% 36%, rgba(107,99,196,0.05) 0%, transparent 35%),'
+      + (bgLinear[currentBg] || bgLinear.dark);
+  }
+
+  // Labels
   const stylePretty = {'Pure Engager':'🤝 Pure Engager','Engager':'💬 Connector','Balanced':'⚖️ All-Rounder','Broadcaster':'📢 Broadcaster','Heavy Broadcaster':'📡 Megaphone'};
-  const dimPretty = {'Social':'💛 Social Wellness','Physical':'💪 Physical Wellness','Spiritual':'🧘 Spiritual Wellness','Occupational':'💼 Occupational Wellness'};
   const stLabel = stylePretty[r.style] || r.style;
-  const dimLabel = dimPretty[r.dim] || r.dim;
 
   // Wrapped data
   const wd = WRAPPED_DATA[r.name] || {};
-  const topWords = wd.top_words || [];
-  const topWord = topWords[0] || null;
+  const topWord = (wd.top_words && wd.top_words[0]) || null;
   const topReactions = (wd.top_reactions || []).map(convertSlackEmoji);
   const topEmojis = (wd.top_emojis || []).map(convertSlackEmoji).filter(e => e && e.replace(/[\u200D\uFE0F\uFE0E\u200B\u200C]/g,'').trim().length > 0);
   const photosShared = wd.photos_shared || 0;
   const activeLabel = wd.active_label || '';
   const bestie = wd.bestie || '';
   const mostHyped = wd.most_hyped || 0;
+  const labelColor = mc.accent + 'BB';
 
-  // ── Build content HTML — flex mode for everyone, rank only for top 5
+  // Logo URL
+  const logoEl = document.querySelector('.logo-corner img');
+  const logoSrc = logoEl ? logoEl.src : '';
+
+  // ── Build card content HTML ─────────────────────────────
   let contentHTML = '';
-  const labelColor = nc.accent + 'BB';
 
   // Rank badge — only top 5
   if(isTop5){
-    contentHTML += `
-      <div style="text-align:center;padding:2px 0 0;">
-        <span style="display:inline-block;padding:4px 20px;border-radius:20px;border:2px solid ${nc.accent};color:${nc.accent};font-family:Cabin,sans-serif;font-size:28px;font-weight:700;">#${rank}</span>
-      </div>`;
+    contentHTML += '<span style="display:inline-block;padding:4px 16px;border-radius:20px;border:2px solid ' + mc.accent + ';color:' + mc.accent + ';font-family:Cabin,sans-serif;font-size:22px;font-weight:700;">#' + rank + '</span>';
   }
 
-  // Top word — simplified
-  const isTop10 = rank <= 10;
+  // Top word
   if(topWord){
-    contentHTML += `
-    <div style="text-align:center;padding:8px 22px 2px;">
-      <div style="font-size:12px;color:${labelColor};">top word</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:1.1;">"${topWord[0].toUpperCase()}"</div>
-    </div>`;
+    contentHTML += '<div style="text-align:center;">'
+      + '<div style="font-size:10px;color:' + labelColor + ';font-weight:600;font-family:Cabin,sans-serif;">top word</div>'
+      + '<div style="font-family:Bebas Neue,sans-serif;font-size:40px;color:' + mc.text + ';line-height:1.1;">&ldquo;' + topWord[0].toUpperCase() + '&rdquo;</div>'
+      + '</div>';
   }
 
-  // Emojis typed + Reactions received
+  // Emojis + Reactions
   const hasEmojis = topEmojis.length > 0;
   const hasReactions = topReactions.length > 0;
   if(hasEmojis || hasReactions){
-    contentHTML += `<div style="display:flex;justify-content:center;gap:36px;padding:8px 22px;">`;
+    contentHTML += '<div style="display:flex;justify-content:center;gap:28px;">';
     if(hasEmojis){
-      contentHTML += `<div style="text-align:center;">
-        <div style="font-size:11px;color:${labelColor};">most used</div>
-        <div style="font-size:26px;letter-spacing:6px;margin-top:4px;">${topEmojis.slice(0,3).join(' ')}</div>
-      </div>`;
+      contentHTML += '<div style="text-align:center;">'
+        + '<div style="font-size:9px;color:' + labelColor + ';font-weight:600;font-family:Cabin,sans-serif;">most used</div>'
+        + '<div style="font-size:22px;letter-spacing:4px;margin-top:2px;">' + topEmojis.slice(0,3).join(' ') + '</div>'
+        + '</div>';
     }
     if(hasReactions){
-      contentHTML += `<div style="text-align:center;">
-        <div style="font-size:11px;color:${labelColor};">people sent you</div>
-        <div style="font-size:28px;letter-spacing:8px;margin-top:4px;">${topReactions.slice(0,3).join(' ')}</div>
-      </div>`;
+      contentHTML += '<div style="text-align:center;">'
+        + '<div style="font-size:9px;color:' + labelColor + ';font-weight:600;font-family:Cabin,sans-serif;">people sent you</div>'
+        + '<div style="font-size:24px;letter-spacing:6px;margin-top:2px;">' + topReactions.slice(0,3).join(' ') + '</div>'
+        + '</div>';
     }
-    contentHTML += `</div>`;
+    contentHTML += '</div>';
   }
 
-  // Identity pill — one pill: award if they have one, otherwise style
+  // Identity pill
   const pillText = award ? (award[0] + '  ' + award[1]) : stLabel;
-  contentHTML += `
-    <div style="padding:10px 22px 2px;">
-      <div style="padding:10px;border-radius:22px;border:2px solid ${nc.accent};background:${nc.glow}0.10);text-align:center;font-size:15px;font-weight:700;color:${nc.accent};">${pillText}</div>
-    </div>`;
+  contentHTML += '<div style="align-self:stretch;margin:0 4px;padding:8px 16px;border-radius:20px;border:2px solid ' + mc.accent + ';background:' + mc.pillBg + ';text-align:center;font-size:13px;font-weight:700;color:' + mc.accent + ';font-family:Cabin,sans-serif;">' + pillText + '</div>';
 
-  // Detail stat pills — 3 separate neon cards
+  // Stat pills
   const statPills = [];
   if(photosShared > 0) statPills.push({em:'📸', val:photosShared, lbl:'PHOTOS'});
   if(activeLabel){
@@ -1113,119 +1153,168 @@ function openCrewProfile(idx) {
   }
   if(mostHyped > 0) statPills.push({em:'🔥', val:mostHyped, lbl:'TOP POST'});
   if(statPills.length > 0){
-    contentHTML += `<div style="display:flex;justify-content:center;gap:8px;padding:10px 16px 2px;">`;
+    contentHTML += '<div style="display:flex;justify-content:center;gap:6px;align-self:stretch;margin:0 4px;">';
     statPills.forEach(function(sp){
-      contentHTML += `<div style="flex:1;text-align:center;padding:10px 4px;border-radius:14px;background:${nc.glow}0.08);border:2px solid ${nc.accent};">
-        <div style="font-size:18px;">${sp.em}</div>
-        <div style="font-size:14px;font-weight:700;color:#fff;margin-top:2px;">${sp.val}</div>
-        <div style="font-size:8px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.4);margin-top:2px;">${sp.lbl}</div>
-      </div>`;
+      contentHTML += '<div style="flex:1;text-align:center;padding:8px 4px;border-radius:12px;background:' + mc.statBg + ';border:2px solid ' + mc.accent + ';">'
+        + '<div style="font-size:16px;">' + sp.em + '</div>'
+        + '<div style="font-size:12px;font-weight:700;color:' + mc.text + ';margin-top:1px;font-family:Cabin,sans-serif;">' + sp.val + '</div>'
+        + '<div style="font-size:7px;font-weight:700;letter-spacing:.06em;color:' + mc.sub + ';margin-top:1px;font-family:Cabin,sans-serif;">' + sp.lbl + '</div>'
+        + '</div>';
     });
-    contentHTML += `</div>`;
+    contentHTML += '</div>';
   }
 
-  // Garden buddy — stronger contrast
+  // Garden buddy
   if(bestie){
-    contentHTML += `
-    <div style="text-align:center;padding:6px 22px 2px;">
-      <div style="font-size:9px;color:rgba(255,255,255,.35);font-weight:700;letter-spacing:.12em;">GARDEN BUDDY</div>
-      <div style="font-size:20px;font-weight:700;color:#fff;margin-top:3px;text-shadow:0 0 10px ${nc.glow}0.4);">${bestie}</div>
-    </div>`;
+    contentHTML += '<div style="text-align:center;">'
+      + '<div style="font-size:7px;color:' + mc.faint + ';font-weight:700;letter-spacing:.1em;font-family:Cabin,sans-serif;">GARDEN BUDDY</div>'
+      + '<div style="font-size:16px;font-weight:700;color:' + mc.text + ';margin-top:2px;font-family:Cabin,sans-serif;">' + bestie + '</div>'
+      + '</div>';
   }
 
-  // ── Modal shell — dark theme matching share card
+  // ── Swatch HTML ─────────────────────────────────
+  const swatchDefs = [
+    {bg:'dark',grad:'linear-gradient(135deg,#08080F,#0A1A12)'},
+    {bg:'midnight',grad:'linear-gradient(135deg,#0B0B2E,#1A1145)'},
+    {bg:'forest',grad:'linear-gradient(135deg,#04342C,#062B1F)'},
+    {bg:'slate',grad:'linear-gradient(135deg,#1C1C2E,#2A2A3D)'},
+    {bg:'warm',grad:'linear-gradient(135deg,#1A1008,#2B1A0A)'},
+    {bg:'light',grad:'linear-gradient(135deg,#F7F4EE,#EDE9DF)'}
+  ];
+  let swatchHTML = '';
+  swatchDefs.forEach(function(sd){
+    const isActive = (sd.bg === currentBg);
+    swatchHTML += '<div class="bg-swatch" data-bg="' + sd.bg + '" style="width:36px;height:36px;border-radius:50%;background:' + sd.grad + ';cursor:pointer;border:3px solid ' + (isActive ? mc.accent : 'rgba(255,255,255,.12)') + ';box-shadow:' + (isActive ? '0 0 12px ' + mc.glow + '0.5)' : 'none') + ';transition:all .2s;transform:' + (isActive ? 'scale(1.15)' : 'scale(1)') + ';"></div>';
+  });
+
+  // ── Build modal ─────────────────────────────────
   const modal = document.createElement('div');
+  modal.id = 'crewProfileModal';
   modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:800;display:flex;align-items:center;justify-content:center;padding:20px;';
-  modal.innerHTML = `
-    <div style="position:relative;background:linear-gradient(180deg,#0D0D18 0%,#0A0A14 40%,#08080F 100%);border-radius:28px;max-width:380px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.5);overflow:hidden;animation:sheetIn .3s cubic-bezier(.34,1.2,.64,1) both;max-height:90vh;overflow-y:auto;color:#fff;">
-      <button id="crewModalClose" style="position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);cursor:pointer;font-size:13px;color:rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;z-index:10;">✕</button>
-      <!-- Header — emoji + name + role -->
-      <div style="text-align:center;padding:24px 22px 6px;">
-        <div style="font-size:52px;margin-bottom:4px;">${em}</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:.9;color:#fff;">${name.toUpperCase()}</div>
-      </div>
-      ${contentHTML}
-      <!-- Share button -->
-      <div style="padding:14px 22px 6px;">
-        <button id="shareCardBtn" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,${nc.accent},${nc.accent}cc);color:#000;font-family:-apple-system,BlinkMacSystemFont,'Cabin',sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px ${nc.glow}0.3);letter-spacing:.02em;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-          Share My Card
-        </button>
-      </div>
-      <!-- Caption picker — hidden until card is shared -->
-      <div id="captionPicker" style="display:none;padding:0 22px 22px;">
-        <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);text-align:center;margin-bottom:10px;">copy a caption for your post</div>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;position:relative;">
-            my march wrapped 🌿 love this team @amigocare.aba
-          </div>
-          <div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;position:relative;">
-            when your workplace actually cares about wellness 🌱 @amigocare.aba
-          </div>
-          <div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;position:relative;">
-            not your average healthcare job 🌿 @amigocare.aba
-          </div>
-        </div>
-      </div>
-    </div>`;
+
+  // The #modalCard is 360×640 (9:16). html2canvas captures it at 3x → 1080×1920
+  modal.innerHTML = ''
+    + '<div style="position:relative;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:12px;">'
+
+    // Close button — OUTSIDE the card
+    + '<button id="crewModalClose" style="position:absolute;top:4px;right:4px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.15);cursor:pointer;font-size:12px;color:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;z-index:10;">✕</button>'
+
+    // ═══ THE CARD — 9:16, single source of truth for PNG ═══
+    + '<div id="modalCard" style="width:360px;height:640px;min-height:640px;flex-shrink:0;border-radius:24px;overflow:hidden;position:relative;display:flex;flex-direction:column;color:' + mc.text + ';background:' + cardBgCSS + ';box-shadow:0 24px 64px rgba(0,0,0,.5);animation:sheetIn .3s cubic-bezier(.34,1.2,.64,1) both;">'
+
+      // Eyebrow
+      + '<div style="text-align:center;padding:14px 16px 0;font-size:9px;font-weight:700;letter-spacing:.1em;color:' + mc.sub + ';font-family:Cabin,sans-serif;">ZEN GARDEN · MARCH 2026</div>'
+
+      // Main content — centered flex
+      + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:0 20px;">'
+        + '<div style="font-size:48px;line-height:1;">' + em + '</div>'
+        + '<div style="font-family:Bebas Neue,sans-serif;font-size:48px;line-height:.9;color:' + mc.text + ';">' + name.toUpperCase() + '</div>'
+        + contentHTML
+      + '</div>'
+
+      // Footer — divider + logo + CTA
+      + '<div style="text-align:center;padding:0 24px 16px;">'
+        + '<div style="width:32px;height:2px;background:' + mc.accent + ';border-radius:1px;margin:0 auto 10px;' + (isLightModal ? '' : 'box-shadow:0 0 12px ' + mc.accent + ';') + '"></div>'
+        + (logoSrc ? '<img src="' + logoSrc + '" style="height:36px;margin-bottom:6px;' + (isLightModal ? '' : 'filter:brightness(0) invert(1);') + '" crossorigin="anonymous" />' : '')
+        + '<div style="font-size:10px;font-weight:600;color:' + mc.accent + ';font-family:Cabin,sans-serif;">when your workplace actually cares about wellness 🌱</div>'
+      + '</div>'
+
+    + '</div>' // end #modalCard
+
+    // ═══ CONTROLS — not captured in PNG ═══
+    + '<div style="width:360px;">'
+      // Background picker
+      + '<div style="padding:4px 0 8px;">'
+        + '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;margin-bottom:8px;">card background</div>'
+        + '<div id="bgPicker" style="display:flex;justify-content:center;gap:10px;">' + swatchHTML + '</div>'
+      + '</div>'
+      // Share button
+      + '<div style="padding:6px 0;">'
+        + '<button id="shareCardBtn" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,' + mc.accent + ',' + mc.accent + 'cc);color:' + (isLightModal ? '#fff' : '#000') + ';font-family:-apple-system,BlinkMacSystemFont,Cabin,sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px ' + mc.glow + '0.3);letter-spacing:.02em;">'
+          + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>'
+          + ' Share My Card'
+        + '</button>'
+      + '</div>'
+      // Caption picker
+      + '<div id="captionPicker" style="display:none;padding:0 0 12px;">'
+        + '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;margin-bottom:10px;">copy a caption for your post</div>'
+        + '<div style="display:flex;flex-direction:column;gap:6px;">'
+          + '<div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;">my march wrapped 🌿 love this team @amigocare.aba</div>'
+          + '<div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;">when your workplace actually cares about wellness 🌱 @amigocare.aba</div>'
+          + '<div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;">not your average healthcare job 🌿 @amigocare.aba</div>'
+        + '</div>'
+      + '</div>'
+    + '</div>' // end controls
+
+    + '</div>'; // end scroll wrapper
 
   document.body.appendChild(modal);
   document.getElementById('crewModalClose').onclick = () => modal.remove();
   modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
 
-  // Share button — download card then reveal caption picker
+  // ── Share button — html2canvas capture of #modalCard ─────
   document.getElementById('shareCardBtn').onclick = function(){
-    generateShareCard(idx);
-    var picker = document.getElementById('captionPicker');
-    if(picker) {
-      picker.style.display = 'block';
-      picker.scrollIntoView({behavior:'smooth',block:'nearest'});
-      // Update share button to show "downloaded" state
-      var btn = document.getElementById('shareCardBtn');
-      btn.innerHTML = '✓ Card Saved — Now Post It';
-      btn.style.background = 'rgba(255,255,255,.08)';
-      btn.style.color = '${nc.accent}';
-      btn.style.border = '1px solid ${nc.accent}';
-      btn.style.boxShadow = 'none';
-      btn.style.cursor = 'default';
-    }
+    var card = document.getElementById('modalCard');
+    var btn = document.getElementById('shareCardBtn');
+    btn.innerHTML = 'Generating...';
+    btn.style.opacity = '0.6';
+    // Remove border-radius for clean full-bleed PNG
+    var origRadius = card.style.borderRadius;
+    card.style.borderRadius = '0';
+    html2canvas(card, {
+      scale: 3, // 360×3=1080, 640×3=1920
+      useCORS: true,
+      backgroundColor: null,
+      logging: false
+    }).then(function(canvas){
+      card.style.borderRadius = origRadius;
+      var link = document.createElement('a');
+      link.download = name.toLowerCase() + '-zen-garden-march-2026.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      haptic([8,30,8]);
+      // Show caption picker
+      var picker = document.getElementById('captionPicker');
+      if(picker){
+        picker.style.display = 'block';
+        picker.scrollIntoView({behavior:'smooth',block:'nearest'});
+        btn.innerHTML = '✓ Card Saved — Now Post It';
+        btn.style.background = 'rgba(255,255,255,.08)';
+        btn.style.color = mc.accent;
+        btn.style.border = '1px solid ' + mc.accent;
+        btn.style.boxShadow = 'none';
+        btn.style.cursor = 'default';
+        btn.style.opacity = '1';
+      }
+    });
   };
 
-  // Caption copy handlers
+  // ── Swatch handlers — rebuild modal on theme change ─────
+  if(!window._cardBg) window._cardBg = 'dark';
+  document.querySelectorAll('.bg-swatch').forEach(function(sw){
+    sw.onclick = function(){
+      window._cardBg = sw.dataset.bg;
+      openCrewProfile(window._currentCrewIdx);
+    };
+  });
+
+  // ── Caption copy handlers ─────
   document.querySelectorAll('.caption-opt').forEach(function(el){
     el.onclick = function(){
       var text = el.textContent.trim();
       navigator.clipboard.writeText(text).then(function(){
         var orig = el.innerHTML;
-        el.style.borderColor = '${nc.accent}';
-        el.style.background = '${nc.glow}0.10)';
-        el.innerHTML = '<span style="color:${nc.accent};font-weight:700;">✓ copied!</span>';
+        el.style.borderColor = mc.accent;
+        el.style.background = mc.glow + '0.10)';
+        el.innerHTML = '<span style="color:' + mc.accent + ';font-weight:700;">✓ copied!</span>';
         setTimeout(function(){
           el.innerHTML = orig;
-          el.style.borderColor = 'rgba(255,255,255,.08)';
-          el.style.background = 'rgba(255,255,255,.04)';
+          el.style.borderColor = mc.captionBorder;
+          el.style.background = mc.captionBg;
         }, 1500);
       });
     };
   });
-}
-
-// ── SHARE CARD GENERATOR (Canvas — iOS/Gen Z) ────────────────────
-function generateShareCard(idx){
-  var r = D.all_active[idx];
-  if(!r) return;
-
-  // Load logo first, then draw
-  var logoEl = document.querySelector('.logo-corner img');
-  if(logoEl && logoEl.complete){
-    _renderShareCard(idx, logoEl);
-  } else if(logoEl){
-    var tmp = new Image();
-    tmp.onload = function(){ _renderShareCard(idx, tmp); };
-    tmp.src = logoEl.src;
-  } else {
-    _renderShareCard(idx, null);
-  }
 }
 
 // Slack code → emoji converter
@@ -1234,333 +1323,129 @@ var slackEmoji = {
   'white_heart':'🤍','orange_heart':'🧡','brown_heart':'🤎','black_heart':'🖤',
   'heart_hands':'🫶','raised_hands':'🙌','muscle':'💪','pray':'🙏',
   'face_holding_back_tears':'🥹','joy':'😂','sob':'😭','fire':'🔥',
-  'thumbsup':'👍','100':'💯','sparkles':'✨','star':'⭐','clap':'👏',
-  'tada':'🎉','eyes':'👀','ok_hand':'👌','wave':'👋','sunflower':'🌻',
-  'two_hearts':'💕','revolving_hearts':'💞','sparkling_heart':'💖',
-  'heartbeat':'💓','heartpulse':'💗','smiling_face_with_3_hearts':'🥰',
-  'heart_eyes':'😍','kissing_heart':'😘','hugging_face':'🤗',
-  'folded_hands':'🙏','clapping_hands':'👏','raising_hands':'🙌',
-  'red_heart':'❤️','heart':'❤️','heavy_heart_exclamation':'❣️'
+  'thumbsup':'👍','thumbsdown':'👎','100':'💯','sparkles':'✨','star':'⭐',
+  'clap':'👏','tada':'🎉','eyes':'👀','ok_hand':'👌','wave':'👋',
+  'sunflower':'🌻','two_hearts':'💕','revolving_hearts':'💞',
+  'sparkling_heart':'💖','heartbeat':'💓','heartpulse':'💗',
+  'smiling_face_with_3_hearts':'🥰','heart_eyes':'😍','kissing_heart':'😘',
+  'hugging_face':'🤗','folded_hands':'🙏','clapping_hands':'👏',
+  'raising_hands':'🙌','red_heart':'❤️','heart':'❤️',
+  'heavy_heart_exclamation':'❣️',
+  // Missing codes found in data
+  'bangbang':'‼️','exclamation':'❗','boat':'⛵','cold_sweat':'😰',
+  'cup_with_straw':'🥤','jigsaw':'🧩','nail_care':'💅','panda_face':'🐼',
+  'shushing_face':'🤫','sunny':'☀️','turtle':'🐢','yum':'😋',
+  // Common extras for future-proofing
+  'rocket':'🚀','rainbow':'🌈','sun_with_face':'🌞','moon':'🌙',
+  'star2':'🌟','dizzy':'💫','boom':'💥','sweat_drops':'💦',
+  'dash':'💨','speaking_head':'🗣️','thought_balloon':'💭',
+  'speech_balloon':'💬','laughing':'😆','smile':'😄','grinning':'😀',
+  'wink':'😉','blush':'😊','innocent':'😇','smirk':'😏','relaxed':'☺️',
+  'stuck_out_tongue':'😛','stuck_out_tongue_winking_eye':'😜',
+  'stuck_out_tongue_closed_eyes':'😝','money_mouth_face':'🤑',
+  'nerd_face':'🤓','sunglasses':'😎','disguised_face':'🥸',
+  'partying_face':'🥳','zany_face':'🤪','pleading_face':'🥺',
+  'cry':'😢','angry':'😠','rage':'🤬','skull':'💀','ghost':'👻',
+  'alien':'👽','robot':'🤖','poop':'💩','smiley':'😃','grin':'😁',
+  'rofl':'🤣','upside_down_face':'🙃','melting_face':'🫠',
+  'relieved':'😌','sleeping':'😴','drooling_face':'🤤',
+  'thinking_face':'🤔','zipper_mouth_face':'🤐','face_with_raised_eyebrow':'🤨',
+  'neutral_face':'😐','expressionless':'😑','no_mouth':'😶',
+  'face_in_clouds':'😶‍🌫️','smiling_imp':'😈','skull_and_crossbones':'☠️',
+  'hand_over_mouth':'🤭','saluting_face':'🫡','monocle_face':'🧐',
+  'confused':'😕','worried':'😟','frowning_face':'☹️',
+  'open_mouth':'😮','hushed':'😯','astonished':'😲',
+  'flushed':'😳','scream':'😱','fearful':'😨','sweat':'😓',
+  'disappointed':'😞','weary':'😩','tired_face':'😫',
+  'triumph':'😤','pout':'😡',
+  'see_no_evil':'🙈','hear_no_evil':'🙉','speak_no_evil':'🙊',
+  'kiss':'💋','love_letter':'💌','cupid':'💘','gift_heart':'💝',
+  'broken_heart':'💔','growing_heart':'💗',
+  'point_up':'☝️','point_down':'👇','point_left':'👈','point_right':'👉',
+  'fist':'✊','v':'✌️','crossed_fingers':'🤞','love_you_gesture':'🤟',
+  'metal':'🤘','call_me_hand':'🤙','handshake':'🤝',
+  'writing_hand':'✍️','selfie':'🤳','flexed_biceps':'💪',
+  'leg':'🦵','foot':'🦶','ear':'👂','nose':'👃','brain':'🧠',
+  'tooth':'🦷','bone':'🦴','dog':'🐶','cat':'🐱',
+  'bear':'🐻','koala':'🐨','lion_face':'🦁','cow':'🐮',
+  'pig':'🐷','frog':'🐸','monkey_face':'🐵','chicken':'🐔',
+  'penguin':'🐧','bird':'🐦','eagle':'🦅','owl':'🦉',
+  'bat':'🦇','wolf':'🐺','horse':'🐴','unicorn':'🦄',
+  'bee':'🐝','bug':'🐛','butterfly':'🦋','snail':'🐌',
+  'lady_beetle':'🐞','ant':'🐜','mosquito':'🦟','spider':'🕷️',
+  'crab':'🦀','lobster':'🦞','shrimp':'🦐','squid':'🦑',
+  'octopus':'🐙','tropical_fish':'🐠','fish':'🐟','whale':'🐳',
+  'dolphin':'🐬','shark':'🦈','seal':'🦭',
+  'cherry_blossom':'🌸','rose':'🌹','wilted_flower':'🥀','tulip':'🌷',
+  'blossom':'🌼','hibiscus':'🌺','bouquet':'💐','seedling':'🌱',
+  'evergreen_tree':'🌲','deciduous_tree':'🌳','palm_tree':'🌴',
+  'cactus':'🌵','herb':'🌿','shamrock':'☘️','four_leaf_clover':'🍀',
+  'fallen_leaf':'🍂','leaves':'🍃','maple_leaf':'🍁',
+  'apple':'🍎','green_apple':'🍏','pear':'🍐','orange':'🍊',
+  'lemon':'🍋','banana':'🍌','watermelon':'🍉','grapes':'🍇',
+  'strawberry':'🍓','peach':'🍑','mango':'🥭','pineapple':'🍍',
+  'coconut':'🥥','avocado':'🥑','eggplant':'🍆','hot_pepper':'🌶️',
+  'corn':'🌽','carrot':'🥕','potato':'🥔','sweet_potato':'🍠',
+  'pizza':'🍕','hamburger':'🍔','fries':'🍟','hotdog':'🌭',
+  'taco':'🌮','burrito':'🌯','sandwich':'🥪','egg':'🥚',
+  'cooking':'🍳','coffee':'☕','tea':'🍵','beer':'🍺',
+  'wine_glass':'🍷','cocktail':'🍸','tropical_drink':'🍹',
+  'champagne':'🍾','ice_cream':'🍦','cake':'🎂','cookie':'🍪',
+  'chocolate_bar':'🍫','candy':'🍬','lollipop':'🍭','doughnut':'🍩',
+  'soccer':'⚽','basketball':'🏀','football':'🏈','baseball':'⚾',
+  'tennis':'🎾','volleyball':'🏐','golf':'⛳','trophy':'🏆',
+  'medal':'🏅','1st_place_medal':'🥇','2nd_place_medal':'🥈',
+  '3rd_place_medal':'🥉','crown':'👑','gem':'💎',
+  'musical_note':'🎵','notes':'🎶','headphones':'🎧',
+  'microphone':'🎤','guitar':'🎸','piano':'🎹','drum':'🥁',
+  'art':'🎨','camera':'📷','camera_flash':'📸','video_camera':'📹',
+  'movie_camera':'🎥','tv':'📺','computer':'💻','phone':'📱',
+  'bulb':'💡','flashlight':'🔦','candle':'🕯️',
+  'book':'📖','books':'📚','pencil':'✏️','pen':'🖊️',
+  'memo':'📝','briefcase':'💼','calendar':'📅','paperclip':'📎',
+  'scissors':'✂️','lock':'🔒','key':'🔑',
+  'hammer':'🔨','axe':'🪓','wrench':'🔧','gear':'⚙️',
+  'link':'🔗','magnet':'🧲','hourglass':'⌛',
+  'alarm_clock':'⏰','stopwatch':'⏱️','timer_clock':'⏲️',
+  'bell':'🔔','mega':'📣','loudspeaker':'📢',
+  'checkered_flag':'🏁','triangular_flag_on_post':'🚩',
+  'white_check_mark':'✅','ballot_box_with_check':'☑️',
+  'heavy_check_mark':'✔️','x':'❌','negative_squared_cross_mark':'❎',
+  'question':'❓','grey_question':'❔','grey_exclamation':'❕',
+  'warning':'⚠️','no_entry':'⛔','prohibited':'🚫',
+  'recycle':'♻️','heavy_plus_sign':'➕','heavy_minus_sign':'➖',
+  'heavy_multiplication_x':'✖️','heavy_division_sign':'➗',
+  'infinity':'♾️','arrow_right':'➡️','arrow_left':'⬅️',
+  'arrow_up':'⬆️','arrow_down':'⬇️',
+  'new':'🆕','free':'🆓','up':'🆙','cool':'🆒','sos':'🆘',
+  'no_entry_sign':'🚫','underage':'🔞',
+  'rainbow_flag':'🏳️‍🌈','pirate_flag':'🏴‍☠️',
+  'flag_us':'🇺🇸','flag_mx':'🇲🇽','flag_pr':'🇵🇷',
+  // Hyphenated Slack codes (Slack uses hyphens, not underscores, for some)
+  'star-struck':'🤩','thumbs-up-peach':'👍','flag-gt':'🇬🇹',
+  'flag-us':'🇺🇸','flag-mx':'🇲🇽','flag-pr':'🇵🇷','flag-co':'🇨🇴',
+  'flag-ve':'🇻🇪','flag-do':'🇩🇴','flag-cu':'🇨🇺','flag-hn':'🇭🇳',
+  'flag-sv':'🇸🇻','flag-ni':'🇳🇮','flag-pe':'🇵🇪','flag-br':'🇧🇷',
+  'flag-ar':'🇦🇷','flag-ec':'🇪🇨','flag-pa':'🇵🇦','flag-cr':'🇨🇷',
+  'slightly-smiling-face':'🙂','upside-down-face':'🙃',
+  'heart-eyes':'😍','smiling-face-with-tear':'🥲',
+  'face-with-tears-of-joy':'😂','rolling-on-the-floor-laughing':'🤣',
+  'raised-hands':'🙌','thumbsup-all':'👍','heavy-check-mark':'✔️',
+  'skin-tone-2':'','skin-tone-3':'','skin-tone-4':'','skin-tone-5':'','skin-tone-6':''
+};
+// Slack skin-tone modifier → Unicode ZWJ modifier
+var skinToneMap = {
+  'skin-tone-2':'\u{1F3FB}','skin-tone-3':'\u{1F3FC}',
+  'skin-tone-4':'\u{1F3FD}','skin-tone-5':'\u{1F3FE}','skin-tone-6':'\u{1F3FF}'
 };
 function convertSlackEmoji(s){
   if(!s || typeof s !== 'string') return s;
-  return s.replace(/:([a-z0-9_]+)(?:::[a-z0-9_-]+)*:/g, function(m, code){
-    return slackEmoji[code] || m;
+  return s.replace(/:([a-z0-9_-]+)(?:::([a-z0-9_-]+))*:/g, function(m, code, tone){
+    var base = slackEmoji[code];
+    if(!base) return ''; // hide unmapped codes (custom workspace emoji etc.)
+    if(tone && skinToneMap[tone]) return base + skinToneMap[tone];
+    return base;
   });
-}
-
-function _renderShareCard(idx, logoEl){
-  var r = D.all_active[idx];
-  var fn = r.name.split(' ')[0];
-  var name = fn.charAt(0).toUpperCase()+fn.slice(1).toLowerCase();
-  var em = personEmoji[r.name]||'🌱';
-  var award = window.AWARD_MAP ? AWARD_MAP[name] : null;
-
-  // Calculate rank
-  var sorted = D.all_active.slice().sort(function(a,b){return b.pts-a.pts;});
-  var rank = sorted.findIndex(function(p){return p.name===r.name;}) + 1;
-  var isTop5 = rank <= 5;
-
-  // Role-based neon palette
-  var neonMap = {
-    Leadership:{accent:'#B8B0FF',glow:'rgba(127,119,221,',dark:'#0D0B1F'},
-    BCBA:{accent:'#64B5F6',glow:'rgba(55,138,221,',dark:'#080F1F'},
-    Admin:{accent:'#FFD54F',glow:'rgba(239,159,39,',dark:'#1A1408'},
-    RBT:{accent:'#00FF9F',glow:'rgba(0,255,159,',dark:'#041A12'}
-  };
-  var nc = neonMap[r.role] || neonMap.RBT;
-
-  // Style labels with emoji
-  var stylePretty = {
-    'Pure Engager':'🤝 Pure Engager','Engager':'💬 Connector',
-    'Balanced':'⚖️ All-Rounder','Broadcaster':'📢 Broadcaster',
-    'Heavy Broadcaster':'📡 Megaphone'
-  };
-  // Dimension labels
-  var dimPretty = {
-    'Social':'💛 Social Wellness','Physical':'💪 Physical Wellness',
-    'Spiritual':'🧘 Spiritual Wellness','Occupational':'💼 Occupational Wellness'
-  };
-
-  var W = 1080, H = 1920;
-  var c = document.createElement('canvas');
-  c.width = W; c.height = H;
-  var ctx = c.getContext('2d');
-  var cx = W/2;
-
-  // ── Background: deep dark with subtle role tint
-  var bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, '#08080F');
-  bg.addColorStop(0.3, nc.dark);
-  bg.addColorStop(0.7, '#0A0A14');
-  bg.addColorStop(1, '#08080F');
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, W, H);
-
-  // Neon glow — behind emoji area
-  var g1 = ctx.createRadialGradient(cx, 420, 0, cx, 420, 520);
-  g1.addColorStop(0, nc.glow + '0.22)');
-  g1.addColorStop(1, 'transparent');
-  ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
-
-  // Neon glow — mid
-  var g2 = ctx.createRadialGradient(160, 900, 0, 160, 900, 500);
-  g2.addColorStop(0, nc.glow + '0.06)');
-  g2.addColorStop(1, 'transparent');
-  ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
-
-  // Accent glow — right
-  var g3 = ctx.createRadialGradient(900, 700, 0, 900, 700, 400);
-  g3.addColorStop(0, 'rgba(107,99,196,0.05)');
-  g3.addColorStop(1, 'transparent');
-  ctx.fillStyle = g3; ctx.fillRect(0, 0, W, H);
-
-  // ── Eyebrow
-  ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,255,255,0.6)';
-  ctx.font = '700 26px Cabin, sans-serif';
-  ctx.letterSpacing = '2px';
-  ctx.fillText('ZEN GARDEN · MARCH 2026', cx, 100);
-
-  // ── Big emoji with glow behind (reset fillStyle so emoji renders in full color)
-  var emGlow = ctx.createRadialGradient(cx, 280, 0, cx, 280, 200);
-  emGlow.addColorStop(0, nc.glow + '0.25)');
-  emGlow.addColorStop(1, 'transparent');
-  ctx.fillStyle = emGlow;
-  ctx.fillRect(cx - 200, 80, 400, 400);
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = '200px serif';
-  ctx.fillText(em, cx, 340);
-
-  // ── Name
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = '160px "Bebas Neue", sans-serif';
-  ctx.fillText(name.toUpperCase(), cx, 530);
-
-  // ═══════════════════════════════════════════════════
-  // FLEX MODE FOR EVERYONE — rank badge only for top 5
-  // ═══════════════════════════════════════════════════
-  var contentBottom;
-
-  // Wrapped data
-  var wd = WRAPPED_DATA[r.name] || {};
-  var topWord = wd.top_words && wd.top_words[0] ? wd.top_words[0] : null;
-  var topReactions = (wd.top_reactions || []).map(convertSlackEmoji);
-  var photosShared = wd.photos_shared || 0;
-  var activeLabel = wd.active_label || '';
-  var bestie = wd.bestie || '';
-  var mostHyped = wd.most_hyped || 0;
-  var stLabel = stylePretty[r.style] || r.style;
-
-  // Accent dash helper
-  function accentDash(y){
-    ctx.fillStyle = nc.glow + '0.25)';
-    roundRect(ctx, cx - 20, y, 40, 3, 2); ctx.fill();
-  }
-
-  // ── Rank badge — only for top 5
-  var curY = 555;
-  if(isTop5){
-    var rankText = '#' + rank;
-    ctx.font = '700 56px Cabin, sans-serif';
-    var rankW = ctx.measureText(rankText).width;
-    ctx.fillStyle = nc.glow + '0.15)';
-    roundRect(ctx, cx - rankW/2 - 36, curY, rankW + 72, 72, 36); ctx.fill();
-    ctx.strokeStyle = nc.accent; ctx.lineWidth = 2; ctx.stroke();
-    ctx.save(); ctx.shadowColor = nc.accent; ctx.shadowBlur = 16;
-    ctx.fillStyle = nc.accent; ctx.fillText(rankText, cx, curY + 50); ctx.restore();
-    curY += 90;
-  } else {
-    curY += 18;
-  }
-
-  // ── Points hero — MASSIVE number with glow
-  accentDash(curY);
-  curY += 22;
-  // ── Top word — simplified: just the word
-  var isTop10 = rank <= 10;
-  if(topWord){
-    accentDash(curY);
-    curY += 22;
-    ctx.fillStyle = nc.accent + 'BB';
-    ctx.font = '600 20px Cabin, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('top word', cx, curY);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = '86px "Bebas Neue", sans-serif';
-    ctx.fillText('"' + topWord[0].toUpperCase() + '"', cx, curY + 72);
-    curY += 95;
-  }
-
-  // ── Emojis typed + Reactions — neon labels, original-color emojis
-  var topEmojis = (wd.top_emojis || []).map(convertSlackEmoji).filter(function(e){ return e && e.replace(/[\u200D\uFE0F\uFE0E\u200B\u200C]/g,'').trim().length > 0; });
-  var hasEmojis = topEmojis.length > 0;
-  var hasReactions = topReactions.length > 0;
-
-  if(hasEmojis && hasReactions){
-    curY += 8;
-    var colL = cx - 240, colR = cx + 240;
-    ctx.fillStyle = nc.accent + 'BB';
-    ctx.font = '600 16px Cabin, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('most used', colL, curY);
-    ctx.fillText('people sent you', colR, curY);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = '44px serif';
-    ctx.fillText(topEmojis.slice(0,3).join('  '), colL, curY + 48);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText(topReactions.slice(0,3).join('  '), colR, curY + 48);
-    curY += 68;
-  } else if(hasEmojis){
-    curY += 8;
-    ctx.fillStyle = nc.accent + 'BB';
-    ctx.font = '600 18px Cabin, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('most used', cx, curY);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = '48px serif';
-    ctx.fillText(topEmojis.slice(0,3).join('    '), cx, curY + 52);
-    curY += 68;
-  } else if(hasReactions){
-    curY += 8;
-    ctx.fillStyle = nc.accent + 'BB';
-    ctx.font = '600 18px Cabin, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('people sent you', cx, curY);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = '52px serif';
-    ctx.fillText(topReactions.slice(0,3).join('    '), cx, curY + 56);
-    curY += 72;
-  }
-
-  // ── Identity pill — one pill: award if they have one, otherwise style
-  curY += 18;
-  accentDash(curY);
-  curY += 18;
-  var pillW = 620, pillH = 58, pillR = 29;
-  var pillLabel = award ? (award[0] + '  ' + award[1]) : stLabel;
-  ctx.fillStyle = nc.glow + '0.10)';
-  roundRect(ctx, cx - pillW/2, curY, pillW, pillH, pillR); ctx.fill();
-  ctx.strokeStyle = nc.accent; ctx.lineWidth = 2; ctx.stroke();
-  ctx.fillStyle = nc.accent;
-  ctx.font = award ? '700 28px Cabin, sans-serif' : '700 26px Cabin, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(pillLabel, cx, curY + 38);
-  curY += pillH + 12;
-
-  // ── Detail stats — 3 separate neon pills
-  var statItems = [];
-  if(photosShared > 0) statItems.push({em:'📸', val:photosShared.toString(), lbl:'PHOTOS'});
-  if(activeLabel){
-    var alMatch = activeLabel.match(/^(.+?)\s*([\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}]+)$/u);
-    if(alMatch){ statItems.push({em:alMatch[2], val:alMatch[1], lbl:'VIBE HOUR'}); }
-    else { statItems.push({em:'🕐', val:activeLabel, lbl:'VIBE HOUR'}); }
-  }
-  if(mostHyped > 0) statItems.push({em:'🔥', val:mostHyped.toString(), lbl:'TOP POST'});
-
-  if(statItems.length > 0){
-    curY += 12;
-    var spW = 270, spH = 88, spGap = 18, spR = 20;
-    var totalSpW = statItems.length * spW + (statItems.length - 1) * spGap;
-    var spStartX = cx - totalSpW / 2;
-
-    for(var si = 0; si < statItems.length; si++){
-      var spX = spStartX + si * (spW + spGap);
-      var spCx = spX + spW / 2;
-
-      // Neon-tinted bg
-      ctx.fillStyle = nc.glow + '0.08)';
-      roundRect(ctx, spX, curY, spW, spH, spR); ctx.fill();
-      ctx.strokeStyle = nc.accent; ctx.lineWidth = 2; ctx.stroke();
-
-      // Emoji icon
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '28px serif'; ctx.textAlign = 'center';
-      ctx.fillText(statItems[si].em, spCx, curY + 30);
-
-      // Value
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '700 22px Cabin, sans-serif';
-      ctx.fillText(statItems[si].val, spCx, curY + 58);
-
-      // Label
-      ctx.fillStyle = 'rgba(255,255,255,0.4)';
-      ctx.font = '700 12px Cabin, sans-serif';
-      ctx.fillText(statItems[si].lbl, spCx, curY + 78);
-    }
-    curY += spH + 10;
-  }
-
-  // ── Garden buddy — stronger contrast between label and name
-  if(bestie){
-    curY += 6;
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.font = '700 14px Cabin, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('GARDEN BUDDY', cx, curY);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = '700 36px Cabin, sans-serif';
-    ctx.save(); ctx.shadowColor = nc.accent; ctx.shadowBlur = 12;
-    ctx.fillText(bestie, cx, curY + 40);
-    ctx.restore();
-    curY += 52;
-  }
-
-  contentBottom = curY + 20;
-
-  // ═══════════════════════════════════════════════════
-  // SHARED FOOTER (both modes)
-  // ═══════════════════════════════════════════════════
-
-  // Neon divider — above logo with clearance
-  var divY = H - 390;
-  ctx.fillStyle = nc.accent;
-  ctx.save();
-  ctx.shadowColor = nc.accent; ctx.shadowBlur = 24;
-  roundRect(ctx, cx - 36, divY, 72, 3, 2); ctx.fill();
-  ctx.restore();
-
-  // Logo (big, white) at bottom — below divider
-  if(logoEl){
-    var logoH2 = 130;
-    var logoW2 = logoEl.naturalWidth * (logoH2 / logoEl.naturalHeight);
-    var tmpC = document.createElement('canvas');
-    tmpC.width = Math.ceil(logoW2); tmpC.height = logoH2;
-    var tmpCtx = tmpC.getContext('2d');
-    tmpCtx.drawImage(logoEl, 0, 0, logoW2, logoH2);
-    tmpCtx.globalCompositeOperation = 'source-atop';
-    tmpCtx.fillStyle = '#FFFFFF';
-    tmpCtx.fillRect(0, 0, logoW2, logoH2);
-    ctx.drawImage(tmpC, cx - logoW2/2, H - 350);
-  }
-
-  // CTA — caps
-  ctx.fillStyle = nc.accent;
-  ctx.font = '600 26px Cabin, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('when your workplace actually cares about wellness 🌱', cx, H - 160);
-
-  // @handle below CTA
-  ctx.fillStyle = 'rgba(255,255,255,0.6)';
-  ctx.font = '700 26px Cabin, sans-serif';
-  ctx.fillText('@amigocare.aba', cx, H - 110);
-
-  // ── Download
-  var link = document.createElement('a');
-  link.download = name.toLowerCase() + '-zen-garden-march-2026.png';
-  link.href = c.toDataURL('image/png');
-  link.click();
-  haptic([8,30,8]);
-}
-
-// Helper: rounded rect path
-function roundRect(ctx, x, y, w, h, r){
-  ctx.beginPath();
-  ctx.moveTo(x+r, y);
-  ctx.lineTo(x+w-r, y);
-  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
-  ctx.lineTo(x+w, y+h-r);
-  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
-  ctx.lineTo(x+r, y+h);
-  ctx.quadraticCurveTo(x, y+h, x, y+h-r);
-  ctx.lineTo(x, y+r);
-  ctx.quadraticCurveTo(x, y, x+r, y);
-  ctx.closePath();
 }
 
 // ── COUNTER — re-trigger on every visit to cover slide ───────────
