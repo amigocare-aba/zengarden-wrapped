@@ -1068,16 +1068,13 @@ function openCrewProfile(idx) {
       <div style="font-size:11px;letter-spacing:4px;opacity:.2;font-weight:700;">P O I N T S</div>
     </div>`;
 
-  // Top words
+  // Top word — simplified
+  const isTop10 = rank <= 10;
   if(topWord){
-    const runnersHTML = topWords.length > 1 ?
-      `<div style="font-size:12px;opacity:.18;margin-top:2px;">${topWords.slice(1,3).map(w=>w[0]).join('  ·  ')}</div>` : '';
     contentHTML += `
     <div style="text-align:center;padding:8px 22px 2px;">
-      <div style="font-size:12px;color:${labelColor};">your words were</div>
+      <div style="font-size:12px;color:${labelColor};">top word</div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:1.1;">"${topWord[0].toUpperCase()}"</div>
-      <div style="font-size:12px;opacity:.25;">× ${topWord[1]} TIMES</div>
-      ${runnersHTML}
     </div>`;
   }
 
@@ -1088,7 +1085,7 @@ function openCrewProfile(idx) {
     contentHTML += `<div style="display:flex;justify-content:center;gap:36px;padding:8px 22px;">`;
     if(hasEmojis){
       contentHTML += `<div style="text-align:center;">
-        <div style="font-size:11px;color:${labelColor};">your emojis</div>
+        <div style="font-size:11px;color:${labelColor};">most used</div>
         <div style="font-size:26px;letter-spacing:6px;margin-top:4px;">${topEmojis.slice(0,3).join(' ')}</div>
       </div>`;
     }
@@ -1101,14 +1098,22 @@ function openCrewProfile(idx) {
     contentHTML += `</div>`;
   }
 
-  // Style + Award pills
-  contentHTML += `
-    <div style="padding:10px 22px 2px;display:flex;flex-direction:column;gap:8px;">
-      <div style="padding:10px;border-radius:22px;border:2px solid ${nc.accent};text-align:center;font-size:15px;font-weight:700;color:${nc.accent};">${stLabel}</div>
-      ${award ? `<div style="padding:10px;border-radius:22px;border:1px solid rgba(255,255,255,.08);text-align:center;font-size:15px;color:#fff;">${award[0]}  ${award[1]}</div>` : ''}
+  // Identity pill — top 10: award OR style (one pill); others: style + award
+  if(isTop10){
+    const pillText = award ? (award[0] + '  ' + award[1]) : stLabel;
+    contentHTML += `
+    <div style="padding:10px 22px 2px;">
+      <div style="padding:10px;border-radius:22px;border:2px solid ${nc.accent};background:${nc.glow}0.10);text-align:center;font-size:15px;font-weight:700;color:${nc.accent};">${pillText}</div>
     </div>`;
+  } else {
+    contentHTML += `
+    <div style="padding:10px 22px 2px;display:flex;flex-direction:column;gap:8px;">
+      <div style="padding:10px;border-radius:22px;border:2px solid ${nc.accent};background:${nc.glow}0.06);text-align:center;font-size:15px;font-weight:700;color:${nc.accent};">${stLabel}</div>
+      ${award ? `<div style="padding:10px;border-radius:22px;border:1px solid ${nc.glow}0.15);background:${nc.glow}0.06);text-align:center;font-size:15px;color:#fff;">${award[0]}  ${award[1]}</div>` : ''}
+    </div>`;
+  }
 
-  // Detail stat pills — 3 separate cards
+  // Detail stat pills — 3 separate neon cards
   const statPills = [];
   if(photosShared > 0) statPills.push({em:'📸', val:photosShared, lbl:'PHOTOS'});
   if(activeLabel){
@@ -1119,21 +1124,21 @@ function openCrewProfile(idx) {
   if(statPills.length > 0){
     contentHTML += `<div style="display:flex;justify-content:center;gap:8px;padding:10px 16px 2px;">`;
     statPills.forEach(function(sp){
-      contentHTML += `<div style="flex:1;text-align:center;padding:10px 4px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);">
+      contentHTML += `<div style="flex:1;text-align:center;padding:10px 4px;border-radius:14px;background:${nc.glow}0.08);border:1px solid ${nc.glow}0.18);">
         <div style="font-size:18px;">${sp.em}</div>
         <div style="font-size:14px;font-weight:700;color:#fff;margin-top:2px;">${sp.val}</div>
-        <div style="font-size:8px;font-weight:700;letter-spacing:.08em;opacity:.35;margin-top:2px;">${sp.lbl}</div>
+        <div style="font-size:8px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.4);margin-top:2px;">${sp.lbl}</div>
       </div>`;
     });
     contentHTML += `</div>`;
   }
 
-  // Garden buddy
+  // Garden buddy — stronger contrast
   if(bestie){
     contentHTML += `
     <div style="text-align:center;padding:6px 22px 2px;">
-      <div style="font-size:10px;color:${labelColor};font-weight:700;letter-spacing:.1em;">GARDEN BUDDY</div>
-      <div style="font-size:18px;font-weight:700;color:${nc.accent};margin-top:2px;">${bestie}</div>
+      <div style="font-size:9px;color:rgba(255,255,255,.35);font-weight:700;letter-spacing:.12em;">GARDEN BUDDY</div>
+      <div style="font-size:20px;font-weight:700;color:#fff;margin-top:3px;text-shadow:0 0 10px ${nc.glow}0.4);">${bestie}</div>
     </div>`;
   }
 
@@ -1353,29 +1358,18 @@ function _renderShareCard(idx, logoEl){
   ctx.fillText('P O I N T S', cx, curY + 148);
   curY += 185;
 
-  // ── Top word — hero + runner-ups
+  // ── Top word — simplified: just the word
+  var isTop10 = rank <= 10;
   if(topWord){
     accentDash(curY);
     curY += 22;
     ctx.fillStyle = nc.accent + 'BB';
     ctx.font = '600 20px Cabin, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('your words were', cx, curY);
+    ctx.fillText('top word', cx, curY);
     ctx.fillStyle = '#FFFFFF';
     ctx.font = '86px "Bebas Neue", sans-serif';
     ctx.fillText('"' + topWord[0].toUpperCase() + '"', cx, curY + 72);
-    ctx.fillStyle = 'rgba(255,255,255,0.4)';
-    ctx.font = '700 20px Cabin, sans-serif';
-    ctx.fillText('× ' + topWord[1] + ' TIMES', cx, curY + 98);
-    var topWords = wd.top_words || [];
-    if(topWords.length > 1){
-      var runners = topWords.slice(1,3).map(function(w){ return w[0]; }).join('  ·  ');
-      ctx.fillStyle = 'rgba(255,255,255,0.3)';
-      ctx.font = '700 18px Cabin, sans-serif';
-      ctx.fillText(runners, cx, curY + 122);
-      curY += 145;
-    } else {
-      curY += 120;
-    }
+    curY += 95;
   }
 
   // ── Emojis typed + Reactions — neon labels, original-color emojis
@@ -1388,7 +1382,7 @@ function _renderShareCard(idx, logoEl){
     var colL = cx - 240, colR = cx + 240;
     ctx.fillStyle = nc.accent + 'BB';
     ctx.font = '600 16px Cabin, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('you typed', colL, curY);
+    ctx.fillText('most used', colL, curY);
     ctx.fillText('people sent you', colR, curY);
     ctx.fillStyle = '#FFFFFF';
     ctx.font = '44px serif';
@@ -1400,7 +1394,7 @@ function _renderShareCard(idx, logoEl){
     curY += 8;
     ctx.fillStyle = nc.accent + 'BB';
     ctx.font = '600 18px Cabin, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('your emojis', cx, curY);
+    ctx.fillText('most used', cx, curY);
     ctx.fillStyle = '#FFFFFF';
     ctx.font = '48px serif';
     ctx.fillText(topEmojis.slice(0,3).join('    '), cx, curY + 52);
@@ -1416,35 +1410,48 @@ function _renderShareCard(idx, logoEl){
     curY += 72;
   }
 
-  // ── Style pill — full-width, accent border
+  // ── Identity pill — top 10: award OR style (one pill); others: style + optional award
   curY += 18;
   accentDash(curY);
   curY += 18;
   var pillW = 620, pillH = 58, pillR = 29;
-  ctx.fillStyle = nc.glow + '0.06)';
-  roundRect(ctx, cx - pillW/2, curY, pillW, pillH, pillR); ctx.fill();
-  ctx.strokeStyle = nc.accent; ctx.lineWidth = 2; ctx.stroke();
-  ctx.fillStyle = nc.accent;
-  ctx.font = '700 26px Cabin, sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText(stLabel, cx, curY + 38);
-  curY += pillH + 12;
 
-  // ── Award pill (if exists)
-  if(award){
-    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+  if(isTop10){
+    // One pill — award takes priority, neon border + neon bg
+    var pillLabel = award ? (award[0] + '  ' + award[1]) : stLabel;
+    ctx.fillStyle = nc.glow + '0.10)';
     roundRect(ctx, cx - pillW/2, curY, pillW, pillH, pillR); ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1; ctx.stroke();
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = '30px serif'; ctx.textAlign = 'center';
-    ctx.fillText(award[0] + '  ' + award[1], cx, curY + 39);
+    ctx.strokeStyle = nc.accent; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = nc.accent;
+    ctx.font = award ? '700 28px Cabin, sans-serif' : '700 26px Cabin, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(pillLabel, cx, curY + 38);
     curY += pillH + 12;
+  } else {
+    // Style pill
+    ctx.fillStyle = nc.glow + '0.06)';
+    roundRect(ctx, cx - pillW/2, curY, pillW, pillH, pillR); ctx.fill();
+    ctx.strokeStyle = nc.accent; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = nc.accent;
+    ctx.font = '700 26px Cabin, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(stLabel, cx, curY + 38);
+    curY += pillH + 12;
+    // Award pill (if exists)
+    if(award){
+      ctx.fillStyle = nc.glow + '0.06)';
+      roundRect(ctx, cx - pillW/2, curY, pillW, pillH, pillR); ctx.fill();
+      ctx.strokeStyle = nc.glow + '0.15)'; ctx.lineWidth = 1; ctx.stroke();
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '30px serif'; ctx.textAlign = 'center';
+      ctx.fillText(award[0] + '  ' + award[1], cx, curY + 39);
+      curY += pillH + 12;
+    }
   }
 
-  // ── Detail stats — 3 separate glass pills
+  // ── Detail stats — 3 separate neon pills
   var statItems = [];
   if(photosShared > 0) statItems.push({em:'📸', val:photosShared.toString(), lbl:'PHOTOS'});
   if(activeLabel){
-    // Split "Night Owl 🦉" → emoji icon + text label
     var alMatch = activeLabel.match(/^(.+?)\s*([\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}]+)$/u);
     if(alMatch){ statItems.push({em:alMatch[2], val:alMatch[1], lbl:'VIBE HOUR'}); }
     else { statItems.push({em:'🕐', val:activeLabel, lbl:'VIBE HOUR'}); }
@@ -1461,10 +1468,10 @@ function _renderShareCard(idx, logoEl){
       var spX = spStartX + si * (spW + spGap);
       var spCx = spX + spW / 2;
 
-      // Glass pill bg
-      ctx.fillStyle = 'rgba(255,255,255,0.03)';
+      // Neon-tinted bg
+      ctx.fillStyle = nc.glow + '0.08)';
       roundRect(ctx, spX, curY, spW, spH, spR); ctx.fill();
-      ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1; ctx.stroke();
+      ctx.strokeStyle = nc.glow + '0.18)'; ctx.lineWidth = 1; ctx.stroke();
 
       // Emoji icon
       ctx.fillStyle = '#FFFFFF';
@@ -1477,23 +1484,25 @@ function _renderShareCard(idx, logoEl){
       ctx.fillText(statItems[si].val, spCx, curY + 58);
 
       // Label
-      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
       ctx.font = '700 12px Cabin, sans-serif';
       ctx.fillText(statItems[si].lbl, spCx, curY + 78);
     }
     curY += spH + 10;
   }
 
-  // ── Garden buddy — warm closer
+  // ── Garden buddy — stronger contrast between label and name
   if(bestie){
     curY += 6;
-    ctx.fillStyle = nc.accent + '88';
-    ctx.font = '600 15px Cabin, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '700 14px Cabin, sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('GARDEN BUDDY', cx, curY);
-    ctx.fillStyle = nc.accent;
-    ctx.font = '700 32px Cabin, sans-serif';
-    ctx.fillText(bestie, cx, curY + 36);
-    curY += 48;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '700 36px Cabin, sans-serif';
+    ctx.save(); ctx.shadowColor = nc.accent; ctx.shadowBlur = 12;
+    ctx.fillText(bestie, cx, curY + 40);
+    ctx.restore();
+    curY += 52;
   }
 
   contentBottom = curY + 20;
