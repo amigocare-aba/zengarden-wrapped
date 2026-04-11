@@ -1100,9 +1100,23 @@ function openCrewProfile(idx) {
   const mostHyped = wd.most_hyped || 0;
   const labelColor = mc.accent + 'BB';
 
-  // Logo URL
+  // Logo — pre-generate white version via canvas for dark backgrounds
   const logoEl = document.querySelector('.logo-corner img');
   const logoSrc = logoEl ? logoEl.src : '';
+  let whiteLogoSrc = '';
+  if(logoEl && logoEl.complete && logoEl.naturalWidth > 0){
+    try {
+      var lc = document.createElement('canvas');
+      lc.width = logoEl.naturalWidth; lc.height = logoEl.naturalHeight;
+      var lctx = lc.getContext('2d');
+      lctx.drawImage(logoEl, 0, 0);
+      lctx.globalCompositeOperation = 'source-atop';
+      lctx.fillStyle = '#FFFFFF';
+      lctx.fillRect(0, 0, lc.width, lc.height);
+      whiteLogoSrc = lc.toDataURL('image/png');
+    } catch(e){ whiteLogoSrc = logoSrc; }
+  }
+  const cardLogoSrc = isLightModal ? logoSrc : (whiteLogoSrc || logoSrc);
 
   // ── Build card content HTML ─────────────────────────────
   let contentHTML = '';
@@ -1215,7 +1229,7 @@ function openCrewProfile(idx) {
       // Footer — divider + logo + CTA
       + '<div style="text-align:center;padding:0 24px 16px;">'
         + '<div style="width:32px;height:2px;background:' + mc.accent + ';border-radius:1px;margin:0 auto 10px;' + (isLightModal ? '' : 'box-shadow:0 0 12px ' + mc.accent + ';') + '"></div>'
-        + (logoSrc ? '<img src="' + logoSrc + '" style="height:36px;margin-bottom:6px;' + (isLightModal ? '' : 'filter:brightness(0) invert(1);') + '" crossorigin="anonymous" />' : '')
+        + (cardLogoSrc ? '<img src="' + cardLogoSrc + '" style="height:36px;margin-bottom:6px;" crossorigin="anonymous" />' : '')
         + '<div style="font-size:10px;font-weight:600;color:' + mc.accent + ';font-family:Cabin,sans-serif;">when your workplace actually cares about wellness 🌱</div>'
       + '</div>'
 
@@ -1228,14 +1242,25 @@ function openCrewProfile(idx) {
         + '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;margin-bottom:8px;">card background</div>'
         + '<div id="bgPicker" style="display:flex;justify-content:center;gap:10px;">' + swatchHTML + '</div>'
       + '</div>'
-      // Share button
-      + '<div style="padding:6px 0;">'
-        + '<button id="shareCardBtn" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,' + mc.accent + ',' + mc.accent + 'cc);color:' + (isLightModal ? '#fff' : '#000') + ';font-family:-apple-system,BlinkMacSystemFont,Cabin,sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px ' + mc.glow + '0.3);letter-spacing:.02em;">'
+      // ── Spotify-style share options ──
+      + '<div style="display:flex;flex-direction:column;gap:8px;padding:6px 0;">'
+        // 1. Instagram Stories / Share (primary CTA)
+        + '<button id="shareStoryBtn" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,' + mc.accent + ',' + mc.accent + 'cc);color:' + (isLightModal ? '#fff' : '#000') + ';font-family:-apple-system,BlinkMacSystemFont,Cabin,sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px ' + mc.glow + '0.3);letter-spacing:.02em;">'
           + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>'
-          + ' Share My Card'
+          + ' Share to Instagram Stories'
+        + '</button>'
+        // 2. Save to Camera Roll
+        + '<button id="saveCardBtn" style="width:100%;padding:12px;border:none;border-radius:14px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);font-family:-apple-system,BlinkMacSystemFont,Cabin,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(255,255,255,.1);letter-spacing:.02em;">'
+          + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+          + ' Save to Camera Roll'
+        + '</button>'
+        // 3. Copy to Clipboard
+        + '<button id="copyCardBtn" style="width:100%;padding:12px;border:none;border-radius:14px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);font-family:-apple-system,BlinkMacSystemFont,Cabin,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(255,255,255,.1);letter-spacing:.02em;">'
+          + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>'
+          + ' Copy Image'
         + '</button>'
       + '</div>'
-      // Caption picker
+      // Caption picker — shown after any share action
       + '<div id="captionPicker" style="display:none;padding:0 0 12px;">'
         + '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;margin-bottom:10px;">copy a caption for your post</div>'
         + '<div style="display:flex;flex-direction:column;gap:6px;">'
@@ -1252,39 +1277,108 @@ function openCrewProfile(idx) {
   document.getElementById('crewModalClose').onclick = () => modal.remove();
   modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
 
-  // ── Share button — html2canvas capture of #modalCard ─────
-  document.getElementById('shareCardBtn').onclick = function(){
+  // ── Helper: capture the card as a PNG blob ─────
+  var fileName = name.toLowerCase() + '-zen-garden-march-2026.png';
+  function captureCard(){
     var card = document.getElementById('modalCard');
-    var btn = document.getElementById('shareCardBtn');
-    btn.innerHTML = 'Generating...';
-    btn.style.opacity = '0.6';
-    // Remove border-radius for clean full-bleed PNG
     var origRadius = card.style.borderRadius;
     card.style.borderRadius = '0';
-    html2canvas(card, {
+    return html2canvas(card, {
       scale: 3, // 360×3=1080, 640×3=1920
       useCORS: true,
       backgroundColor: null,
       logging: false
     }).then(function(canvas){
       card.style.borderRadius = origRadius;
+      return new Promise(function(resolve){
+        canvas.toBlob(function(blob){ resolve(blob); }, 'image/png');
+      });
+    });
+  }
+
+  function showDone(btn, msg){
+    btn.innerHTML = msg;
+    btn.style.opacity = '1';
+    haptic([8,30,8]);
+    var picker = document.getElementById('captionPicker');
+    if(picker){
+      picker.style.display = 'block';
+      picker.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+  }
+
+  function showWorking(btn){ btn.style.opacity = '0.6'; btn.innerHTML = 'Generating...'; }
+
+  // ── 1. Share to Instagram Stories (navigator.share with files) ─────
+  document.getElementById('shareStoryBtn').onclick = function(){
+    var btn = this;
+    showWorking(btn);
+    captureCard().then(function(blob){
+      var file = new File([blob], fileName, {type:'image/png'});
+      // Use Web Share API with files if available (mobile)
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        navigator.share({
+          files: [file],
+          title: name + ' — Zen Garden Wrapped',
+          text: 'when your workplace actually cares about wellness 🌱 @amigocare.aba'
+        }).then(function(){
+          showDone(btn, '✓ Shared!');
+        }).catch(function(){
+          // User cancelled share sheet — still OK
+          showDone(btn, 'Share to Instagram Stories');
+          btn.style.opacity = '1';
+        });
+      } else {
+        // Desktop fallback — download the PNG
+        var link = document.createElement('a');
+        link.download = fileName;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        URL.revokeObjectURL(link.href);
+        showDone(btn, '✓ Card Saved — Open Instagram to Post');
+      }
+    });
+  };
+
+  // ── 2. Save to Camera Roll (direct download) ─────
+  document.getElementById('saveCardBtn').onclick = function(){
+    var btn = this;
+    showWorking(btn);
+    captureCard().then(function(blob){
       var link = document.createElement('a');
-      link.download = name.toLowerCase() + '-zen-garden-march-2026.png';
-      link.href = canvas.toDataURL('image/png');
+      link.download = fileName;
+      link.href = URL.createObjectURL(blob);
       link.click();
-      haptic([8,30,8]);
-      // Show caption picker
-      var picker = document.getElementById('captionPicker');
-      if(picker){
-        picker.style.display = 'block';
-        picker.scrollIntoView({behavior:'smooth',block:'nearest'});
-        btn.innerHTML = '✓ Card Saved — Now Post It';
-        btn.style.background = 'rgba(255,255,255,.08)';
-        btn.style.color = mc.accent;
-        btn.style.border = '1px solid ' + mc.accent;
-        btn.style.boxShadow = 'none';
-        btn.style.cursor = 'default';
-        btn.style.opacity = '1';
+      URL.revokeObjectURL(link.href);
+      showDone(btn, '✓ Saved to Camera Roll');
+    });
+  };
+
+  // ── 3. Copy Image to Clipboard ─────
+  document.getElementById('copyCardBtn').onclick = function(){
+    var btn = this;
+    showWorking(btn);
+    captureCard().then(function(blob){
+      if(navigator.clipboard && navigator.clipboard.write){
+        navigator.clipboard.write([
+          new ClipboardItem({'image/png': blob})
+        ]).then(function(){
+          showDone(btn, '✓ Copied to Clipboard');
+        }).catch(function(){
+          // Fallback: download instead
+          var link = document.createElement('a');
+          link.download = fileName;
+          link.href = URL.createObjectURL(blob);
+          link.click();
+          showDone(btn, '✓ Saved (clipboard not supported)');
+        });
+      } else {
+        // No clipboard API — download
+        var link = document.createElement('a');
+        link.download = fileName;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        showDone(btn, '✓ Saved (clipboard not supported)');
       }
     });
   };
