@@ -1187,13 +1187,7 @@ function openCrewProfile(idx) {
     contentHTML += '</div>';
   }
 
-  // Garden buddy
-  if(bestie){
-    contentHTML += '<div style="text-align:center;">'
-      + '<div style="font-size:7px;color:' + mc.faint + ';font-weight:700;letter-spacing:.1em;font-family:Cabin,sans-serif;">GARDEN BUDDY</div>'
-      + '<div style="font-size:16px;font-weight:700;color:' + mc.text + ';margin-top:2px;font-family:Cabin,sans-serif;">' + bestie + '</div>'
-      + '</div>';
-  }
+  // Garden buddy — kept in data but removed from card for cleaner layout
 
   // ── Swatch HTML ─────────────────────────────────
   const swatchDefs = [
@@ -1235,11 +1229,11 @@ function openCrewProfile(idx) {
         + contentHTML
       + '</div>'
 
-      // Footer — divider + logo + tagline + IG-safe bottom padding (~280px at 1920)
-      + '<div style="text-align:center;padding:0 24px 96px;">'
-        + '<div style="width:32px;height:2px;background:' + mc.accent + ';border-radius:1px;margin:0 auto 14px;' + (isLightModal ? '' : 'box-shadow:0 0 12px ' + mc.accent + ';') + '"></div>'
-        + (cardLogoSrc ? '<img src="' + cardLogoSrc + '" style="height:49px;margin-bottom:12px;" crossorigin="anonymous" />' : '')
-        + '<div style="font-size:15px;font-weight:700;color:#4ade80;font-family:Cabin,sans-serif;line-height:1.4;letter-spacing:.01em;">A workplace that actually<br>sees you 🌱</div>'
+      // Footer — divider + tagline + logo + IG-safe bottom padding (~280px at 1920)
+      + '<div style="text-align:center;padding:12px 24px 96px;">'
+        + '<div style="width:32px;height:2px;background:' + mc.accent + ';border-radius:1px;margin:0 auto 16px;' + (isLightModal ? '' : 'box-shadow:0 0 12px ' + mc.accent + ';') + '"></div>'
+        + '<div style="font-size:16px;font-weight:700;color:#4ade80;font-family:Cabin,sans-serif;line-height:1.4;letter-spacing:.01em;margin-bottom:16px;' + (isLightModal ? '' : 'text-shadow:0 0 20px rgba(74,222,128,0.5),0 0 40px rgba(74,222,128,0.25);') + '">A workplace that actually<br>sees you 🌱</div>'
+        + (cardLogoSrc ? '<img src="' + cardLogoSrc + '" style="height:49px;" crossorigin="anonymous" />' : '')
       + '</div>'
 
     + '</div>' // end #modalCard
