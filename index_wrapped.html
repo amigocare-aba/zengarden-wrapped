@@ -1225,21 +1225,21 @@ function openCrewProfile(idx) {
     // ═══ THE CARD — 9:16, single source of truth for PNG ═══
     + '<div id="modalCard" style="width:360px;height:640px;min-height:640px;flex-shrink:0;border-radius:24px;overflow:hidden;position:relative;display:flex;flex-direction:column;color:' + mc.text + ';background:' + cardBgCSS + ';box-shadow:0 24px 64px rgba(0,0,0,.5);animation:sheetIn .3s cubic-bezier(.34,1.2,.64,1) both;">'
 
-      // Eyebrow
-      + '<div style="text-align:center;padding:14px 16px 0;font-size:9px;font-weight:700;letter-spacing:.1em;color:' + mc.sub + ';font-family:Cabin,sans-serif;">ZEN GARDEN · MARCH 2026</div>'
+      // Eyebrow — below IG story header safe zone (~130px at 1920)
+      + '<div style="text-align:center;padding:38px 16px 0;font-size:9px;font-weight:700;letter-spacing:.1em;color:' + mc.sub + ';font-family:Cabin,sans-serif;">ZEN GARDEN · MARCH 2026</div>'
 
-      // Main content — centered flex
-      + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:0 20px;">'
+      // Main content — shifted up (flex-start) so nothing gets cut by IG bottom UI
+      + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:0 20px 0;">'
         + '<div style="font-size:48px;line-height:1;">' + em + '</div>'
         + '<div style="font-family:Bebas Neue,sans-serif;font-size:48px;line-height:.9;color:' + mc.text + ';">' + name.toUpperCase() + '</div>'
         + contentHTML
       + '</div>'
 
-      // Footer — divider + logo + CTA
-      + '<div style="text-align:center;padding:0 24px 16px;">'
-        + '<div style="width:32px;height:2px;background:' + mc.accent + ';border-radius:1px;margin:0 auto 10px;' + (isLightModal ? '' : 'box-shadow:0 0 12px ' + mc.accent + ';') + '"></div>'
-        + (cardLogoSrc ? '<img src="' + cardLogoSrc + '" style="height:36px;margin-bottom:6px;" crossorigin="anonymous" />' : '')
-        + '<div style="font-size:10px;font-weight:600;color:' + mc.accent + ';font-family:Cabin,sans-serif;">when your workplace actually cares about wellness 🌱</div>'
+      // Footer — divider + logo + tagline + IG-safe bottom padding (~280px at 1920)
+      + '<div style="text-align:center;padding:0 24px 96px;">'
+        + '<div style="width:32px;height:2px;background:' + mc.accent + ';border-radius:1px;margin:0 auto 14px;' + (isLightModal ? '' : 'box-shadow:0 0 12px ' + mc.accent + ';') + '"></div>'
+        + (cardLogoSrc ? '<img src="' + cardLogoSrc + '" style="height:49px;margin-bottom:12px;" crossorigin="anonymous" />' : '')
+        + '<div style="font-size:15px;font-weight:700;color:#4ade80;font-family:Cabin,sans-serif;line-height:1.4;letter-spacing:.01em;">A workplace that actually<br>sees you 🌱</div>'
       + '</div>'
 
     + '</div>' // end #modalCard
@@ -1251,22 +1251,11 @@ function openCrewProfile(idx) {
         + '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;margin-bottom:8px;">card background</div>'
         + '<div id="bgPicker" style="display:flex;justify-content:center;gap:10px;">' + swatchHTML + '</div>'
       + '</div>'
-      // ── Spotify-style share options ──
-      + '<div style="display:flex;flex-direction:column;gap:8px;padding:6px 0;">'
-        // 1. Instagram Stories / Share (primary CTA)
+      // ── Share button ──
+      + '<div style="padding:6px 0;">'
         + '<button id="shareStoryBtn" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,' + mc.accent + ',' + mc.accent + 'cc);color:' + (isLightModal ? '#fff' : '#000') + ';font-family:-apple-system,BlinkMacSystemFont,Cabin,sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px ' + mc.glow + '0.3);letter-spacing:.02em;">'
           + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>'
-          + ' Share to Instagram Stories'
-        + '</button>'
-        // 2. Save to Camera Roll
-        + '<button id="saveCardBtn" style="width:100%;padding:12px;border:none;border-radius:14px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);font-family:-apple-system,BlinkMacSystemFont,Cabin,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(255,255,255,.1);letter-spacing:.02em;">'
-          + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
-          + ' Save to Camera Roll'
-        + '</button>'
-        // 3. Copy to Clipboard
-        + '<button id="copyCardBtn" style="width:100%;padding:12px;border:none;border-radius:14px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);font-family:-apple-system,BlinkMacSystemFont,Cabin,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(255,255,255,.1);letter-spacing:.02em;">'
-          + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>'
-          + ' Copy Image'
+          + ' Share to Social Media'
         + '</button>'
       + '</div>'
       // Caption picker — shown after any share action
@@ -1274,7 +1263,7 @@ function openCrewProfile(idx) {
         + '<div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;margin-bottom:10px;">copy a caption for your post</div>'
         + '<div style="display:flex;flex-direction:column;gap:6px;">'
           + '<div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;">my march wrapped 🌿 love this team @amigocare.aba</div>'
-          + '<div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;">when your workplace actually cares about wellness 🌱 @amigocare.aba</div>'
+          + '<div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;">A workplace that actually sees you 🌱 @amigocare.aba</div>'
           + '<div class="caption-opt" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);cursor:pointer;font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;transition:border-color .2s,background .2s;">not your average healthcare job 🌿 @amigocare.aba</div>'
         + '</div>'
       + '</div>'
@@ -1329,7 +1318,7 @@ function openCrewProfile(idx) {
         navigator.share({
           files: [file],
           title: name + ' — Zen Garden Wrapped',
-          text: 'when your workplace actually cares about wellness 🌱 @amigocare.aba'
+          text: 'A workplace that actually sees you 🌱 @amigocare.aba'
         }).then(function(){
           showDone(btn, '✓ Shared!');
         }).catch(function(){
@@ -1345,49 +1334,6 @@ function openCrewProfile(idx) {
         link.click();
         URL.revokeObjectURL(link.href);
         showDone(btn, '✓ Card Saved — Open Instagram to Post');
-      }
-    });
-  };
-
-  // ── 2. Save to Camera Roll (direct download) ─────
-  document.getElementById('saveCardBtn').onclick = function(){
-    var btn = this;
-    showWorking(btn);
-    captureCard().then(function(blob){
-      var link = document.createElement('a');
-      link.download = fileName;
-      link.href = URL.createObjectURL(blob);
-      link.click();
-      URL.revokeObjectURL(link.href);
-      showDone(btn, '✓ Saved to Camera Roll');
-    });
-  };
-
-  // ── 3. Copy Image to Clipboard ─────
-  document.getElementById('copyCardBtn').onclick = function(){
-    var btn = this;
-    showWorking(btn);
-    captureCard().then(function(blob){
-      if(navigator.clipboard && navigator.clipboard.write){
-        navigator.clipboard.write([
-          new ClipboardItem({'image/png': blob})
-        ]).then(function(){
-          showDone(btn, '✓ Copied to Clipboard');
-        }).catch(function(){
-          // Fallback: download instead
-          var link = document.createElement('a');
-          link.download = fileName;
-          link.href = URL.createObjectURL(blob);
-          link.click();
-          showDone(btn, '✓ Saved (clipboard not supported)');
-        });
-      } else {
-        // No clipboard API — download
-        var link = document.createElement('a');
-        link.download = fileName;
-        link.href = URL.createObjectURL(blob);
-        link.click();
-        showDone(btn, '✓ Saved (clipboard not supported)');
       }
     });
   };
