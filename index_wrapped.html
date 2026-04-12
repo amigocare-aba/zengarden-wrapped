@@ -690,7 +690,7 @@ body::before{
   <div style="position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;width:280px;height:280px;background:radial-gradient(circle,rgba(255,255,255,0.10),transparent 65%);top:40%;left:42%;"></div>
   <div class="eyebrow anim-up">the crew</div>
   <div class="slide-heading anim-up-2" style="color:var(--purple);">LOOK<br>YOURSELF UP.</div>
-  <div class="slide-body anim-up-3" style="margin-bottom:28px;max-width:800px;">Search your name. See your points, your streak, your style — everything from March in one tap.</div>
+  <div class="slide-body anim-up-3" style="margin-bottom:28px;max-width:800px;">Search your name, then <strong style="color:var(--green);">tap your card</strong> to unlock your personal Wrapped and share it.</div>
   <div class="anim-up-4" style="max-width:1200px;width:100%;">
     <div style="position:relative;margin-bottom:16px;max-width:400px;">
       <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;">🔍</span>
@@ -698,7 +698,7 @@ body::before{
         style="width:100%;padding:14px 14px 14px 42px;border-radius:14px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:16px;font-family:inherit;outline:none;box-sizing:border-box;"/>
     </div>
     <div id="crewSeeAll" style="text-align:left;margin-top:12px;margin-bottom:20px;max-width:400px;">
-      <button onclick="showAllCrew()" style="background:none;border:1px solid var(--border);border-radius:99px;padding:10px 28px;font-family:'Cabin',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;">see all 48 people</button>
+      <button onclick="showAllCrew()" style="background:var(--green);border:none;border-radius:99px;padding:12px 32px;font-family:'Cabin',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#04342C;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(29,158,117,0.3);">see all 48 people</button>
     </div>
     <div id="crewGrid" class="crew-grid" style="width:100%;display:none;"></div>
     <div id="crewHideBottom" style="text-align:center;margin-top:24px;display:none;">
@@ -859,7 +859,7 @@ if(emojiEl){
 }
 
 // ── AWARDS — data computation + population ────────────────────────
-function firstName(n){const p=n.split(' ')[0];return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase();}
+function firstName(n){if(n.includes(' & ')){return n.split(' & ').map(function(s){var p=s.trim().split(' ')[0];return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase();}).join(' & ');}const p=n.split(' ')[0];return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase();}
 
 const streaker=[...D.all_active].sort((a,b)=>b.streak-a.streak||b.pts-a.pts)[0];
 const improved=[...D.all_active].sort((a,b)=>(b.wk4-b.wk1)-(a.wk4-a.wk1))[0];
@@ -1119,7 +1119,8 @@ function openCrewProfile(idx) {
 
   // Wrapped data
   const wd = WRAPPED_DATA[r.name] || {};
-  const topWord = (wd.top_words && wd.top_words[0]) || null;
+  const _skipWords = new Set(['ooo','oooo','ooooo','ahh','ahhh','hiii','omggg','yesss','sooo','soo']);
+  const topWord = (wd.top_words && wd.top_words.find(function(w){ return !_skipWords.has(w[0]); })) || null;
   const topReactions = (wd.top_reactions || []).map(convertSlackEmoji);
   const topEmojis = (wd.top_emojis || []).map(convertSlackEmoji).filter(e => e && e.replace(/[\u200D\uFE0F\uFE0E\u200B\u200C]/g,'').trim().length > 0);
   const photosShared = wd.photos_shared || 0;
@@ -1241,11 +1242,11 @@ function openCrewProfile(idx) {
     + '<div id="modalCard" style="width:360px;height:640px;min-height:640px;flex-shrink:0;border-radius:24px;overflow:hidden;position:relative;display:flex;flex-direction:column;color:' + mc.text + ';background:' + cardBgCSS + ';box-shadow:0 24px 64px rgba(0,0,0,.5);animation:sheetIn .3s cubic-bezier(.34,1.2,.64,1) both;">'
 
       // Eyebrow — below IG story header safe zone (~130px at 1920)
-      + '<div style="text-align:center;padding:38px 16px 0;font-size:9px;font-weight:700;letter-spacing:.1em;color:' + mc.sub + ';font-family:Cabin,sans-serif;">ZEN GARDEN · MARCH 2026</div>'
+      + '<div style="text-align:center;padding:44px 16px 16px;font-size:9px;font-weight:700;letter-spacing:.1em;color:' + mc.sub + ';font-family:Cabin,sans-serif;">ZEN GARDEN · MARCH 2026</div>'
 
-      // Main content — shifted up (flex-start) so nothing gets cut by IG bottom UI
+      // Main content — centered with breathing room
       + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:0 20px 0;">'
-        + '<div style="font-size:48px;line-height:1;">' + em + '</div>'
+        + '<div style="font-size:48px;line-height:1;margin-bottom:2px;">' + em + '</div>'
         + '<div style="font-family:Bebas Neue,sans-serif;font-size:48px;line-height:.9;color:' + mc.text + ';">' + name.toUpperCase() + '</div>'
         + contentHTML
       + '</div>'
@@ -1254,7 +1255,7 @@ function openCrewProfile(idx) {
       + '<div style="text-align:center;padding:12px 24px 96px;">'
         + '<div style="width:32px;height:2px;background:' + mc.accent + ';border-radius:1px;margin:0 auto 16px;' + (isLightModal ? '' : 'box-shadow:0 0 12px ' + mc.accent + ';') + '"></div>'
         + '<div style="font-size:13px;font-weight:700;color:' + (isLightModal ? '#2E7DD4' : '#4ade80') + ';font-family:Cabin,sans-serif;line-height:1.4;letter-spacing:.02em;margin-bottom:16px;white-space:nowrap;' + (isLightModal ? '' : 'text-shadow:0 0 20px rgba(74,222,128,0.5),0 0 40px rgba(74,222,128,0.25);') + '">A workplace that actually sees you 🌱</div>'
-        + (cardLogoSrc ? '<img src="' + cardLogoSrc + '" style="height:49px;margin-top:8px;" crossorigin="anonymous" />' : '')
+        + (cardLogoSrc ? '<img src="' + cardLogoSrc + '" style="height:49px;margin-top:18px;" crossorigin="anonymous" />' : '')
       + '</div>'
 
     + '</div>' // end #modalCard
