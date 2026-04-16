@@ -28,6 +28,7 @@ import json
 import csv
 import hashlib
 import argparse
+import urllib.request
 from collections import defaultdict
 from datetime import datetime, timedelta
 from slack_sdk import WebClient
@@ -75,6 +76,28 @@ if not BOT_TOKEN or not USER_TOKEN:
         print("     SLACK_BOT_TOKEN=xoxb-...")
         print("     SLACK_USER_TOKEN=xoxp-...")
         sys.exit(1)
+
+SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "")
+
+
+def post_to_slack(text):
+    """Post a message to Slack via incoming webhook."""
+    if not SLACK_WEBHOOK_URL:
+        print("⚠️  No SLACK_WEBHOOK_URL set — skipping Slack post")
+        return False
+    try:
+        payload = json.dumps({"text": text}).encode("utf-8")
+        req = urllib.request.Request(
+            SLACK_WEBHOOK_URL,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+        )
+        urllib.request.urlopen(req)
+        print("📣 Posted summary to Slack")
+        return True
+    except Exception as e:
+        print(f"⚠️  Slack post failed: {e}")
+        return False
 
 
 # ── CONFIG VALIDATION ───────────────────────────────────────────────
@@ -560,6 +583,11 @@ def main():
         f.write(summary_text + "\n")
     outputs.append(SUMMARY_FILE)
     print(f"💬 Summary → {SUMMARY_FILE}")
+
+    # 3b. Post summary to Slack channel
+    page_url = "https://amigocare-aba.github.io/zengarden-wrapped/weekly.html"
+    slack_msg = summary_text + f"\n\n📊 <{page_url}|View full scoreboard>"
+    post_to_slack(slack_msg)
 
     # 4. Run status (audit artifact)
     write_status({
