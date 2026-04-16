@@ -92,6 +92,54 @@ body::before {
 .link-desc { font-size: 11px; color: var(--ink2); }
 .link-arrow { color: var(--ink3); font-size: 18px; }
 
+/* ── MESSAGING ────────────────────────────────────────────────── */
+.msg-section {
+  background: var(--bg2); border-radius: var(--r); padding: 24px;
+  border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 16px;
+}
+.msg-section-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.msg-section-desc { font-size: 12px; color: var(--ink2); margin-bottom: 16px; }
+.msg-textarea {
+  width: 100%; min-height: 80px; padding: 12px 14px;
+  border-radius: var(--r-sm); border: 1px solid var(--border);
+  background: var(--bg); font-family: 'Cabin', sans-serif; font-size: 14px;
+  color: var(--ink); resize: vertical; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.msg-textarea:focus {
+  border-color: rgba(29,158,117,0.4);
+  box-shadow: 0 0 0 3px rgba(29,158,117,0.08);
+}
+.msg-textarea::placeholder { color: var(--ink3); }
+.msg-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+.msg-btn {
+  padding: 10px 24px; border-radius: 99px; border: none;
+  font-family: 'Cabin', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: transform 0.1s, box-shadow 0.2s;
+  letter-spacing: 0.04em;
+}
+.msg-btn:active { transform: scale(0.97); }
+.msg-btn-send { background: var(--green); color: #fff; box-shadow: 0 2px 8px rgba(29,158,117,0.3); }
+.msg-btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+.msg-status { font-size: 12px; color: var(--ink2); margin-left: 8px; }
+.msg-status.ok { color: var(--green); }
+.msg-status.err { color: var(--coral); }
+.webhook-setup {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 16px;
+}
+.webhook-input {
+  flex: 1; padding: 10px 14px; border-radius: var(--r-sm);
+  border: 1px solid var(--border); background: var(--bg);
+  font-family: 'Cabin', sans-serif; font-size: 12px; color: var(--ink); outline: none;
+}
+.webhook-input::placeholder { color: var(--ink3); }
+.webhook-save {
+  padding: 8px 16px; border-radius: 99px; border: 1px solid var(--border);
+  background: var(--bg2); font-family: 'Cabin', sans-serif; font-size: 11px;
+  font-weight: 700; cursor: pointer; color: var(--ink);
+}
+.webhook-saved { font-size: 11px; color: var(--green); font-weight: 700; }
+
 .empty { text-align: center; padding: 40px 20px; color: var(--ink2); font-size: 14px; }
 
 @media (max-width: 640px) {
@@ -154,6 +202,27 @@ body::before {
       <span class="link-arrow">&rsaquo;</span>
     </a>
   </div>
+
+  <!-- GARDY MESSAGING -->
+  <div class="msg-section" id="msgSection" style="display:none;">
+    <div class="msg-section-title">Send as Gardy</div>
+    <div class="msg-section-desc">Post a message to the wellness channel as Gardy</div>
+
+    <div class="webhook-setup" id="webhookSetup">
+      <input class="webhook-input" id="webhookInput" type="password" placeholder="Paste webhook URL (saved in your browser)">
+      <button class="webhook-save" onclick="saveWebhook()">Save</button>
+    </div>
+    <div id="webhookSaved" style="display:none;">
+      <span class="webhook-saved">Webhook saved</span>
+      <button class="webhook-save" onclick="clearWebhook()" style="margin-left:8px;">Change</button>
+    </div>
+
+    <textarea class="msg-textarea" id="msgText" placeholder="Type a message for Gardy to send..."></textarea>
+    <div class="msg-actions">
+      <button class="msg-btn msg-btn-send" id="msgSend" onclick="sendMessage()" disabled>Send</button>
+      <span class="msg-status" id="msgStatus"></span>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -214,6 +283,85 @@ fetch('run_status.json')
     document.getElementById('content').innerHTML = '<div class="empty">No run data found.<br><small>Run the extraction script to generate status.</small></div>';
     document.getElementById('links').style.display = '';
   });
+
+// ── GARDY MESSAGING ──────────────────────────────────────────────
+(function() {
+  var section = document.getElementById('msgSection');
+  var setup = document.getElementById('webhookSetup');
+  var saved = document.getElementById('webhookSaved');
+  var input = document.getElementById('webhookInput');
+  var textarea = document.getElementById('msgText');
+  var sendBtn = document.getElementById('msgSend');
+  var statusEl = document.getElementById('msgStatus');
+
+  // Show section always
+  section.style.display = '';
+
+  // Check for saved webhook
+  var webhook = localStorage.getItem('gardy_webhook') || '';
+  if (webhook) {
+    setup.style.display = 'none';
+    saved.style.display = '';
+    sendBtn.disabled = false;
+  }
+
+  // Enable send when there's text and webhook
+  textarea.addEventListener('input', function() {
+    var has = textarea.value.trim().length > 0;
+    var hasWH = !!(localStorage.getItem('gardy_webhook'));
+    sendBtn.disabled = !(has && hasWH);
+  });
+
+  window.saveWebhook = function() {
+    var url = input.value.trim();
+    if (!url.startsWith('https://hooks.slack.com/')) {
+      statusEl.textContent = 'Invalid webhook URL';
+      statusEl.className = 'msg-status err';
+      return;
+    }
+    localStorage.setItem('gardy_webhook', url);
+    setup.style.display = 'none';
+    saved.style.display = '';
+    sendBtn.disabled = !textarea.value.trim();
+    statusEl.textContent = '';
+  };
+
+  window.clearWebhook = function() {
+    localStorage.removeItem('gardy_webhook');
+    input.value = '';
+    setup.style.display = '';
+    saved.style.display = 'none';
+    sendBtn.disabled = true;
+    statusEl.textContent = '';
+  };
+
+  window.sendMessage = function() {
+    var wh = localStorage.getItem('gardy_webhook');
+    var text = textarea.value.trim();
+    if (!wh || !text) return;
+
+    sendBtn.disabled = true;
+    statusEl.textContent = 'Sending...';
+    statusEl.className = 'msg-status';
+
+    fetch(wh, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text }),
+      mode: 'no-cors'
+    }).then(function() {
+      statusEl.textContent = 'Sent!';
+      statusEl.className = 'msg-status ok';
+      textarea.value = '';
+      sendBtn.disabled = true;
+      setTimeout(function() { statusEl.textContent = ''; }, 3000);
+    }).catch(function(err) {
+      statusEl.textContent = 'Failed: ' + err.message;
+      statusEl.className = 'msg-status err';
+      sendBtn.disabled = false;
+    });
+  };
+})();
 </script>
 </body>
 </html>
