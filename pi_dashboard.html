@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PI Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { min-height: 100vh; background: #fafafa; font-family: 'Inter', sans-serif; }
+
+  /* ── Login ── */
+  #login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 20px;
+  }
+
+  #login.hidden { display: none; }
+
+  #login h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+
+  #login p {
+    font-size: 14px;
+    color: #888;
+  }
+
+  #login input {
+    padding: 12px 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    width: 260px;
+    text-align: center;
+    outline: none;
+  }
+
+  #login input:focus { border-color: #1a1a1a; }
+
+  #login-error {
+    font-size: 13px;
+    color: #e63946;
+    font-weight: 600;
+    display: none;
+  }
+
+  .btn {
+    padding: 12px 32px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn-dark {
+    background: #1a1a1a;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  .btn-dark:hover { transform: scale(1.03); }
+
+  .btn-outline {
+    background: #fff;
+    color: #1a1a1a;
+    border: 1px solid rgba(0,0,0,0.12);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .btn-outline:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+  .btn-danger {
+    background: #fef2f2;
+    color: #e63946;
+    border: 1px solid #fecaca;
+  }
+
+  .btn-danger:hover { background: #fee2e2; }
+
+  /* ── Dashboard ── */
+  #dashboard {
+    display: none;
+    flex-direction: column;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    gap: 32px;
+  }
+
+  #dashboard.show { display: flex; }
+
+  .dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .dash-header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+
+  .dash-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* ── Summary Cards ── */
+  .summary-cards {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .summary-card {
+    flex: 1;
+    min-width: 160px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .summary-card .s-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #999;
+  }
+
+  .summary-card .s-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+  }
+
+  /* ── Session Table ── */
+  .sessions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .sessions-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    padding: 12px 16px;
+    border-bottom: 2px solid #f0f0f0;
+    background: #fafafa;
+  }
+
+  .sessions-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f5f5f5;
+    color: #444;
+    font-weight: 500;
+  }
+
+  .sessions-table tr:last-child td { border-bottom: none; }
+
+  .sessions-table tr:hover td { background: #fafafa; }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-a { background: #dbeafe; color: #1d4ed8; }
+  .badge-b { background: #fef3c7; color: #b45309; }
+  .badge-default { background: #f3f4f6; color: #555; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: #bbb;
+    font-size: 15px;
+  }
+
+  .empty-state h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #ccc;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Login ── -->
+<div id="login">
+  <h1>PI Dashboard</h1>
+  <p>Enter your password to access session data.</p>
+  <input type="password" id="password" placeholder="Password" autofocus>
+  <span id="login-error">Incorrect password</span>
+  <button class="btn btn-dark" id="login-btn">Sign In</button>
+</div>
+
+<!-- ── Dashboard ── -->
+<div id="dashboard">
+  <div class="dash-header">
+    <h1>Session Data</h1>
+    <div class="dash-actions">
+      <button class="btn btn-dark" id="export-all">Export All CSV</button>
+      <button class="btn btn-danger" id="clear-data">Clear All Data</button>
+      <button class="btn btn-outline" id="logout-btn">Log Out</button>
+    </div>
+  </div>
+  <div class="summary-cards" id="summary-cards"></div>
+  <div id="session-list"></div>
+</div>
+
+<script>
+  // ── Simple password gate ──
+  // Change this password to whatever you want
+  const PI_PASSWORD = 'admin';
+
+  const loginEl = document.getElementById('login');
+  const dashEl = document.getElementById('dashboard');
+  const passInput = document.getElementById('password');
+  const loginError = document.getElementById('login-error');
+
+  function tryLogin() {
+    if (passInput.value === PI_PASSWORD) {
+      loginEl.classList.add('hidden');
+      dashEl.classList.add('show');
+      renderDashboard();
+    } else {
+      loginError.style.display = 'block';
+      passInput.value = '';
+      passInput.focus();
+    }
+  }
+
+  document.getElementById('login-btn').addEventListener('click', tryLogin);
+  passInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    dashEl.classList.remove('show');
+    loginEl.classList.remove('hidden');
+    passInput.value = '';
+    loginError.style.display = 'none';
+  });
+
+  // ── Dashboard ──
+  function getSessions() {
+    return JSON.parse(localStorage.getItem('aba_sessions') || '[]');
+  }
+
+  function renderDashboard() {
+    const sessions = getSessions();
+    const summaryEl = document.getElementById('summary-cards');
+    const listEl = document.getElementById('session-list');
+
+    if (sessions.length === 0) {
+      summaryEl.innerHTML = '';
+      listEl.innerHTML = `
+        <div class="empty-state">
+          <h2>No sessions yet</h2>
+          <p>Sessions will appear here after participants complete the game.</p>
+        </div>`;
+      return;
+    }
+
+    // Summary stats
+    const participants = new Set(sessions.map(s => s.participant));
+    const conditions = new Set(sessions.map(s => s.condition));
+    const totalClicks = sessions.reduce((sum, s) => sum + s.clicks.length, 0);
+
+    summaryEl.innerHTML = `
+      <div class="summary-card">
+        <span class="s-label">Sessions</span>
+        <span class="s-value">${sessions.length}</span>
+      </div>
+      <div class="summary-card">
+        <span class="s-label">Participants</span>
+        <span class="s-value">${participants.size}</span>
+      </div>
+      <div class="summary-card">
+        <span class="s-label">Conditions</span>
+        <span class="s-value">${conditions.size}</span>
+      </div>
+      <div class="summary-card">
+        <span class="s-label">Total Clicks</span>
+        <span class="s-value">${totalClicks}</span>
+      </div>
+    `;
+
+    // Session table
+    let tableHTML = `
+      <table class="sessions-table">
+        <thead>
+          <tr>
+            <th>Participant</th>
+            <th>Condition</th>
+            <th>Session</th>
+            <th>Date</th>
+            <th>Clicks</th>
+            <th>Color A</th>
+            <th>Color B</th>
+            <th>Pauses</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+    sessions.forEach(s => {
+      const pauses = s.clicks.filter(c => c.pause === 1).length;
+      const date = new Date(s.date).toLocaleDateString();
+      const condLower = s.condition.toLowerCase();
+      const badgeClass = condLower.includes('baseline') || condLower.includes(' a') ? 'badge-a'
+        : condLower.includes('intervention') || condLower.includes(' b') ? 'badge-b'
+        : 'badge-default';
+
+      const countA = s.clicks.filter(c => c.circle === s.colorA).length;
+      const countB = s.clicks.filter(c => c.circle === s.colorB).length;
+
+      tableHTML += `
+        <tr>
+          <td><strong>${s.participant}</strong></td>
+          <td><span class="badge ${badgeClass}">${s.condition}</span></td>
+          <td>${s.session}</td>
+          <td>${date}</td>
+          <td>${s.clicks.length}</td>
+          <td>${s.colorA} (${countA})</td>
+          <td>${s.colorB} (${countB})</td>
+          <td>${pauses}</td>
+        </tr>`;
+    });
+
+    tableHTML += '</tbody></table>';
+    listEl.innerHTML = tableHTML;
+  }
+
+  // ── Export all sessions as one CSV ──
+  document.getElementById('export-all').addEventListener('click', () => {
+    const sessions = getSessions();
+    if (sessions.length === 0) return;
+
+    const headers = [
+      'participant_id', 'condition', 'session', 'session_date',
+      'click_num', 'circle_color', 'elapsed_s', 'gap_s',
+      'pause_flag', 'cumulative_total', 'cumulative_circle',
+    ];
+
+    const rows = [];
+    sessions.forEach(s => {
+      const cumByCircle = {};
+      s.clicks.forEach((c, i) => {
+        cumByCircle[c.circle] = (cumByCircle[c.circle] || 0) + 1;
+        rows.push([
+          s.participant,
+          s.condition,
+          s.session,
+          s.date,
+          c.num,
+          c.circle,
+          c.elapsed_s,
+          c.gap_s,
+          c.pause,
+          i + 1,
+          cumByCircle[c.circle],
+        ]);
+      });
+    });
+
+    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `aba_sessions_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ── Clear all data ──
+  document.getElementById('clear-data').addEventListener('click', () => {
+    if (confirm('Are you sure you want to delete ALL session data? This cannot be undone.')) {
+      localStorage.removeItem('aba_sessions');
+      renderDashboard();
+    }
+  });
+</script>
+</body>
+</html>

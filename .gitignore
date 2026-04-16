@@ -1,6 +1,7 @@
 # Sensitive files
 .env
 zen_garden_wrapped_extract.py
+zen_garden_weekly_extract.py
 
 # Backups
 *_backup.html

@@ -1,0 +1,22 @@
+{
+  "last_run": "2026-04-15T22:21:14",
+  "status": "success",
+  "week_number": 1,
+  "week_label": "Week 1 (Apr 5 – Apr 11)",
+  "date_window": {
+    "start": "2026-04-05T00:00:00",
+    "end": "2026-04-12T00:00:00"
+  },
+  "config_hash": "4d8a4d6e5b6f",
+  "people_scored": 37,
+  "total_points": 711,
+  "group_activities_found": 6,
+  "csv_path": "week1_apr5-11.csv",
+  "outputs": [
+    "week1_apr5-11.csv",
+    "week1_apr5-11.csv",
+    "zen_garden_weekly.json",
+    "weekly_summary.txt"
+  ],
+  "errors": []
+}

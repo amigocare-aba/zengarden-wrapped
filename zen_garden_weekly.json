@@ -1,0 +1,534 @@
+{
+  "month": "April 2026",
+  "current_week": 1,
+  "updated_at": "2026-04-15",
+  "weeks": [
+    {
+      "week_number": 1,
+      "week_label": "Week 1",
+      "date_range": "Apr 5 – Apr 11",
+      "scores": [
+        {
+          "name": "leslie orellana-amaya",
+          "points": 113,
+          "role": "RBT",
+          "posts": 4,
+          "comments": 47,
+          "group_activities": 3
+        },
+        {
+          "name": "Jerusha Daniel",
+          "points": 86,
+          "role": "RBT",
+          "posts": 4,
+          "comments": 41,
+          "group_activities": 0
+        },
+        {
+          "name": "Alex Arevalo",
+          "points": 50,
+          "role": "Leadership",
+          "posts": 2,
+          "comments": 24,
+          "group_activities": 0
+        },
+        {
+          "name": "Jennifer Leiva",
+          "points": 48,
+          "role": "RBT",
+          "posts": 1,
+          "comments": 11,
+          "group_activities": 5
+        },
+        {
+          "name": "Katherin Hernandez",
+          "points": 44,
+          "role": "RBT",
+          "posts": 10,
+          "comments": 17,
+          "group_activities": 0
+        },
+        {
+          "name": "Samantha Collazo",
+          "points": 41,
+          "role": "RBT",
+          "posts": 1,
+          "comments": 20,
+          "group_activities": 0
+        },
+        {
+          "name": "Zendy Wilson",
+          "points": 34,
+          "role": "BCBA",
+          "posts": 5,
+          "comments": 12,
+          "group_activities": 1
+        },
+        {
+          "name": "Razelle Abogadie",
+          "points": 32,
+          "role": "RBT",
+          "posts": 6,
+          "comments": 13,
+          "group_activities": 0
+        },
+        {
+          "name": "Pamela martinez gonzalez",
+          "points": 27,
+          "role": "RBT",
+          "posts": 1,
+          "comments": 3,
+          "group_activities": 4
+        },
+        {
+          "name": "Nicole Burke",
+          "points": 22,
+          "role": "BCBA",
+          "posts": 2,
+          "comments": 10,
+          "group_activities": 0
+        },
+        {
+          "name": "Richard Saavedra",
+          "points": 21,
+          "role": "RBT",
+          "posts": 0,
+          "comments": 3,
+          "group_activities": 3
+        },
+        {
+          "name": "Melitza",
+          "points": 20,
+          "role": "RBT",
+          "posts": 0,
+          "comments": 10,
+          "group_activities": 0
+        },
+        {
+          "name": "Ana Plaza",
+          "points": 18,
+          "role": "RBT",
+          "posts": 0,
+          "comments": 9,
+          "group_activities": 0
+        },
+        {
+          "name": "Laura Outland",
+          "points": 16,
+          "role": "RBT",
+          "posts": 2,
+          "comments": 7,
+          "group_activities": 0
+        },
+        {
+          "name": "Lizzie Maldonado",
+          "points": 14,
+          "role": "RBT",
+          "posts": 2,
+          "comments": 6,
+          "group_activities": 0
+        },
+        {
+          "name": "Kimberly Lemus",
+          "points": 13,
+          "role": "BCBA",
+          "posts": 1,
+          "comments": 6,
+          "group_activities": 0
+        },
+        {
+          "name": "Stephany Carrasco",
+          "points": 13,
+          "role": "RBT",
+          "posts": 3,
+          "comments": 5,
+          "group_activities": 0
+        },
+        {
+          "name": "Melissa Barrera",
+          "points": 11,
+          "role": "RBT",
+          "posts": 1,
+          "comments": 5,
+          "group_activities": 0
+        },
+        {
+          "name": "Shelby Quigley",
+          "points": 10,
+          "role": "Leadership",
+          "posts": 4,
+          "comments": 3,
+          "group_activities": 0
+        },
+        {
+          "name": "Taylor Schindhelm",
+          "points": 10,
+          "role": "RBT",
+          "posts": 3,
+          "comments": 1,
+          "group_activities": 1
+        },
+        {
+          "name": "Aafia Syed",
+          "points": 9,
+          "role": "RBT",
+          "posts": 3,
+          "comments": 3,
+          "group_activities": 0
+        },
+        {
+          "name": "Jocelyn",
+          "points": 9,
+          "role": "BCBA",
+          "posts": 3,
+          "comments": 3,
+          "group_activities": 0
+        },
+        {
+          "name": "Pierre",
+          "points": 8,
+          "role": "BCBA",
+          "posts": 2,
+          "comments": 3,
+          "group_activities": 0
+        },
+        {
+          "name": "Cristabell A Harrison",
+          "points": 7,
+          "role": "RBT",
+          "posts": 3,
+          "comments": 2,
+          "group_activities": 0
+        },
+        {
+          "name": "LeeAnn (HR)",
+          "points": 6,
+          "role": "Admin",
+          "posts": 2,
+          "comments": 2,
+          "group_activities": 0
+        },
+        {
+          "name": "Anusha Sarkar",
+          "points": 5,
+          "role": "RBT",
+          "posts": 0,
+          "comments": 0,
+          "group_activities": 1
+        },
+        {
+          "name": "adriana pereira",
+          "points": 4,
+          "role": "BCBA",
+          "posts": 0,
+          "comments": 2,
+          "group_activities": 0
+        },
+        {
+          "name": "Carla Helena",
+          "points": 4,
+          "role": "RBT",
+          "posts": 0,
+          "comments": 2,
+          "group_activities": 0
+        },
+        {
+          "name": "Jeffrey Nsubuga",
+          "points": 2,
+          "role": "RBT",
+          "posts": 2,
+          "comments": 0,
+          "group_activities": 0
+        },
+        {
+          "name": "Iris Lovo",
+          "points": 2,
+          "role": "RBT",
+          "posts": 2,
+          "comments": 0,
+          "group_activities": 0
+        },
+        {
+          "name": "Jessica Blanco",
+          "points": 2,
+          "role": "RBT",
+          "posts": 0,
+          "comments": 1,
+          "group_activities": 0
+        },
+        {
+          "name": "Jasmine Caceres",
+          "points": 2,
+          "role": "Admin",
+          "posts": 0,
+          "comments": 1,
+          "group_activities": 0
+        },
+        {
+          "name": "Eleana Ferrer",
+          "points": 2,
+          "role": "Admin",
+          "posts": 0,
+          "comments": 1,
+          "group_activities": 0
+        },
+        {
+          "name": "Mimi Theodore",
+          "points": 2,
+          "role": "Leadership",
+          "posts": 0,
+          "comments": 1,
+          "group_activities": 0
+        },
+        {
+          "name": "Andre Perret Giesecke",
+          "points": 2,
+          "role": "BCBA",
+          "posts": 0,
+          "comments": 1,
+          "group_activities": 0
+        },
+        {
+          "name": "William Gunn",
+          "points": 1,
+          "role": "RBT",
+          "posts": 1,
+          "comments": 0,
+          "group_activities": 0
+        },
+        {
+          "name": "Randy Sandoval",
+          "points": 1,
+          "role": "RBT",
+          "posts": 1,
+          "comments": 0,
+          "group_activities": 0
+        }
+      ]
+    }
+  ],
+  "cumulative": [
+    {
+      "name": "leslie orellana-amaya",
+      "points": 113,
+      "role": "RBT",
+      "this_week": 113
+    },
+    {
+      "name": "Jerusha Daniel",
+      "points": 86,
+      "role": "RBT",
+      "this_week": 86
+    },
+    {
+      "name": "Alex Arevalo",
+      "points": 50,
+      "role": "Leadership",
+      "this_week": 50
+    },
+    {
+      "name": "Jennifer Leiva",
+      "points": 48,
+      "role": "RBT",
+      "this_week": 48
+    },
+    {
+      "name": "Katherin Hernandez",
+      "points": 44,
+      "role": "RBT",
+      "this_week": 44
+    },
+    {
+      "name": "Samantha Collazo",
+      "points": 41,
+      "role": "RBT",
+      "this_week": 41
+    },
+    {
+      "name": "Zendy Wilson",
+      "points": 34,
+      "role": "BCBA",
+      "this_week": 34
+    },
+    {
+      "name": "Razelle Abogadie",
+      "points": 32,
+      "role": "RBT",
+      "this_week": 32
+    },
+    {
+      "name": "Pamela martinez gonzalez",
+      "points": 27,
+      "role": "RBT",
+      "this_week": 27
+    },
+    {
+      "name": "Nicole Burke",
+      "points": 22,
+      "role": "BCBA",
+      "this_week": 22
+    },
+    {
+      "name": "Richard Saavedra",
+      "points": 21,
+      "role": "RBT",
+      "this_week": 21
+    },
+    {
+      "name": "Melitza",
+      "points": 20,
+      "role": "RBT",
+      "this_week": 20
+    },
+    {
+      "name": "Ana Plaza",
+      "points": 18,
+      "role": "RBT",
+      "this_week": 18
+    },
+    {
+      "name": "Laura Outland",
+      "points": 16,
+      "role": "RBT",
+      "this_week": 16
+    },
+    {
+      "name": "Lizzie Maldonado",
+      "points": 14,
+      "role": "RBT",
+      "this_week": 14
+    },
+    {
+      "name": "Kimberly Lemus",
+      "points": 13,
+      "role": "BCBA",
+      "this_week": 13
+    },
+    {
+      "name": "Stephany Carrasco",
+      "points": 13,
+      "role": "RBT",
+      "this_week": 13
+    },
+    {
+      "name": "Melissa Barrera",
+      "points": 11,
+      "role": "RBT",
+      "this_week": 11
+    },
+    {
+      "name": "Shelby Quigley",
+      "points": 10,
+      "role": "Leadership",
+      "this_week": 10
+    },
+    {
+      "name": "Taylor Schindhelm",
+      "points": 10,
+      "role": "RBT",
+      "this_week": 10
+    },
+    {
+      "name": "Aafia Syed",
+      "points": 9,
+      "role": "RBT",
+      "this_week": 9
+    },
+    {
+      "name": "Jocelyn",
+      "points": 9,
+      "role": "BCBA",
+      "this_week": 9
+    },
+    {
+      "name": "Pierre",
+      "points": 8,
+      "role": "BCBA",
+      "this_week": 8
+    },
+    {
+      "name": "Cristabell A Harrison",
+      "points": 7,
+      "role": "RBT",
+      "this_week": 7
+    },
+    {
+      "name": "LeeAnn (HR)",
+      "points": 6,
+      "role": "Admin",
+      "this_week": 6
+    },
+    {
+      "name": "Anusha Sarkar",
+      "points": 5,
+      "role": "RBT",
+      "this_week": 5
+    },
+    {
+      "name": "adriana pereira",
+      "points": 4,
+      "role": "BCBA",
+      "this_week": 4
+    },
+    {
+      "name": "Carla Helena",
+      "points": 4,
+      "role": "RBT",
+      "this_week": 4
+    },
+    {
+      "name": "Jeffrey Nsubuga",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2
+    },
+    {
+      "name": "Iris Lovo",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2
+    },
+    {
+      "name": "Jessica Blanco",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2
+    },
+    {
+      "name": "Jasmine Caceres",
+      "points": 2,
+      "role": "Admin",
+      "this_week": 2
+    },
+    {
+      "name": "Eleana Ferrer",
+      "points": 2,
+      "role": "Admin",
+      "this_week": 2
+    },
+    {
+      "name": "Mimi Theodore",
+      "points": 2,
+      "role": "Leadership",
+      "this_week": 2
+    },
+    {
+      "name": "Andre Perret Giesecke",
+      "points": 2,
+      "role": "BCBA",
+      "this_week": 2
+    },
+    {
+      "name": "William Gunn",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1
+    },
+    {
+      "name": "Randy Sandoval",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1
+    }
+  ]
+}

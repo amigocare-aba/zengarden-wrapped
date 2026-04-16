@@ -1,0 +1,46 @@
+{
+  "month": "April 2026",
+  "year": 2026,
+  "week_start_day": "sunday",
+  "channel": "zengarden",
+  "weeks": [
+    {
+      "week_number": 1,
+      "start": "2026-04-05",
+      "end": "2026-04-11",
+      "skip": false,
+      "skip_reason": ""
+    },
+    {
+      "week_number": 2,
+      "start": "2026-04-12",
+      "end": "2026-04-18",
+      "skip": false,
+      "skip_reason": ""
+    },
+    {
+      "week_number": 3,
+      "start": "2026-04-19",
+      "end": "2026-04-25",
+      "skip": false,
+      "skip_reason": ""
+    },
+    {
+      "week_number": 4,
+      "start": "2026-04-26",
+      "end": "2026-05-02",
+      "skip": false,
+      "skip_reason": ""
+    }
+  ],
+  "roles": {
+    "Leadership": ["Noor Javed", "Mimi Theodore", "Shelby Quigley", "Alex Arevalo"],
+    "Admin": ["Eleana Ferrer", "LeeAnn (HR)", "Jasmine Caceres"],
+    "BCBA": [
+      "Soraya Dos Santos", "adriana pereira", "Pierre", "A.J. Flynn",
+      "Emily Chesbrough", "Andre Perret Giesecke", "Camila Morales",
+      "Hannah Roth", "Valeria Macuare", "Jocelyn", "Kimberly Lemus",
+      "Nicole Burke", "Zendy Wilson"
+    ]
+  }
+}

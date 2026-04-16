@@ -1,0 +1,62 @@
+name: Weekly Points Extraction
+
+on:
+  schedule:
+    - cron: '0 14 * * 0'  # Every Sunday at 9am ET (14:00 UTC)
+  workflow_dispatch:
+    inputs:
+      week_override:
+        description: 'Week number to process (leave blank for auto-detect)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run — calculate points but do not save'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install slack_sdk
+
+      - name: Run weekly extraction
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_USER_TOKEN: ${{ secrets.SLACK_USER_TOKEN }}
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.week_override }}" ]; then
+            ARGS="--week ${{ inputs.week_override }}"
+          fi
+          if [ "${{ inputs.dry_run }}" == "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          python zen_garden_weekly_auto.py $ARGS
+
+      - name: Commit and push results
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          git config user.name "Zen Garden Bot"
+          git config user.email "bot@amigocareaba.com"
+          git add zen_garden_weekly.json run_status.json weekly_summary.txt weekly_reports/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            WEEK_LABEL=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('week_label','update'))")
+            git commit -m "Weekly points: ${WEEK_LABEL}"
+            git push
+          fi
