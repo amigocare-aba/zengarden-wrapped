@@ -160,6 +160,27 @@ body::before {
     <div class="empty">Loading status...</div>
   </div>
 
+  <!-- GARDY MESSAGING -->
+  <div class="msg-section" id="msgSection" style="display:none;">
+    <div class="msg-section-title">Send as Gardy</div>
+    <div class="msg-section-desc">Post a message to the wellness channel as Gardy</div>
+
+    <div class="webhook-setup" id="webhookSetup">
+      <input class="webhook-input" id="webhookInput" type="password" placeholder="Paste webhook URL (saved in your browser)">
+      <button class="webhook-save" onclick="saveWebhook()">Save</button>
+    </div>
+    <div id="webhookSaved" style="display:none;">
+      <span class="webhook-saved">Webhook saved</span>
+      <button class="webhook-save" onclick="clearWebhook()" style="margin-left:8px;">Change</button>
+    </div>
+
+    <textarea class="msg-textarea" id="msgText" placeholder="Type a message for Gardy to send..."></textarea>
+    <div class="msg-actions">
+      <button class="msg-btn msg-btn-send" id="msgSend" onclick="sendMessage()" disabled>Send</button>
+      <span class="msg-status" id="msgStatus"></span>
+    </div>
+  </div>
+
   <div class="links" id="links" style="display:none;">
     <a class="link-card" href="weekly.html">
       <span class="link-icon">📊</span>
@@ -201,27 +222,6 @@ body::before {
       </div>
       <span class="link-arrow">&rsaquo;</span>
     </a>
-  </div>
-
-  <!-- GARDY MESSAGING -->
-  <div class="msg-section" id="msgSection" style="display:none;">
-    <div class="msg-section-title">Send as Gardy</div>
-    <div class="msg-section-desc">Post a message to the wellness channel as Gardy</div>
-
-    <div class="webhook-setup" id="webhookSetup">
-      <input class="webhook-input" id="webhookInput" type="password" placeholder="Paste webhook URL (saved in your browser)">
-      <button class="webhook-save" onclick="saveWebhook()">Save</button>
-    </div>
-    <div id="webhookSaved" style="display:none;">
-      <span class="webhook-saved">Webhook saved</span>
-      <button class="webhook-save" onclick="clearWebhook()" style="margin-left:8px;">Change</button>
-    </div>
-
-    <textarea class="msg-textarea" id="msgText" placeholder="Type a message for Gardy to send..."></textarea>
-    <div class="msg-actions">
-      <button class="msg-btn msg-btn-send" id="msgSend" onclick="sendMessage()" disabled>Send</button>
-      <span class="msg-status" id="msgStatus"></span>
-    </div>
   </div>
 </div>
 
