@@ -339,7 +339,7 @@ var rolePill = {
 };
 
 // ── Load & render ───────────────────────────────────────────────
-fetch('zen_garden_weekly.json')
+fetch('zen_garden_weekly.json?t=' + Date.now())
   .then(function(r) { return r.json(); })
   .then(function(data) {
     // Header badges — show latest week info

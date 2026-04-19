@@ -237,7 +237,7 @@ body::before {
 </div>
 
 <script>
-fetch('run_status.json')
+fetch('run_status.json?t=' + Date.now())
   .then(function(r) { return r.json(); })
   .then(function(d) {
     var status = d.status || 'unknown';
