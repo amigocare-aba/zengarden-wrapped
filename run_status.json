@@ -1,19 +1,19 @@
 {
-  "last_run": "2026-04-19T17:56:03",
+  "last_run": "2026-04-26T18:06:10",
   "status": "success",
-  "week_number": 2,
-  "week_label": "Week 2 (Apr 12 – Apr 18)",
+  "week_number": 3,
+  "week_label": "Week 3 (Apr 19 – Apr 25)",
   "date_window": {
-    "start": "2026-04-12T00:00:00",
-    "end": "2026-04-19T00:00:00"
+    "start": "2026-04-19T00:00:00",
+    "end": "2026-04-26T00:00:00"
   },
   "config_hash": "4d8a4d6e5b6f",
-  "people_scored": 33,
-  "total_points": 668,
-  "group_activities_found": 6,
-  "csv_path": "week2_apr12-18.csv",
+  "people_scored": 36,
+  "total_points": 527,
+  "group_activities_found": 7,
+  "csv_path": "week3_apr19-25.csv",
   "outputs": [
-    "week2_apr12-18.csv",
+    "week3_apr19-25.csv",
     "zen_garden_weekly.json",
     "weekly_summary.txt"
   ],
