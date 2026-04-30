@@ -142,6 +142,76 @@ body::before {
 
 .empty { text-align: center; padding: 40px 20px; color: var(--ink2); font-size: 14px; }
 
+/* ── DOCS / HOW IT WORKS ─────────────────────────────────────── */
+.docs {
+  margin-bottom: 48px;
+}
+.docs-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.docs-sub {
+  font-size: 11px;
+  color: var(--ink2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.faq-item {
+  background: var(--bg2);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.faq-item.open { box-shadow: var(--shadow-sm); }
+.faq-q {
+  width: 100%;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Cabin', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.faq-q:hover { background: var(--bg3); }
+.faq-arrow {
+  font-size: 16px;
+  color: var(--ink3);
+  transition: transform 0.2s;
+}
+.faq-item.open .faq-arrow { transform: rotate(90deg); }
+.faq-a {
+  padding: 0 18px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink2);
+  display: none;
+}
+.faq-item.open .faq-a { display: block; }
+.faq-a code {
+  background: var(--bg3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Menlo', monospace;
+  font-size: 11px;
+  color: var(--ink);
+}
+.faq-a a { color: var(--green); text-decoration: none; font-weight: 700; }
+.faq-a a:hover { text-decoration: underline; }
+.faq-a ol, .faq-a ul { margin: 6px 0 6px 18px; }
+.faq-a li { margin-bottom: 4px; }
+
 @media (max-width: 640px) {
   .stat-grid { grid-template-columns: repeat(2, 1fr); }
   .stat-num { font-size: 22px; }
@@ -233,6 +303,106 @@ body::before {
       </div>
       <span class="link-arrow">&rsaquo;</span>
     </a>
+  </div>
+
+  <!-- DOCS / HOW IT WORKS -->
+  <div class="docs">
+    <div class="docs-title">HOW IT WORKS</div>
+    <div class="docs-sub">Click any question to expand</div>
+
+    <div class="faq-item">
+      <button class="faq-q">What runs and when? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        <strong>Every Sunday at 12pm ET:</strong> Gardy auto-posts the weekly leaderboard to <code>#zengarden</code>.<br><br>
+        <strong>First Sunday after a month ends</strong> (e.g., May 3 for April): Gardy posts the monthly Wrapped instead — full recap + form link to redeem points.<br><br>
+        The exchange form auto-opens that morning and auto-closes 7 days later via a Google Apps Script attached to the form.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">How do I skip a week? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        <ol>
+          <li>Open <a href="https://github.com/amigocare-aba/zengarden-wrapped/blob/main/weekly_config.json" target="_blank">weekly_config.json</a> on GitHub</li>
+          <li>Click the pencil icon (top right) to edit</li>
+          <li>Find the week, change <code>"skip": false</code> to <code>"skip": true</code></li>
+          <li>Add a <code>"skip_reason"</code> like "Holiday week"</li>
+          <li>Commit. Next Sunday will skip silently — no Slack post, no error.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">How do I update the redemption form URL? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        Same form is reused every month — you don't need a new URL. But if you ever do change forms:
+        <ol>
+          <li>Open <a href="https://github.com/amigocare-aba/zengarden-wrapped/blob/main/weekly_config.json" target="_blank">weekly_config.json</a></li>
+          <li>Change the <code>"exchange_form_url"</code> field at the top</li>
+          <li>Commit. Next monthly post uses the new URL.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">How do I trigger a manual run? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        <ol>
+          <li>Go to <a href="https://github.com/amigocare-aba/zengarden-wrapped/actions" target="_blank">GitHub Actions</a></li>
+          <li>Click <strong>Weekly Points Extraction</strong> on the left</li>
+          <li>Click <strong>Run workflow</strong> on the right</li>
+          <li>Leave Week blank for auto-detect, or specify a week number</li>
+          <li>Check <strong>Dry run</strong> if you just want to test (no Slack post, no commit)</li>
+          <li>Click the green Run button</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">How do I send a custom message as Gardy? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        Use the <strong>Send as Gardy</strong> box on this page (above). First time you'll need to paste the webhook URL — it's saved in your browser after that. Then type a message and hit Send.<br><br>
+        For tagging: <code>&lt;!channel&gt;</code> = @channel, <code>&lt;!here&gt;</code> = @here.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Someone changed their Slack name. Will their points break? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        Points still work — they're tied to Slack user IDs, not display names.<br><br>
+        But if a name change happens for someone in <code>roles</code> (Leadership, Admin, BCBA), they'll fall back to "RBT" until you update the config. Edit <a href="https://github.com/amigocare-aba/zengarden-wrapped/blob/main/weekly_config.json" target="_blank">weekly_config.json</a> with their new display name.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">A new BCBA joined. How do I add them? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        Open <a href="https://github.com/amigocare-aba/zengarden-wrapped/blob/main/weekly_config.json" target="_blank">weekly_config.json</a>, find the <code>"roles"</code> section, and add their full Slack display name to the right list (Leadership / Admin / BCBA). Commit. Done.<br><br>
+        Until you add them, they default to "RBT". Their points are tracked correctly either way.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Something broke. What now? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        Failure alerts auto-post to <code>#wellnessprogram-group</code> with a link to the broken run.<br><br>
+        Open the link, click <strong>extract</strong> to see logs. Common causes:
+        <ul>
+          <li><strong>"Channel not found"</strong> — someone renamed #zengarden</li>
+          <li><strong>"Missing tokens"</strong> — Slack tokens expired (regenerate in Slack app settings, update GitHub Secrets)</li>
+          <li><strong>"Config validation failed"</strong> — bad edit to weekly_config.json (revert the commit on GitHub)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Daylight saving time? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        The Sunday cron runs at 16:00 UTC = 12pm ET <strong>during EDT (March–November)</strong>.<br><br>
+        After Nov 1, 2026 (when EST starts), Gardy will post at <strong>11am ET</strong> instead. To keep it at noon, edit <a href="https://github.com/amigocare-aba/zengarden-wrapped/blob/main/.github/workflows/weekly-points.yml" target="_blank">weekly-points.yml</a> and change <code>'0 16 * * 0'</code> to <code>'0 17 * * 0'</code>.<br><br>
+        Switch back in March 2027.
+      </div>
+    </div>
   </div>
 </div>
 
@@ -394,6 +564,13 @@ fetch('run_status.json?t=' + Date.now())
     });
   };
 })();
+
+// ── FAQ collapse/expand ────────────────────────────────────────
+document.querySelectorAll('.faq-q').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    btn.parentElement.classList.toggle('open');
+  });
+});
 </script>
 </body>
 </html>
