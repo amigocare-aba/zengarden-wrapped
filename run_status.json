@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-04-30T01:43:17",
+  "last_run": "2026-05-03T18:38:07",
   "status": "success",
   "week_number": 4,
   "week_label": "Week 4 (Apr 26 – May 2)",
@@ -8,12 +8,11 @@
     "end": "2026-05-03T00:00:00"
   },
   "config_hash": "bbcffe6b8d39",
-  "people_scored": 30,
-  "total_points": 335,
-  "group_activities_found": 7,
+  "people_scored": 36,
+  "total_points": 544,
+  "group_activities_found": 9,
   "csv_path": "week4_apr26-2.csv",
   "outputs": [
-    "week4_apr26-2.csv",
     "week4_apr26-2.csv",
     "zen_garden_weekly.json",
     "weekly_summary.txt"
