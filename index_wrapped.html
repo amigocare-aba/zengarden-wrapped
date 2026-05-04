@@ -1851,8 +1851,10 @@ fetch('zen_garden_wrapped_data.json?t=' + Date.now())
   .then(function(r) { return r.json(); })
   .then(function(data) {
     D = data;
+    window.D = D;  // expose globally so helpers like getAvatarEmoji can find it
     WRAPPED_DATA = {};
     (D.all_active || []).forEach(function(p) { WRAPPED_DATA[p.name] = p; });
+    window.WRAPPED_DATA = WRAPPED_DATA;
     initWrapped();
   })
   .catch(function(err) {
