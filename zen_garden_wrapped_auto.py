@@ -1767,10 +1767,10 @@ def main():
     # Within the preferred category, pick highest score.
     # Fall back to overall highest if preferred category has no story.
     CATEGORY_ROTATION = [
-        'engagement',  # April (month 4): hearts, palette, cheers ratio
-        'mood',        # May (5): mood arc shifts
-        'people',      # June (6): comeback, most improved, connector
-        'behavior',    # July (7): post length, threads, response time
+        'behavior',    # April (month 4): post length, threads, mostly-replies
+        'engagement',  # May (5): hearts, palette, cheers ratio
+        'mood',        # June (6): mood arc shifts
+        'people',      # July (7): comeback, most improved, connector
         'moment',      # August (8): power hour, big day, peak week
         'theme',       # September (9): weather, gatherings
         'volume',      # October (10): collective output, reading time
