@@ -2,17 +2,17 @@
   "month": "April 2026",
   "date_range": "Apr 5 – May 2",
   "total": 67,
-  "active": 45,
-  "participation_rate": 67.2,
-  "total_pts": 2412,
+  "active": 44,
+  "participation_rate": 65.7,
+  "total_pts": 2410,
   "total_payout": 830,
   "total_posts": 273,
-  "total_comments": 1299,
+  "total_comments": 831,
   "bcba_avg": 48.8,
   "rbt_avg": 59.14,
   "lead_avg": 58.67,
   "wk_totals": [
-    706,
+    704,
     635,
     527,
     544
@@ -27,68 +27,68 @@
     "Spiritual": 2,
     "Financial": 4
   },
-  "avg_sentiment": 0.35,
+  "avg_sentiment": 0.36,
   "positive_pct": 100.0,
   "stress_flags": 0,
   "styles": {
-    "Pure Engager": 19,
-    "Engager": 10,
-    "Balanced": 11,
-    "Broadcaster": 1,
-    "Heavy Broadcaster": 4
+    "Pure Engager": 16,
+    "Balanced": 9,
+    "Engager": 8,
+    "Broadcaster": 6,
+    "Heavy Broadcaster": 5
   },
   "word_counts": [
     [
       "love",
-      103
+      69
     ],
     [
       "cute",
-      74
+      51
     ],
     [
       "looks",
-      67
+      48
     ],
     [
       "good",
-      60
-    ],
-    [
-      "what",
-      39
-    ],
-    [
-      "beautiful",
-      36
-    ],
-    [
-      "cool",
-      35
+      38
     ],
     [
       "fun",
-      35
-    ],
-    [
-      "pretty",
-      33
+      32
     ],
     [
       "day",
-      33
+      31
     ],
     [
       "today",
-      29
+      27
+    ],
+    [
+      "cool",
+      27
+    ],
+    [
+      "what",
+      26
+    ],
+    [
+      "beautiful",
+      23
     ],
     [
       "great",
-      29
+      23
     ],
     [
       "nice",
-      28
+      20
+    ],
+    [
+      "time",
+      20
     ]
   ],
   "all_active": [
@@ -102,35 +102,35 @@
       "dim": "Social",
       "wellness": 7,
       "stress": 0,
-      "encourage": 43,
-      "conn": 672,
+      "encourage": 38,
+      "conn": 324,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 113,
       "wk2": 111,
       "wk3": 33,
       "wk4": 8,
-      "sentiment": 0.26,
+      "sentiment": 0.23,
       "top_words": [
         [
           "cute",
-          9
+          4
         ],
         [
-          "yummy",
-          6
-        ],
-        [
-          "beautiful",
-          5
-        ],
-        [
-          "looks",
-          5
+          "awee",
+          3
         ],
         [
           "fun",
-          4
+          3
+        ],
+        [
+          "literally",
+          3
+        ],
+        [
+          "cool",
+          2
         ]
       ],
       "top_emojis": [],
@@ -142,12 +142,12 @@
       "reactions_given": [
         "❤️",
         "😊",
-        "✨"
+        "💅"
       ],
       "photos_shared": 10,
       "active_hour": 16,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Jerusha",
+      "bestie": "Nicole",
       "most_hyped": 7
     },
     {
@@ -160,35 +160,35 @@
       "dim": "Emotional",
       "wellness": 7,
       "stress": 0,
-      "encourage": 95,
-      "conn": 542,
+      "encourage": 84,
+      "conn": 387,
       "style": "Pure Engager",
       "trend": "Up",
       "wk1": 22,
       "wk2": 65,
       "wk3": 52,
       "wk4": 42,
-      "sentiment": 0.32,
+      "sentiment": 0.35,
       "top_words": [
         [
           "love",
-          19
-        ],
-        [
-          "fun",
-          7
+          18
         ],
         [
           "little",
           7
         ],
         [
-          "what",
+          "fun",
           6
         ],
         [
           "new",
           5
+        ],
+        [
+          "cool",
+          4
         ]
       ],
       "top_emojis": [],
@@ -205,7 +205,7 @@
       "photos_shared": 13,
       "active_hour": 10,
       "active_label": "Morning Person ☀️",
-      "bestie": "leslie",
+      "bestie": "Ana",
       "most_hyped": 7
     },
     {
@@ -218,35 +218,35 @@
       "dim": "Intellectual",
       "wellness": 13,
       "stress": 0,
-      "encourage": 35,
-      "conn": 499,
-      "style": "Engager",
+      "encourage": 22,
+      "conn": 269,
+      "style": "Balanced",
       "trend": "Down",
       "wk1": 86,
       "wk2": 40,
       "wk3": 20,
       "wk4": 24,
-      "sentiment": 0.36,
+      "sentiment": 0.34,
       "top_words": [
         [
           "love",
-          12
+          6
         ],
         [
           "cute",
-          8
-        ],
-        [
-          "yummy",
           5
         ],
         [
           "beautiful",
-          5
+          4
         ],
         [
           "wait",
-          5
+          4
+        ],
+        [
+          "yum",
+          3
         ]
       ],
       "top_emojis": [],
@@ -259,8 +259,8 @@
         "❤️"
       ],
       "photos_shared": 20,
-      "active_hour": 10,
-      "active_label": "Morning Person ☀️",
+      "active_hour": 15,
+      "active_label": "Afternoon Vibes 🌤️",
       "bestie": "leslie",
       "most_hyped": 12
     },
@@ -275,21 +275,17 @@
       "wellness": 5,
       "stress": 0,
       "encourage": 2,
-      "conn": 341,
-      "style": "Pure Engager",
+      "conn": 212,
+      "style": "Engager",
       "trend": "Down",
       "wk1": 48,
       "wk2": 48,
       "wk3": 29,
       "wk4": 16,
-      "sentiment": 0.09,
+      "sentiment": 0.07,
       "top_words": [
         [
           "today",
-          3
-        ],
-        [
-          "cutee",
           3
         ],
         [
@@ -297,25 +293,29 @@
           3
         ],
         [
-          "love",
-          3
+          "cutee",
+          2
         ],
         [
-          "pretty",
-          3
+          "love",
+          2
+        ],
+        [
+          "cuteee",
+          2
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
         "❤️",
-        "😂",
-        "🙌"
+        "🙌",
+        "🤤"
       ],
       "reactions_given": [
         "❤️",
         "😂"
       ],
-      "photos_shared": 13,
+      "photos_shared": 11,
       "active_hour": 16,
       "active_label": "Afternoon Vibes 🌤️",
       "bestie": "leslie",
@@ -331,35 +331,35 @@
       "dim": "Occupational",
       "wellness": 3,
       "stress": 0,
-      "encourage": 88,
-      "conn": 396,
+      "encourage": 74,
+      "conn": 221,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 50,
       "wk2": 45,
       "wk3": 15,
       "wk4": 22,
-      "sentiment": 0.32,
+      "sentiment": 0.36,
       "top_words": [
         [
-          "good",
-          11
+          "nice",
+          5
         ],
         [
           "love",
-          8
+          5
         ],
         [
-          "nice",
-          7
+          "good",
+          5
         ],
         [
-          "need",
-          6
+          "weather",
+          4
         ],
         [
-          "here",
-          6
+          "looks",
+          4
         ]
       ],
       "top_emojis": [
@@ -367,18 +367,18 @@
       ],
       "top_reactions": [
         "❤️",
-        "🤣",
-        "👀"
+        "👀",
+        "🤣"
       ],
       "reactions_given": [
         "🫶",
         "❤️",
-        "✨"
+        "🤩"
       ],
       "photos_shared": 4,
-      "active_hour": 16,
-      "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "leslie",
+      "active_hour": 9,
+      "active_label": "Morning Person ☀️",
+      "bestie": "Jerusha",
       "most_hyped": 11
     },
     {
@@ -391,52 +391,52 @@
       "dim": "Emotional",
       "wellness": 18,
       "stress": 0,
-      "encourage": 315,
-      "conn": 381,
-      "style": "Engager",
+      "encourage": 281,
+      "conn": 253,
+      "style": "Balanced",
       "trend": "Down",
       "wk1": 44,
       "wk2": 29,
       "wk3": 35,
       "wk4": 23,
-      "sentiment": 0.4,
+      "sentiment": 0.39,
       "top_words": [
         [
           "good",
-          10
-        ],
-        [
-          "beautiful",
-          7
-        ],
-        [
-          "love",
-          6
-        ],
-        [
-          "cute",
-          6
+          9
         ],
         [
           "little",
           5
+        ],
+        [
+          "beautiful",
+          5
+        ],
+        [
+          "lily",
+          5
+        ],
+        [
+          "love",
+          4
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
         "❤️",
-        "😂",
-        "🥹"
+        "🥹",
+        "😂"
       ],
       "reactions_given": [
         "❤️",
         "😋",
         "🤤"
       ],
-      "photos_shared": 61,
+      "photos_shared": 59,
       "active_hour": 18,
       "active_label": "Evening Energy 🌆",
-      "bestie": "leslie",
+      "bestie": "Nicole",
       "most_hyped": 5
     },
     {
@@ -449,35 +449,35 @@
       "dim": "Intellectual",
       "wellness": 10,
       "stress": 0,
-      "encourage": 32,
-      "conn": 354,
+      "encourage": 24,
+      "conn": 258,
       "style": "Engager",
       "trend": "Up",
       "wk1": 32,
       "wk2": 11,
       "wk3": 39,
       "wk4": 34,
-      "sentiment": 0.34,
+      "sentiment": 0.26,
       "top_words": [
         [
-          "cute",
-          7
-        ],
-        [
           "cool",
-          6
+          5
         ],
         [
-          "good",
-          6
-        ],
-        [
-          "love",
-          6
+          "cute",
+          5
         ],
         [
           "morning",
           4
+        ],
+        [
+          "mom",
+          3
+        ],
+        [
+          "out",
+          3
         ]
       ],
       "top_emojis": [
@@ -490,8 +490,8 @@
       ],
       "reactions_given": [
         "❤️",
-        "😂",
-        "😋"
+        "😋",
+        "😂"
       ],
       "photos_shared": 34,
       "active_hour": 15,
@@ -509,15 +509,15 @@
       "dim": "Intellectual",
       "wellness": 7,
       "stress": 0,
-      "encourage": 73,
-      "conn": 252,
-      "style": "Engager",
+      "encourage": 62,
+      "conn": 180,
+      "style": "Balanced",
       "trend": "Down",
       "wk1": 27,
       "wk2": 37,
       "wk3": 23,
       "wk4": 21,
-      "sentiment": 0.11,
+      "sentiment": 0.07,
       "top_words": [
         [
           "run",
@@ -528,15 +528,15 @@
           4
         ],
         [
-          "nice",
-          3
-        ],
-        [
           "gracias",
           2
         ],
         [
           "basketball",
+          2
+        ],
+        [
+          "nice",
           2
         ]
       ],
@@ -568,25 +568,25 @@
       "wellness": 1,
       "stress": 0,
       "encourage": 0,
-      "conn": 347,
+      "conn": 306,
       "style": "Pure Engager",
       "trend": "Up",
       "wk1": 18,
       "wk2": 0,
       "wk3": 16,
       "wk4": 73,
-      "sentiment": 0.36,
+      "sentiment": 0.34,
       "top_words": [
         [
           "looks",
-          9
+          7
         ],
         [
           "cute",
-          6
+          4
         ],
         [
-          "love",
+          "fun",
           4
         ],
         [
@@ -594,7 +594,7 @@
           4
         ],
         [
-          "fun",
+          "love",
           3
         ]
       ],
@@ -608,7 +608,7 @@
       "photos_shared": 1,
       "active_hour": 19,
       "active_label": "Evening Energy 🌆",
-      "bestie": "Nicole",
+      "bestie": "Stephany",
       "most_hyped": 4
     },
     {
@@ -621,35 +621,35 @@
       "dim": "Social",
       "wellness": 3,
       "stress": 0,
-      "encourage": 7,
-      "conn": 305,
+      "encourage": 5,
+      "conn": 157,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 41,
       "wk2": 37,
       "wk3": 15,
       "wk4": 10,
-      "sentiment": 0.34,
+      "sentiment": 0.42,
       "top_words": [
         [
-          "awww",
-          5
-        ],
-        [
           "looks",
-          5
-        ],
-        [
-          "always",
           4
         ],
         [
-          "beautiful",
-          4
+          "awww",
+          3
         ],
         [
           "wow",
           3
+        ],
+        [
+          "amazing",
+          2
+        ],
+        [
+          "always",
+          2
         ]
       ],
       "top_emojis": [],
@@ -660,7 +660,6 @@
       ],
       "reactions_given": [
         "❤️",
-        "😭",
         "🫶"
       ],
       "photos_shared": 3,
@@ -679,34 +678,34 @@
       "dim": "Occupational",
       "wellness": 6,
       "stress": 0,
-      "encourage": 40,
-      "conn": 237,
+      "encourage": 33,
+      "conn": 163,
       "style": "Engager",
       "trend": "Up",
       "wk1": 13,
       "wk2": 25,
       "wk3": 34,
       "wk4": 22,
-      "sentiment": 0.3,
+      "sentiment": 0.26,
       "top_words": [
         [
           "fun",
-          6
-        ],
-        [
-          "love",
-          5
-        ],
-        [
-          "looks",
           4
         ],
         [
-          "what",
+          "love",
+          4
+        ],
+        [
+          "looks",
           2
         ],
         [
           "cool",
+          2
+        ],
+        [
+          "day",
           2
         ]
       ],
@@ -716,17 +715,17 @@
       "top_reactions": [
         "❤️",
         "✨",
-        "😂"
+        "👀"
       ],
       "reactions_given": [
         "❤️",
-        "😂",
-        "🥹"
+        "🥹",
+        "😋"
       ],
       "photos_shared": 12,
-      "active_hour": 21,
-      "active_label": "Night Owl 🦉",
-      "bestie": "leslie",
+      "active_hour": 19,
+      "active_label": "Evening Energy 🌆",
+      "bestie": "Nicole",
       "most_hyped": 7
     },
     {
@@ -739,27 +738,19 @@
       "dim": "Physical",
       "wellness": 9,
       "stress": 0,
-      "encourage": 44,
-      "conn": 269,
+      "encourage": 33,
+      "conn": 215,
       "style": "Engager",
       "trend": "Up",
       "wk1": 10,
       "wk2": 32,
       "wk3": 18,
       "wk4": 25,
-      "sentiment": 0.2,
+      "sentiment": 0.21,
       "top_words": [
         [
           "cute",
-          6
-        ],
-        [
-          "girl",
-          4
-        ],
-        [
-          "time",
-          3
+          5
         ],
         [
           "always",
@@ -767,6 +758,14 @@
         ],
         [
           "assignments",
+          2
+        ],
+        [
+          "time",
+          2
+        ],
+        [
+          "anyone",
           2
         ]
       ],
@@ -778,8 +777,8 @@
       ],
       "reactions_given": [
         "❤️",
-        "😅",
-        "😂"
+        "😂",
+        "😅"
       ],
       "photos_shared": 18,
       "active_hour": 13,
@@ -797,34 +796,34 @@
       "dim": "Emotional",
       "wellness": 6,
       "stress": 0,
-      "encourage": 24,
-      "conn": 320,
+      "encourage": 14,
+      "conn": 241,
       "style": "Pure Engager",
       "trend": "Up",
       "wk1": 13,
       "wk2": 7,
       "wk3": 0,
       "wk4": 59,
-      "sentiment": 0.37,
+      "sentiment": 0.35,
       "top_words": [
-        [
-          "book",
-          5
-        ],
-        [
-          "love",
-          4
-        ],
-        [
-          "movie",
-          4
-        ],
         [
           "youre",
           3
         ],
         [
           "fun",
+          3
+        ],
+        [
+          "what",
+          3
+        ],
+        [
+          "def",
+          3
+        ],
+        [
+          "cute",
           3
         ]
       ],
@@ -855,34 +854,34 @@
       "dim": "Intellectual",
       "wellness": 7,
       "stress": 0,
-      "encourage": 8,
-      "conn": 165,
+      "encourage": 7,
+      "conn": 105,
       "style": "Balanced",
       "trend": "Down",
       "wk1": 34,
       "wk2": 8,
       "wk3": 10,
       "wk4": 6,
-      "sentiment": 0.34,
+      "sentiment": 0.26,
       "top_words": [
         [
           "cute",
-          5
-        ],
-        [
-          "looks",
-          4
+          3
         ],
         [
           "amazing",
-          3
-        ],
-        [
-          "beautiful",
-          3
+          2
         ],
         [
           "break",
+          2
+        ],
+        [
+          "looks",
+          2
+        ],
+        [
+          "what",
           2
         ]
       ],
@@ -893,13 +892,12 @@
         "😂"
       ],
       "reactions_given": [
-        "❤️",
-        "😂"
+        "❤️"
       ],
       "photos_shared": 13,
       "active_hour": 10,
       "active_label": "Morning Person ☀️",
-      "bestie": "leslie",
+      "bestie": "Nicole",
       "most_hyped": 7
     },
     {
@@ -913,18 +911,22 @@
       "wellness": 1,
       "stress": 0,
       "encourage": 10,
-      "conn": 177,
+      "conn": 102,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 20,
       "wk2": 10,
       "wk3": 11,
       "wk4": 12,
-      "sentiment": 0.42,
+      "sentiment": 0.58,
       "top_words": [
         [
           "love",
-          5
+          4
+        ],
+        [
+          "cute",
+          3
         ],
         [
           "now",
@@ -935,12 +937,8 @@
           2
         ],
         [
-          "what",
-          2
-        ],
-        [
-          "beautiful",
-          2
+          "therapeutic",
+          1
         ]
       ],
       "top_emojis": [],
@@ -956,7 +954,7 @@
       "photos_shared": 1,
       "active_hour": 20,
       "active_label": "Night Owl 🦉",
-      "bestie": "leslie",
+      "bestie": "Ana",
       "most_hyped": 7
     },
     {
@@ -969,22 +967,22 @@
       "dim": "Physical",
       "wellness": 8,
       "stress": 0,
-      "encourage": 45,
-      "conn": 135,
-      "style": "Engager",
+      "encourage": 39,
+      "conn": 69,
+      "style": "Balanced",
       "trend": "Down",
       "wk1": 9,
       "wk2": 27,
       "wk3": 8,
       "wk4": 6,
-      "sentiment": 0.21,
+      "sentiment": 0.22,
       "top_words": [
         [
-          "run",
-          4
+          "dinner",
+          3
         ],
         [
-          "dinner",
+          "run",
           3
         ],
         [
@@ -1028,33 +1026,33 @@
       "wellness": 4,
       "stress": 0,
       "encourage": 48,
-      "conn": 188,
-      "style": "Pure Engager",
+      "conn": 146,
+      "style": "Engager",
       "trend": "Up",
       "wk1": 16,
       "wk2": 0,
       "wk3": 15,
       "wk4": 19,
-      "sentiment": 0.55,
+      "sentiment": 0.58,
       "top_words": [
         [
           "good",
-          7
+          5
         ],
         [
           "looks",
-          6
+          5
         ],
         [
           "cute",
           3
         ],
         [
-          "wow",
-          3
+          "pineapple",
+          2
         ],
         [
-          "pineapple",
+          "scraps",
           2
         ]
       ],
@@ -1072,7 +1070,7 @@
       "photos_shared": 8,
       "active_hour": 9,
       "active_label": "Morning Person ☀️",
-      "bestie": "leslie",
+      "bestie": "Nicole",
       "most_hyped": 9
     },
     {
@@ -1085,23 +1083,19 @@
       "dim": "Physical",
       "wellness": 3,
       "stress": 0,
-      "encourage": 3,
-      "conn": 164,
+      "encourage": 0,
+      "conn": 128,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 14,
       "wk2": 0,
       "wk3": 21,
       "wk4": 12,
-      "sentiment": 0.39,
+      "sentiment": 0.35,
       "top_words": [
         [
           "looks",
           5
-        ],
-        [
-          "cute",
-          3
         ],
         [
           "made",
@@ -1114,6 +1108,10 @@
         [
           "good",
           2
+        ],
+        [
+          "cute",
+          2
         ]
       ],
       "top_emojis": [],
@@ -1122,13 +1120,11 @@
         "🫶",
         "✨"
       ],
-      "reactions_given": [
-        "❤️"
-      ],
+      "reactions_given": [],
       "photos_shared": 3,
-      "active_hour": 10,
+      "active_hour": 11,
       "active_label": "Morning Person ☀️",
-      "bestie": "leslie",
+      "bestie": "Nicole",
       "most_hyped": 6
     },
     {
@@ -1141,20 +1137,16 @@
       "dim": "Physical",
       "wellness": 5,
       "stress": 0,
-      "encourage": 262,
-      "conn": 137,
+      "encourage": 253,
+      "conn": 87,
       "style": "Balanced",
       "trend": "Steady",
       "wk1": 8,
       "wk2": 15,
       "wk3": 16,
       "wk4": 8,
-      "sentiment": 0.29,
+      "sentiment": 0.27,
       "top_words": [
-        [
-          "great",
-          4
-        ],
         [
           "aymara",
           4
@@ -1164,12 +1156,16 @@
           4
         ],
         [
-          "congrats",
+          "great",
+          3
+        ],
+        [
+          "already",
           2
         ],
         [
-          "strawberries",
-          2
+          "gimme",
+          1
         ]
       ],
       "top_emojis": [],
@@ -1183,7 +1179,7 @@
         "🔥",
         "🫶"
       ],
-      "photos_shared": 16,
+      "photos_shared": 15,
       "active_hour": 21,
       "active_label": "Night Owl 🦉",
       "bestie": "Nicole",
@@ -1200,49 +1196,33 @@
       "wellness": 0,
       "stress": 0,
       "encourage": 1,
-      "conn": 47,
+      "conn": 10,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 21,
       "wk2": 9,
       "wk3": 10,
       "wk4": 5,
-      "sentiment": 0.33,
+      "sentiment": 0.5,
       "top_words": [
         [
           "yummy",
-          3
-        ],
-        [
-          "ayce",
           1
         ],
         [
-          "called",
-          1
-        ],
-        [
-          "hot",
-          1
-        ],
-        [
-          "pot",
+          "girl",
           1
         ]
       ],
       "top_emojis": [],
-      "top_reactions": [
-        "🤩",
-        "👍",
-        "✨"
-      ],
+      "top_reactions": [],
       "reactions_given": [
         "❤️"
       ],
       "photos_shared": 0,
       "active_hour": 19,
       "active_label": "Evening Energy 🌆",
-      "bestie": "Jennifer",
+      "bestie": "Laura",
       "most_hyped": 0
     },
     {
@@ -1256,14 +1236,14 @@
       "wellness": 6,
       "stress": 0,
       "encourage": 23,
-      "conn": 145,
+      "conn": 110,
       "style": "Engager",
       "trend": "Up",
       "wk1": 2,
       "wk2": 9,
       "wk3": 17,
       "wk4": 10,
-      "sentiment": 0.07,
+      "sentiment": 0.12,
       "top_words": [
         [
           "session",
@@ -1278,11 +1258,11 @@
           2
         ],
         [
-          "combo",
+          "breakfast",
           2
         ],
         [
-          "breakfast",
+          "fav",
           2
         ]
       ],
@@ -1313,24 +1293,16 @@
       "dim": "Social",
       "wellness": 0,
       "stress": 0,
-      "encourage": 11,
-      "conn": 100,
+      "encourage": 10,
+      "conn": 78,
       "style": "Engager",
       "trend": "Up",
       "wk1": 0,
       "wk2": 8,
       "wk3": 20,
       "wk4": 6,
-      "sentiment": 0.3,
+      "sentiment": 0.4,
       "top_words": [
-        [
-          "definitely",
-          4
-        ],
-        [
-          "here",
-          2
-        ],
         [
           "love",
           2
@@ -1340,8 +1312,16 @@
           2
         ],
         [
-          "crowded",
+          "definitely",
           2
+        ],
+        [
+          "fellow",
+          1
+        ],
+        [
+          "peruvian",
+          1
         ]
       ],
       "top_emojis": [],
@@ -1371,22 +1351,18 @@
       "dim": "Environmental",
       "wellness": 7,
       "stress": 0,
-      "encourage": 8,
-      "conn": 101,
-      "style": "Balanced",
+      "encourage": 7,
+      "conn": 25,
+      "style": "Broadcaster",
       "trend": "Down",
       "wk1": 10,
       "wk2": 18,
       "wk3": 2,
       "wk4": 0,
-      "sentiment": 0.22,
+      "sentiment": 0.31,
       "top_words": [
         [
           "before",
-          3
-        ],
-        [
-          "out",
           3
         ],
         [
@@ -1399,6 +1375,10 @@
         ],
         [
           "cardinal",
+          2
+        ],
+        [
+          "love",
           2
         ]
       ],
@@ -1414,9 +1394,9 @@
         "✨"
       ],
       "photos_shared": 7,
-      "active_hour": 15,
-      "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "leslie",
+      "active_hour": 9,
+      "active_label": "Morning Person ☀️",
+      "bestie": "Taylor",
       "most_hyped": 8
     },
     {
@@ -1429,15 +1409,15 @@
       "dim": "Occupational",
       "wellness": 4,
       "stress": 0,
-      "encourage": 6,
-      "conn": 79,
-      "style": "Balanced",
+      "encourage": 5,
+      "conn": 32,
+      "style": "Broadcaster",
       "trend": "Down",
       "wk1": 11,
       "wk2": 11,
       "wk3": 5,
       "wk4": 2,
-      "sentiment": 0.19,
+      "sentiment": 0.09,
       "top_words": [
         [
           "client",
@@ -1448,15 +1428,15 @@
           2
         ],
         [
-          "time",
-          2
-        ],
-        [
-          "croc",
-          2
-        ],
-        [
           "trying",
+          1
+        ],
+        [
+          "another",
+          1
+        ],
+        [
+          "drawing",
           1
         ]
       ],
@@ -1468,12 +1448,11 @@
       ],
       "reactions_given": [
         "❤️",
-        "🫣",
-        "🤣"
+        "🫣"
       ],
       "photos_shared": 5,
-      "active_hour": 13,
-      "active_label": "Lunch Poster 🍽️",
+      "active_hour": 19,
+      "active_label": "Evening Energy 🌆",
       "bestie": "leslie",
       "most_hyped": 8
     },
@@ -1487,35 +1466,35 @@
       "dim": "Emotional",
       "wellness": 8,
       "stress": 0,
-      "encourage": 27,
-      "conn": 40,
+      "encourage": 21,
+      "conn": 28,
       "style": "Broadcaster",
       "trend": "Steady",
       "wk1": 7,
       "wk2": 4,
       "wk3": 5,
       "wk4": 7,
-      "sentiment": 0.46,
+      "sentiment": 0.36,
       "top_words": [
         [
           "thank",
-          8
+          5
         ],
         [
           "gracias",
           4
         ],
         [
-          "share",
-          4
+          "what",
+          2
         ],
         [
-          "great",
-          3
+          "cutie",
+          2
         ],
         [
-          "show",
-          3
+          "strawberry",
+          2
         ]
       ],
       "top_emojis": [],
@@ -1532,7 +1511,7 @@
       "photos_shared": 6,
       "active_hour": 11,
       "active_label": "Morning Person ☀️",
-      "bestie": "Katherin",
+      "bestie": "Nicole",
       "most_hyped": 12
     },
     {
@@ -1546,8 +1525,8 @@
       "wellness": 7,
       "stress": 0,
       "encourage": 17,
-      "conn": 103,
-      "style": "Balanced",
+      "conn": 57,
+      "style": "Broadcaster",
       "trend": "Down",
       "wk1": 9,
       "wk2": 0,
@@ -1588,8 +1567,8 @@
         "👍"
       ],
       "photos_shared": 7,
-      "active_hour": 16,
-      "active_label": "Afternoon Vibes 🌤️",
+      "active_hour": 7,
+      "active_label": "Early Bird 🐦",
       "bestie": "Ana",
       "most_hyped": 7
     },
@@ -1661,25 +1640,17 @@
       "wellness": 0,
       "stress": 0,
       "encourage": 11,
-      "conn": 47,
+      "conn": 41,
       "style": "Pure Engager",
       "trend": "Steady",
       "wk1": 2,
       "wk2": 6,
       "wk3": 8,
       "wk4": 2,
-      "sentiment": 0.67,
+      "sentiment": 0.62,
       "top_words": [
         [
           "great",
-          3
-        ],
-        [
-          "next",
-          2
-        ],
-        [
-          "wow",
           2
         ],
         [
@@ -1688,6 +1659,14 @@
         ],
         [
           "minute",
+          1
+        ],
+        [
+          "earned",
+          1
+        ],
+        [
+          "love",
           1
         ]
       ],
@@ -1718,21 +1697,17 @@
       "wellness": 3,
       "stress": 0,
       "encourage": 25,
-      "conn": 58,
+      "conn": 27,
       "style": "Balanced",
       "trend": "Down",
       "wk1": 6,
       "wk2": 4,
       "wk3": 6,
       "wk4": 0,
-      "sentiment": 0.42,
+      "sentiment": 0.44,
       "top_words": [
         [
           "coconut",
-          2
-        ],
-        [
-          "amazing",
           2
         ],
         [
@@ -1745,6 +1720,10 @@
         ],
         [
           "body",
+          1
+        ],
+        [
+          "health",
           1
         ]
       ],
@@ -1760,9 +1739,9 @@
         "🫶"
       ],
       "photos_shared": 4,
-      "active_hour": 18,
-      "active_label": "Evening Energy 🌆",
-      "bestie": "leslie",
+      "active_hour": 12,
+      "active_label": "Lunch Poster 🍽️",
+      "bestie": "Alex",
       "most_hyped": 9
     },
     {
@@ -1775,19 +1754,19 @@
       "dim": "Social",
       "wellness": 3,
       "stress": 0,
-      "encourage": 64,
-      "conn": 71,
+      "encourage": 59,
+      "conn": 59,
       "style": "Engager",
       "trend": "Up",
       "wk1": 2,
       "wk2": 0,
       "wk3": 0,
       "wk4": 13,
-      "sentiment": 0.6,
+      "sentiment": 0.58,
       "top_words": [
         [
           "love",
-          6
+          4
         ],
         [
           "thank",
@@ -1834,14 +1813,14 @@
       "wellness": 1,
       "stress": 0,
       "encourage": 22,
-      "conn": 51,
-      "style": "Balanced",
+      "conn": 20,
+      "style": "Broadcaster",
       "trend": "Up",
       "wk1": 2,
       "wk2": 6,
       "wk3": 2,
       "wk4": 4,
-      "sentiment": 0.08,
+      "sentiment": 0.14,
       "top_words": [
         [
           "awwwwe",
@@ -1856,11 +1835,11 @@
           1
         ],
         [
-          "always",
+          "power",
           1
         ],
         [
-          "regular",
+          "acai",
           1
         ]
       ],
@@ -1876,8 +1855,8 @@
         "🥹"
       ],
       "photos_shared": 4,
-      "active_hour": 9,
-      "active_label": "Morning Person ☀️",
+      "active_hour": 19,
+      "active_label": "Evening Energy 🌆",
       "bestie": "Samantha",
       "most_hyped": 6
     },
@@ -1891,8 +1870,8 @@
       "dim": "Social",
       "wellness": 0,
       "stress": 0,
-      "encourage": 8,
-      "conn": 40,
+      "encourage": 7,
+      "conn": 24,
       "style": "Pure Engager",
       "trend": "Up",
       "wk1": 4,
@@ -1923,10 +1902,7 @@
         ]
       ],
       "top_emojis": [],
-      "top_reactions": [
-        "🤣",
-        "❤️"
-      ],
+      "top_reactions": [],
       "reactions_given": [
         "❤️",
         "🫶",
@@ -1948,15 +1924,15 @@
       "dim": "Intellectual",
       "wellness": 1,
       "stress": 0,
-      "encourage": 10,
-      "conn": 35,
+      "encourage": 9,
+      "conn": 21,
       "style": "Heavy Broadcaster",
       "trend": "Steady",
       "wk1": 2,
       "wk2": 4,
       "wk3": 4,
       "wk4": 2,
-      "sentiment": 0.07,
+      "sentiment": 0.0,
       "top_words": [
         [
           "fede",
@@ -1992,7 +1968,7 @@
       "photos_shared": 10,
       "active_hour": 16,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "leslie",
+      "bestie": "Samantha",
       "most_hyped": 6
     },
     {
@@ -2063,7 +2039,7 @@
       "wellness": 1,
       "stress": 0,
       "encourage": 1,
-      "conn": 11,
+      "conn": 6,
       "style": "Heavy Broadcaster",
       "trend": "Up",
       "wk1": 1,
@@ -2105,7 +2081,7 @@
       "photos_shared": 2,
       "active_hour": 22,
       "active_label": "Night Owl 🦉",
-      "bestie": "Ana",
+      "bestie": "Stephany",
       "most_hyped": 9
     },
     {
@@ -2119,14 +2095,14 @@
       "wellness": 2,
       "stress": 0,
       "encourage": 0,
-      "conn": 14,
-      "style": "Balanced",
+      "conn": 11,
+      "style": "Broadcaster",
       "trend": "Up",
       "wk1": 0,
       "wk2": 2,
       "wk3": 0,
       "wk4": 6,
-      "sentiment": 0.4,
+      "sentiment": 0.0,
       "top_words": [
         [
           "inspired",
@@ -2159,7 +2135,7 @@
       "photos_shared": 2,
       "active_hour": 11,
       "active_label": "Morning Person ☀️",
-      "bestie": "Alex",
+      "bestie": "Nicole",
       "most_hyped": 4
     },
     {
@@ -2202,7 +2178,7 @@
       "photos_shared": 0,
       "active_hour": 14,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Katherin",
+      "bestie": "Razelle",
       "most_hyped": 0
     },
     {
@@ -2216,7 +2192,7 @@
       "wellness": 0,
       "stress": 0,
       "encourage": 7,
-      "conn": 25,
+      "conn": 9,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 4,
@@ -2235,14 +2211,6 @@
         ],
         [
           "days",
-          1
-        ],
-        [
-          "cutee",
-          1
-        ],
-        [
-          "loveee",
           1
         ]
       ],
@@ -2310,7 +2278,7 @@
       "photos_shared": 0,
       "active_hour": 22,
       "active_label": "Night Owl 🦉",
-      "bestie": "Chellsea",
+      "bestie": "Laura",
       "most_hyped": 0
     },
     {
@@ -2434,14 +2402,14 @@
       "wellness": 0,
       "stress": 0,
       "encourage": 1,
-      "conn": 24,
+      "conn": 14,
       "style": "Pure Engager",
       "trend": "Steady",
       "wk1": 0,
       "wk2": 2,
       "wk3": 2,
       "wk4": 0,
-      "sentiment": 0.2,
+      "sentiment": 0.33,
       "top_words": [
         [
           "jealous",
@@ -2465,9 +2433,7 @@
         ]
       ],
       "top_emojis": [],
-      "top_reactions": [
-        "❤️"
-      ],
+      "top_reactions": [],
       "reactions_given": [
         "❤️"
       ],
@@ -2487,20 +2453,16 @@
       "dim": "Social",
       "wellness": 3,
       "stress": 0,
-      "encourage": 22,
-      "conn": 21,
-      "style": "Balanced",
+      "encourage": 12,
+      "conn": 2,
+      "style": "Heavy Broadcaster",
       "trend": "Down",
       "wk1": 2,
       "wk2": 1,
       "wk3": 0,
       "wk4": 0,
-      "sentiment": 0.43,
+      "sentiment": 0.0,
       "top_words": [
-        [
-          "loved",
-          2
-        ],
         [
           "sunday",
           2
@@ -2514,8 +2476,12 @@
           2
         ],
         [
-          "lovely",
-          2
+          "activities",
+          1
+        ],
+        [
+          "supporting",
+          1
         ]
       ],
       "top_emojis": [],
@@ -2530,46 +2496,10 @@
         "🫶"
       ],
       "photos_shared": 5,
-      "active_hour": 14,
-      "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Alex",
+      "active_hour": 9,
+      "active_label": "Morning Person ☀️",
+      "bestie": "Stephany",
       "most_hyped": 8
-    },
-    {
-      "name": "Eleana Ferrer",
-      "role": "Admin",
-      "pts": 2,
-      "bonus": "$0",
-      "streak": 1,
-      "ci": 100,
-      "dim": "Social",
-      "wellness": 0,
-      "stress": 0,
-      "encourage": 1,
-      "conn": 12,
-      "style": "Pure Engager",
-      "trend": "Down",
-      "wk1": 2,
-      "wk2": 0,
-      "wk3": 0,
-      "wk4": 0,
-      "sentiment": 0.5,
-      "top_words": [
-        [
-          "love",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [],
-      "reactions_given": [
-        "❤️"
-      ],
-      "photos_shared": 0,
-      "active_hour": 16,
-      "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Aafia",
-      "most_hyped": 0
     },
     {
       "name": "Xochilt Saavedra",
@@ -2638,12 +2568,12 @@
       "wk4": 73
     },
     "most_loved": {
-      "name": "leslie orellana-amaya",
-      "value": 672
+      "name": "Nicole Burke",
+      "value": 387
     },
     "hype_machine": {
       "name": "Katherin Hernandez",
-      "value": 315
+      "value": 281
     },
     "most_motivating": {
       "name": "Katherin Hernandez",
@@ -2651,19 +2581,19 @@
     },
     "silent_mvp": {
       "name": "Stephany Carrasco",
-      "value": 320
+      "value": 241
     },
     "photo_energy": {
       "name": "Katherin Hernandez",
-      "value": 61
+      "value": 59
     },
     "most_supportive": {
-      "name": "leslie orellana-amaya",
-      "value": 672
+      "name": "Nicole Burke",
+      "value": 387
     },
     "best_duo": {
-      "name1": "leslie orellana-amaya",
-      "name2": "Nicole Burke"
+      "name1": "Nicole Burke",
+      "name2": "leslie orellana-amaya"
     }
   },
   "did_you_know": [
@@ -2675,12 +2605,12 @@
     {
       "emoji": "📖",
       "color": "blue",
-      "text": "If you read every message back-to-back, it'd take <b>37 minutes</b>."
+      "text": "If you read every message back-to-back, it'd take <b>27 minutes</b>."
     },
     {
       "emoji": "📝",
       "color": "blue",
-      "text": "Average post: <b>5.9 words</b>. Short and sweet."
+      "text": "Average post: <b>6.1 words</b>. Short and sweet."
     },
     {
       "emoji": "🌌",
@@ -2695,25 +2625,25 @@
   },
   "real_story": {
     "eyebrow": "the heart count",
-    "heading": "719 HEARTS.<br>ONE MONTH.",
-    "body": "❤️ was given 719 times this month. That's one heart every 60 minutes. For 30 days straight.",
+    "heading": "623 HEARTS.<br>ONE MONTH.",
+    "body": "❤️ was given 623 times this month. That's one heart every 69 minutes. For 30 days straight.",
     "highlight_big": "Most teams<br>don't say it once.",
     "highlight_body": "A workplace giving each other hearts at this rate isn't normal — and it's not by accident. It happens because someone, somewhere, posted first. And then someone else replied. And it kept going."
   },
   "communication": {
-    "avg_post_length_words": 5.9,
-    "avg_post_length_chars": 31,
-    "reading_time_min": 37,
-    "typing_time_min": 231,
+    "avg_post_length_words": 6.1,
+    "avg_post_length_chars": 33,
+    "reading_time_min": 27,
+    "typing_time_min": 167,
     "avg_thread_depth": 5.3,
     "reaction_reach_pct": 97,
-    "avg_first_reply_min": 77,
+    "avg_first_reply_min": 75,
     "question_marks_total": 11,
     "caps_messages": 2,
     "emoji_only_posts": 11,
-    "total_messages": 1572,
-    "total_words_chan": 9250,
-    "total_chars": 49281
+    "total_messages": 1104,
+    "total_words_chan": 6699,
+    "total_chars": 36067
   },
   "patterns": {
     "power_hour": {
@@ -2744,7 +2674,7 @@
         1
       ]
     ],
-    "cross_role_count": 1661,
+    "cross_role_count": 1043,
     "weekend_pct": 28,
     "late_night_count": 13,
     "early_bird_count": 0,
@@ -2765,5 +2695,5 @@
     "😋",
     "🙌"
   ],
-  "updated_at": "2026-05-03 20:30"
+  "updated_at": "2026-05-03 20:37"
 }

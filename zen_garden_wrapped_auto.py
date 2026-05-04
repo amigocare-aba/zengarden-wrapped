@@ -1425,12 +1425,15 @@ def main():
                 if not comeback or weeks[i+1] > comeback[1]:
                     comeback = (p["name"], weeks[i+1], i+1)
 
-    # Story candidates with scores
+    # Story candidates with scores AND categories
+    # Categories rotate monthly so the Real Story angle varies even when
+    # the underlying data patterns are similar (avoids "always heart count").
     stories = []
 
     # 1) Streak story — high score if many people had 4-week streak
     if streak_4_count >= 5:
         stories.append({
+            "category": "people",
             "score": streak_4_count * 10,
             "story": {
                 "eyebrow": "the quiet ones who kept going",
@@ -1445,6 +1448,7 @@ def main():
     if comeback and comeback[1] >= 15:
         first = comeback[0].split(" ")[0].capitalize()
         stories.append({
+            "category": "people",
             "score": comeback[1] * 5,
             "story": {
                 "eyebrow": "the comeback",
@@ -1471,6 +1475,7 @@ def main():
             heading = f"{first.upper()}<br>JUST KEPT GOING."
 
         stories.append({
+            "category": "people",
             "score": improver_delta * 8 + 50,  # boosted to win over comeback for true improvers
             "story": {
                 "eyebrow": "the most improved",
@@ -1484,6 +1489,7 @@ def main():
     # 4) Big day story — one day really popped
     if busiest_day_str and busiest_day_count >= 8:
         stories.append({
+            "category": "moment",
             "score": busiest_day_count * 3,
             "story": {
                 "eyebrow": "the day it all happened",
@@ -1498,6 +1504,7 @@ def main():
     if wk_totals and max(wk_totals) >= 1.4 * (sum(wk_totals)/len(wk_totals) if wk_totals else 1):
         peak_pts = wk_totals[peak_week_idx]
         stories.append({
+            "category": "moment",
             "score": peak_pts * 2,
             "story": {
                 "eyebrow": "the wave",
@@ -1511,6 +1518,7 @@ def main():
     # 6) Diversity story — many different people contributed
     if active >= 30:
         stories.append({
+            "category": "people",
             "score": active * 1.5,
             "story": {
                 "eyebrow": "the chorus",
@@ -1526,6 +1534,7 @@ def main():
         top_conn = all_active[0]
         first = top_conn["name"].split(" ")[0].capitalize()
         stories.append({
+            "category": "people",
             "score": min(top_conn["conn"], 200),  # capped
             "story": {
                 "eyebrow": "the connector",
@@ -1544,6 +1553,7 @@ def main():
             if abs(shift) >= 0.15:
                 if shift > 0:
                     stories.append({
+                        "category": "mood",
                         "score": 280,
                         "story": {
                             "eyebrow": "the mood shift",
@@ -1555,6 +1565,7 @@ def main():
                     })
                 else:
                     stories.append({
+                        "category": "mood",
                         "score": 240,
                         "story": {
                             "eyebrow": "the cool down",
@@ -1568,6 +1579,7 @@ def main():
     # 9) POWER HOUR — one specific 60-min window stood out (NEW)
     if power_hour_str and power_hour_count >= 8:
         stories.append({
+            "category": "moment",
             "score": power_hour_count * 8,
             "story": {
                 "eyebrow": "the power hour",
@@ -1581,6 +1593,7 @@ def main():
     # 10) READING TIME / TYPING TIME — collective effort (NEW)
     if reading_time_min >= 8 and typing_time_min >= 30:
         stories.append({
+            "category": "volume",
             "score": 220,
             "story": {
                 "eyebrow": "the collective output",
@@ -1594,6 +1607,7 @@ def main():
     # 11) FAST RESPONSE — the team replies fast (NEW)
     if avg_first_reply_min and avg_first_reply_min <= 30 and len(first_reply_lags) >= 10:
         stories.append({
+            "category": "behavior",
             "score": 200,
             "story": {
                 "eyebrow": "the response time",
@@ -1607,6 +1621,7 @@ def main():
     # 12) WEATHER / SEASONAL — channel reflects the month
     if weather_posts >= 10:
         stories.append({
+            "category": "theme",
             "score": weather_posts * 12,
             "story": {
                 "eyebrow": "the season",
@@ -1622,6 +1637,7 @@ def main():
         ratio = total_reactions / max(total_messages, 1)
         if ratio >= 1.5:
             stories.append({
+                "category": "engagement",
                 "score": int(total_reactions * 1.2),
                 "story": {
                     "eyebrow": "the chorus",
@@ -1637,6 +1653,7 @@ def main():
     if heart_count >= 50:
         mins_per_heart = round(30 * 24 * 60 / max(heart_count, 1))
         stories.append({
+            "category": "engagement",
             "score": heart_count * 5,
             "story": {
                 "eyebrow": "the heart count",
@@ -1652,6 +1669,7 @@ def main():
     if unique_reactions >= 12:
         top5_str = " ".join(palette_top5[:5]) if palette_top5 else ""
         stories.append({
+            "category": "engagement",
             "score": unique_reactions * 22,
             "story": {
                 "eyebrow": "the palette",
@@ -1668,6 +1686,7 @@ def main():
         comment_share = round(total_comments_overall / total_messages * 100)
         if comment_share >= 60:
             stories.append({
+                "category": "behavior",
                 "score": comment_share * 8,
                 "story": {
                     "eyebrow": "the engagement",
@@ -1677,6 +1696,47 @@ def main():
                     "highlight_body": "A channel where most messages are replies is a channel where people are actually listening. New posts spark something. Replies keep it alive. The ratio matters.",
                 },
             })
+
+    # 18) POST LENGTH — terse vs verbose team identity (NEW)
+    if avg_post_length_words and total_messages >= 50:
+        if avg_post_length_words <= 8:
+            stories.append({
+                "category": "behavior",
+                "score": 230,
+                "story": {
+                    "eyebrow": "the rhythm",
+                    "heading": "SHORT.<br>SWEET.<br>OFTEN.",
+                    "body": f"Average post: {avg_post_length_words} words. {total_messages:,} messages combined. The garden talks in bursts, not essays.",
+                    "highlight_big": "Brevity isn't<br>laziness.",
+                    "highlight_body": "Quick check-ins, photo dumps, two-word reactions — that's the texture of how this team shows up. It's lower-pressure than essays, and it adds up to a real conversation.",
+                },
+            })
+        elif avg_post_length_words >= 18:
+            stories.append({
+                "category": "behavior",
+                "score": 230,
+                "story": {
+                    "eyebrow": "the depth",
+                    "heading": "PEOPLE<br>WROTE WITH WEIGHT.",
+                    "body": f"Average post: {avg_post_length_words} words. People aren't dropping one-liners — they're sharing real moments.",
+                    "highlight_big": "Long posts<br>say something.",
+                    "highlight_body": "It takes intention to write more than a sentence. The garden's average post length says people felt safe enough to take up space, share context, tell a small story.",
+                },
+            })
+
+    # 19) CONVERSATION DEPTH — average thread length (NEW)
+    if avg_thread_depth >= 3:
+        stories.append({
+            "category": "behavior",
+            "score": int(avg_thread_depth * 50),
+            "story": {
+                "eyebrow": "the conversations",
+                "heading": "PEOPLE<br>STAYED IN IT.",
+                "body": f"Average thread had {avg_thread_depth} replies. Posts didn't just get hearts — they sparked actual back-and-forth.",
+                "highlight_big": "A reply<br>is a relationship.",
+                "highlight_body": "Reactions are quick. Replies take effort. Long threads happen when something feels worth lingering on. The garden lingers.",
+            },
+        })
 
     # 17) GROUP ACTIVITIES — when in-person events are documented (NEW)
     total_groups = sum(p.get("group_activities", 0) for p in points_by_name.values()) if points_by_name else 0
@@ -1690,6 +1750,7 @@ def main():
     # for now use a rough cap.
     if total_groups >= 10:
         stories.append({
+            "category": "theme",
             "score": total_groups * 18,
             "story": {
                 "eyebrow": "the gatherings",
@@ -1700,11 +1761,41 @@ def main():
             },
         })
 
-    # Pick highest-scoring story (or fall back to streak/steady default)
+    # ── PICK STORY: rotate preferred CATEGORY by month ─────────────
+    # Each month prefers a different category so the Real Story angle
+    # naturally varies even if the underlying data patterns repeat.
+    # Within the preferred category, pick highest score.
+    # Fall back to overall highest if preferred category has no story.
+    CATEGORY_ROTATION = [
+        'engagement',  # April (month 4): hearts, palette, cheers ratio
+        'mood',        # May (5): mood arc shifts
+        'people',      # June (6): comeback, most improved, connector
+        'behavior',    # July (7): post length, threads, response time
+        'moment',      # August (8): power hour, big day, peak week
+        'theme',       # September (9): weather, gatherings
+        'volume',      # October (10): collective output, reading time
+        'engagement',  # November
+        'people',      # December
+    ]
+    # April = first wrapped month → index 0 of rotation
+    preferred = CATEGORY_ROTATION[(month_num - 4) % len(CATEGORY_ROTATION)]
+
+    real_story = None
     if stories:
+        # Default tag for any legacy story that didn't get categorized
+        for s in stories:
+            s.setdefault("category", "people")
         stories.sort(key=lambda x: -x["score"])
-        real_story = stories[0]["story"]
-    else:
+
+        # Try preferred category first (require minimum score so weak ones don't win)
+        preferred_pool = [s for s in stories if s["category"] == preferred and s["score"] >= 100]
+        if preferred_pool:
+            real_story = preferred_pool[0]["story"]
+        else:
+            # Fall back to overall highest
+            real_story = stories[0]["story"]
+
+    if not real_story:
         real_story = {
             "eyebrow": "the real story",
             "heading": "EVERY WEEK.<br>SAME ENERGY.",
