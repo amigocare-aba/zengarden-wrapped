@@ -297,7 +297,9 @@ def main():
     channel_name = config.get("channel", "zengarden")
 
     # ── Determine which week to process ───────────────────────────
-    today = datetime.now().date()
+    # Allow --simulate-date to override "today" for testing the full flow
+    today = (datetime.strptime(args.simulate_date, "%Y-%m-%d").date()
+             if args.simulate_date else datetime.now().date())
     week_entry = None
 
     if args.week:
@@ -517,7 +519,7 @@ def main():
             sample_lines.append(f"{medal} {nm} — ?? pts (would be from monthly wrapped totals)")
         wrapped_url = "https://amigocare-aba.github.io/zengarden-wrapped/index_wrapped.html"
         preview_msg = (
-            f"*{month_short} Wrapped is here* 🌱\n\n"
+            f"*{month_short} Wrapped — final monthly totals* 🌱\n\n"
             + "\n".join(sample_lines)
             + f"\n\nSee your full {month_short} recap → <{wrapped_url}|wrapped page>"
             + "\nDon't forget to tap your name to share your results on social! 📸"
@@ -708,7 +710,7 @@ def main():
             close_str = close_date.strftime("%A %B %-d")
 
             monthly_msg = (
-                f"*{month_short} Wrapped is here* 🌱\n\n"
+                f"*{month_short} Wrapped — final monthly totals* 🌱\n\n"
                 + "\n".join(top_lines)
                 + f"\n\nSee your full {month_short} recap → <{wrapped_url}|wrapped page>"
                 + "\nDon't forget to tap your name to share your results on social! 📸"
@@ -726,12 +728,26 @@ def main():
             print("⚠️  No wrapped JSON to post")
     else:
         # ── REGULAR WEEKLY POST ────────────────────────────────────
-        page_url = "https://amigocare-aba.github.io/zengarden-wrapped/weekly.html"
-        slack_msg = summary_text + f"\n\n📊 <{page_url}|View full scoreboard>"
-        if posting_enabled:
-            post_to_slack(slack_msg)
-        else:
-            print("\n🔇 Slack post SUPPRESSED (--no-post or --simulate-date)")
+        # SAFETY: Don't post a weekly summary if this week was already
+        # covered by a Wrapped post (gap-Sunday between months).
+        # E.g., on June 7, auto-detect picks May Week 4, but May Week 4
+        # already went out as part of the May 31 Wrapped — we'd duplicate.
+        skip_weekly_post = False
+        week_month_info = config.get("months", {}).get(month_label, {})
+        wrapped_date_str = week_month_info.get("wrapped_post_date", "")
+        if wrapped_date_str and wrapped_date_str <= today_str:
+            # The week's month already had its Wrapped published. Skip the post.
+            skip_weekly_post = True
+            print(f"\n⏭️  Skipping weekly post — {month_label} already had its Wrapped on {wrapped_date_str}.")
+            print(f"   (Today is {today_str}; this is a gap Sunday between months.)")
+
+        if not skip_weekly_post:
+            page_url = "https://amigocare-aba.github.io/zengarden-wrapped/weekly.html"
+            slack_msg = summary_text + f"\n\n📊 <{page_url}|View full scoreboard>"
+            if posting_enabled:
+                post_to_slack(slack_msg)
+            else:
+                print("\n🔇 Slack post SUPPRESSED (--no-post or --simulate-date)")
 
     # 4. Run status (audit artifact)
     write_status({
