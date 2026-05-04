@@ -475,7 +475,7 @@ body::before{
 
   <!-- Dimension usage statement -->
   <div class="anim-up-3" style="margin-bottom:20px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
-    <span style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#00FF9F;text-shadow:0 0 16px rgba(0,255,159,0.5);line-height:1;">4 of 8</span>
+    <span id="dimsBloomedCount" style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#00FF9F;text-shadow:0 0 16px rgba(0,255,159,0.5);line-height:1;">— of 8</span>
     <span style="font-size:13px;color:rgba(247,244,238,0.60);"><span id="dimensionsBloomedText">dimensions bloomed this month. The other four are an open invitation. 🌱</span></span>
   </div>
 
@@ -812,7 +812,7 @@ function initWrapped() {
     var fm = document.getElementById('footerMonth');
     if (fm) fm.textContent = D.month;
     var db = document.getElementById('dimensionsBloomedText');
-    if (db) db.textContent = 'dimensions bloomed in ' + monthShort + '. The other four are an open invitation. 🌱';
+    // dimensionsBloomedText is set later by wellness section once dims is computed
 
     // Closing: next month name
     var closingH = document.getElementById('closingHeadline');
@@ -885,21 +885,51 @@ const maxPts=D.all_active[0].pts;
 })();
 
 // ── WELLNESS DIMENSIONS ───────────────────────────────────────────
-const dims=[
-  {n:'Social',       e:'🤝', c:'#00E5FF', s:41},
-  {n:'Physical',     e:'💪', c:'#69FF47', s:5},
-  {n:'Spiritual',    e:'🧘', c:'#FFD60A', s:1},
-  {n:'Occupational', e:'💼', c:'#00FFCC', s:1},
-  {n:'Emotional',    e:'❤️', c:'#FF9F0A', s:0},
-  {n:'Financial',    e:'💰', c:'#5AC8FA', s:0},
-  {n:'Intellectual', e:'📚', c:'#FFE500', s:0},
-  {n:'Environmental',e:'🌿', c:'#30D158', s:0}
-];
+// Visual config: emoji + neon color per dimension
+const DIM_VISUAL = {
+  'Social':        { e:'🤝', c:'#00E5FF' },
+  'Physical':      { e:'💪', c:'#69FF47' },
+  'Spiritual':     { e:'🧘', c:'#FFD60A' },
+  'Occupational':  { e:'💼', c:'#00FFCC' },
+  'Emotional':     { e:'❤️', c:'#FF9F0A' },
+  'Financial':     { e:'💰', c:'#5AC8FA' },
+  'Intellectual':  { e:'📚', c:'#FFE500' },
+  'Environmental': { e:'🌿', c:'#30D158' }
+};
+
+// Build dims array from D.dim_counts (real data)
+const dims = Object.keys(DIM_VISUAL).map(function(name) {
+  var count = (D.dim_counts && D.dim_counts[name]) || 0;
+  return { n: name, e: DIM_VISUAL[name].e, c: DIM_VISUAL[name].c, s: count };
+}).sort(function(a, b) { return b.s - a.s; });  // sort by count desc
+
+// Update "X of 8" — count dimensions with at least 1 post
+var bloomedCount = dims.filter(function(d) { return d.s > 0; }).length;
+var bloomedEl = document.getElementById('dimsBloomedCount');
+if (bloomedEl) bloomedEl.textContent = bloomedCount + ' of 8';
+
+// Update body copy based on how many dimensions bloomed
+var dimsBloomedText = document.getElementById('dimensionsBloomedText');
+if (dimsBloomedText && D.month) {
+  var ms = D.month.split(' ')[0];
+  var notBloomed = 8 - bloomedCount;
+  var msg;
+  if (bloomedCount === 8) {
+    msg = 'dimensions bloomed in ' + ms + '. The whole garden showed up. 🌱';
+  } else if (notBloomed === 1) {
+    msg = 'dimensions bloomed in ' + ms + '. One is waiting for your voice. 🌱';
+  } else {
+    msg = 'dimensions bloomed in ' + ms + '. The other ' + notBloomed + ' are an open invitation. 🌱';
+  }
+  dimsBloomedText.textContent = msg;
+}
+
 (function(){
   var list = document.getElementById('dimList');
   if(!list) return;
+  var maxS = Math.max.apply(null, dims.map(function(d){ return d.s; })) || 1;
   list.innerHTML = dims.map(function(d, i) {
-    var pct = Math.round(d.s / 41 * 100);
+    var pct = Math.round(d.s / maxS * 100);
     var ghost = d.s === 0 ? ' ghost' : '';
     var countEl = d.s > 0
       ? '<div class="dim-card-count" style="color:' + d.c + ';text-shadow:0 0 14px ' + d.c + '66;">' + d.s + '</div>'
