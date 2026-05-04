@@ -1,20 +1,20 @@
 name,role,monthly_pts,bonus_tier,wk1,wk2,wk3,wk4,streak,trend,style,biggest_dimension,wellness_posts,encourage_given,connections,photos_shared,most_hyped_post,active_hour,active_label,bestie,sentiment
-leslie orellana-amaya,RBT,265,$50,113,111,33,8,4,Down,Pure Engager,Social,7,43,683,10,7,16,Afternoon Vibes 🌤️,Jerusha,0.27
+leslie orellana-amaya,RBT,265,$50,113,111,33,8,4,Down,Pure Engager,Social,7,43,672,10,7,16,Afternoon Vibes 🌤️,Jerusha,0.26
 Nicole Burke,BCBA,181,$50,22,65,52,42,4,Up,Pure Engager,Emotional,7,95,542,13,7,10,Morning Person ☀️,leslie,0.32
-Jerusha Daniel,RBT,170,$50,86,40,20,24,4,Down,Engager,Intellectual,13,35,510,20,12,10,Morning Person ☀️,leslie,0.36
+Jerusha Daniel,RBT,170,$50,86,40,20,24,4,Down,Engager,Intellectual,13,35,499,20,12,10,Morning Person ☀️,leslie,0.36
 Jennifer Leiva,RBT,141,$50,48,48,29,16,4,Down,Pure Engager,Social,5,2,341,13,8,16,Afternoon Vibes 🌤️,leslie,0.09
-Alex Arevalo,Leadership,132,$50,50,45,15,22,4,Down,Pure Engager,Occupational,3,91,409,4,11,16,Afternoon Vibes 🌤️,leslie,0.33
-Katherin Hernandez,RBT,131,$50,44,29,35,23,4,Down,Engager,Emotional,18,315,387,62,5,18,Evening Energy 🌆,leslie,0.39
-Razelle Abogadie,RBT,116,$50,32,11,39,34,4,Up,Engager,Intellectual,10,32,359,34,8,15,Afternoon Vibes 🌤️,Nicole,0.34
-Pamela martinez gonzalez,RBT,108,$50,27,37,23,21,4,Down,Engager,Intellectual,7,73,257,14,9,14,Afternoon Vibes 🌤️,leslie,0.12
-Ana Plaza,RBT,107,$50,18,0,16,73,3,Up,Pure Engager,Physical,1,0,350,1,4,19,Evening Energy 🌆,Nicole,0.37
-Samantha Collazo,RBT,103,$50,41,37,15,10,4,Down,Pure Engager,Social,3,7,308,3,4,18,Evening Energy 🌆,leslie,0.35
-Kimberly Lemus,BCBA,94,$50,13,25,34,22,4,Up,Engager,Occupational,6,40,242,12,7,21,Night Owl 🦉,leslie,0.29
+Alex Arevalo,Leadership,132,$50,50,45,15,22,4,Down,Pure Engager,Occupational,3,88,396,4,11,16,Afternoon Vibes 🌤️,leslie,0.32
+Katherin Hernandez,RBT,131,$50,44,29,35,23,4,Down,Engager,Emotional,18,315,381,61,5,18,Evening Energy 🌆,leslie,0.4
+Razelle Abogadie,RBT,116,$50,32,11,39,34,4,Up,Engager,Intellectual,10,32,354,34,8,15,Afternoon Vibes 🌤️,Nicole,0.34
+Pamela martinez gonzalez,RBT,108,$50,27,37,23,21,4,Down,Engager,Intellectual,7,73,252,14,9,14,Afternoon Vibes 🌤️,leslie,0.11
+Ana Plaza,RBT,107,$50,18,0,16,73,3,Up,Pure Engager,Physical,1,0,347,1,4,19,Evening Energy 🌆,Nicole,0.36
+Samantha Collazo,RBT,103,$50,41,37,15,10,4,Down,Pure Engager,Social,3,7,305,3,4,18,Evening Energy 🌆,leslie,0.34
+Kimberly Lemus,BCBA,94,$50,13,25,34,22,4,Up,Engager,Occupational,6,40,237,12,7,21,Night Owl 🦉,leslie,0.3
 Taylor Schindhelm,RBT,85,$50,10,32,18,25,4,Up,Engager,Physical,9,44,269,18,8,13,Lunch Poster 🍽️,leslie,0.2
-Stephany Carrasco,RBT,79,$25,13,7,0,59,3,Up,Pure Engager,Emotional,6,24,326,9,9,20,Night Owl 🦉,Ana,0.38
-Zendy Wilson,BCBA,58,$25,34,8,10,6,4,Down,Balanced,Intellectual,7,8,170,13,7,10,Morning Person ☀️,leslie,0.36
-Melitza,RBT,53,$25,20,10,11,12,4,Down,Pure Engager,Social,1,10,180,1,7,20,Night Owl 🦉,leslie,0.44
-Jocelyn,BCBA,50,$25,9,27,8,6,4,Down,Engager,Physical,8,45,140,17,7,21,Night Owl 🦉,leslie,0.2
+Stephany Carrasco,RBT,79,$25,13,7,0,59,3,Up,Pure Engager,Emotional,6,24,320,9,9,20,Night Owl 🦉,Ana,0.37
+Zendy Wilson,BCBA,58,$25,34,8,10,6,4,Down,Balanced,Intellectual,7,8,165,13,7,10,Morning Person ☀️,leslie,0.34
+Melitza,RBT,53,$25,20,10,11,12,4,Down,Pure Engager,Social,1,10,177,1,7,20,Night Owl 🦉,leslie,0.42
+Jocelyn,BCBA,50,$25,9,27,8,6,4,Down,Engager,Physical,8,45,135,17,7,21,Night Owl 🦉,leslie,0.21
 Laura Outland,RBT,50,$25,16,0,15,19,3,Up,Pure Engager,Intellectual,4,48,188,8,9,9,Morning Person ☀️,leslie,0.55
 Lizzie Maldonado,RBT,47,$15,14,0,21,12,3,Down,Pure Engager,Physical,3,3,164,3,6,10,Morning Person ☀️,leslie,0.39
 Pierre,BCBA,47,$15,8,15,16,8,4,Steady,Balanced,Physical,5,262,137,16,5,21,Night Owl 🦉,Nicole,0.29
@@ -29,18 +29,18 @@ Emily Chesbrough,BCBA,19,$0,0,0,12,7,2,Up,Balanced,Physical,2,4,20,2,7,8,Early B
 Andre Perret Giesecke,BCBA,18,$0,2,6,8,2,4,Steady,Pure Engager,Social,0,11,47,0,0,20,Night Owl 🦉,Nicole,0.67
 LeeAnn (HR),Admin,16,$0,6,4,6,0,3,Down,Balanced,Physical,3,25,58,4,9,18,Evening Energy 🌆,leslie,0.42
 Jasmine Caceres,Admin,15,$0,2,0,0,13,2,Up,Engager,Social,3,64,71,7,3,9,Morning Person ☀️,Ana,0.6
-Mimi Theodore,Leadership,14,$0,2,6,2,4,4,Up,Balanced,Social,1,22,51,4,6,9,Morning Person ☀️,Nicole,0.08
+Mimi Theodore,Leadership,14,$0,2,6,2,4,4,Up,Balanced,Social,1,22,51,4,6,9,Morning Person ☀️,Samantha,0.08
 adriana pereira,BCBA,12,$0,4,0,0,8,2,Up,Pure Engager,Social,0,8,40,0,0,21,Night Owl 🦉,Jerusha,0.0
 Jeffrey Nsubuga,RBT,12,$0,2,4,4,2,4,Steady,Heavy Broadcaster,Intellectual,1,10,35,10,6,16,Afternoon Vibes 🌤️,leslie,0.07
 Tatiana Castillo,RBT,11,$0,0,3,8,0,2,Steady,Pure Engager,Physical,1,4,41,1,5,9,Morning Person ☀️,leslie,0.12
-Randy Sandoval,RBT,11,$0,1,0,0,10,2,Up,Heavy Broadcaster,Physical,1,1,11,2,9,22,Night Owl 🦉,Jerusha,1.0
+Randy Sandoval,RBT,11,$0,1,0,0,10,2,Up,Heavy Broadcaster,Physical,1,1,11,2,9,22,Night Owl 🦉,Ana,1.0
 Marisol Cabrera,RBT,8,$0,0,2,0,6,2,Up,Balanced,Emotional,2,0,14,2,4,11,Morning Person ☀️,Alex,0.4
 Chellsea Garbutt,RBT,7,$0,0,0,0,7,1,Up,Pure Engager,Social,0,4,19,0,0,14,Afternoon Vibes 🌤️,Katherin,0.0
-Carla Helena,RBT,6,$0,4,0,2,0,2,Down,Pure Engager,Social,0,7,25,0,0,12,Lunch Poster 🍽️,leslie,0.0
-Ivanna Rodriguez,RBT,5,$0,0,0,0,5,1,Up,Pure Engager,Social,0,2,11,0,0,22,Night Owl 🦉,Jocelyn,1.0
+Carla Helena,RBT,6,$0,4,0,2,0,2,Down,Pure Engager,Social,0,7,25,0,0,12,Lunch Poster 🍽️,Katherin,0.0
+Ivanna Rodriguez,RBT,5,$0,0,0,0,5,1,Up,Pure Engager,Social,0,2,11,0,0,22,Night Owl 🦉,Chellsea,1.0
 A.J. Flynn,BCBA,5,$0,0,0,4,1,2,Up,Balanced,Social,0,2,18,2,6,16,Afternoon Vibes 🌤️,Alex,0.33
-William Gunn,RBT,4,$0,1,1,2,0,3,Down,Heavy Broadcaster,Physical,3,1,12,4,5,11,Morning Person ☀️,Samantha,0.0
+William Gunn,RBT,4,$0,1,1,2,0,3,Down,Heavy Broadcaster,Physical,3,0,7,4,5,11,Morning Person ☀️,Samantha,0.0
 Camila Morales,BCBA,4,$0,0,2,2,0,2,Steady,Pure Engager,Social,0,1,24,0,0,11,Morning Person ☀️,leslie,0.2
 Iris Lovo,RBT,3,$0,2,1,0,0,2,Down,Balanced,Social,3,22,21,5,8,14,Afternoon Vibes 🌤️,Alex,0.43
-Eleana Ferrer,Admin,2,$0,2,0,0,0,1,Down,Pure Engager,Social,0,1,12,0,0,16,Afternoon Vibes 🌤️,Jasmine,0.5
-Xochilt Saavedra,RBT,1,$0,0,0,1,0,1,Steady,Heavy Broadcaster,Occupational,1,1,5,2,7,18,Evening Energy 🌆,Jennifer,0.0
+Eleana Ferrer,Admin,2,$0,2,0,0,0,1,Down,Pure Engager,Social,0,1,12,0,0,16,Afternoon Vibes 🌤️,Aafia,0.5
+Xochilt Saavedra,RBT,1,$0,0,0,1,0,1,Steady,Heavy Broadcaster,Occupational,1,1,5,2,7,18,Evening Energy 🌆,Katherin,0.0

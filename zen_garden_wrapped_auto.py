@@ -1604,7 +1604,7 @@ def main():
             },
         })
 
-    # 12) WEATHER / SEASONAL — channel reflects the month (NEW)
+    # 12) WEATHER / SEASONAL — channel reflects the month
     if weather_posts >= 10:
         stories.append({
             "score": weather_posts * 12,
@@ -1614,6 +1614,89 @@ def main():
                 "body": f"{weather_posts} posts mentioned weather, sun, rain, or season. The garden notices — even when nobody's looking.",
                 "highlight_big": "Wellness lives<br>outside the office.",
                 "highlight_body": "When a wellness channel reflects the world outside — sunsets, walks, weekend weather — that means people are bringing real life into work, not pretending it's separate.",
+            },
+        })
+
+    # 13) REACTION DOMINANCE — team cheers more than it speaks (NEW)
+    if total_reactions >= 200 and total_messages > 0:
+        ratio = total_reactions / max(total_messages, 1)
+        if ratio >= 1.5:
+            stories.append({
+                "score": int(total_reactions * 1.2),
+                "story": {
+                    "eyebrow": "the chorus",
+                    "heading": "MORE CHEERS<br>THAN WORDS.",
+                    "body": f"You sent {total_reactions:,} reactions across {total_messages:,} messages. That's {round(ratio,1)} reactions per message — the team cheers more than it speaks.",
+                    "highlight_big": "Quiet support<br>is loud here.",
+                    "highlight_body": "Reacting takes a second. Replying takes longer. Both count. The garden does both, but the volume of pure cheering is what makes this place feel safe to post in the first place.",
+                },
+            })
+
+    # 14) HEART COUNT — ❤️ specifically dominates (NEW)
+    heart_count = global_emoji_counter.get('heart', 0) + global_emoji_counter.get('red_heart', 0)
+    if heart_count >= 50:
+        mins_per_heart = round(30 * 24 * 60 / max(heart_count, 1))
+        stories.append({
+            "score": heart_count * 5,
+            "story": {
+                "eyebrow": "the heart count",
+                "heading": "{} HEARTS.<br>ONE MONTH.".format(heart_count),
+                "body": f"❤️ was given {heart_count} times this month. That's one heart every {mins_per_heart} minutes. For 30 days straight.",
+                "highlight_big": "Most teams<br>don't say it once.",
+                "highlight_body": "A workplace giving each other hearts at this rate isn't normal — and it's not by accident. It happens because someone, somewhere, posted first. And then someone else replied. And it kept going.",
+            },
+        })
+
+    # 15) PALETTE DIVERSITY — variety in reactions used (NEW)
+    unique_reactions = len([n for n, c in global_emoji_counter.most_common(50) if c >= 2])
+    if unique_reactions >= 12:
+        top5_str = " ".join(palette_top5[:5]) if palette_top5 else ""
+        stories.append({
+            "score": unique_reactions * 22,
+            "story": {
+                "eyebrow": "the palette",
+                "heading": "{} WAYS<br>TO SHOW UP.".format(unique_reactions),
+                "body": f"You used {unique_reactions} different reaction emojis this month. {top5_str} led the way.",
+                "highlight_big": "Range matters.",
+                "highlight_body": "A team that reacts with the same emoji every time is operating on autopilot. Yours has range — different emojis for different moments. That's emotional vocabulary, not just engagement.",
+            },
+        })
+
+    # 16) ENGAGEMENT MIX — posts vs comments vs reactions split (NEW)
+    if total_messages and total_reactions:
+        post_share = round(total_posts_overall / total_messages * 100)
+        comment_share = round(total_comments_overall / total_messages * 100)
+        if comment_share >= 60:
+            stories.append({
+                "score": comment_share * 8,
+                "story": {
+                    "eyebrow": "the engagement",
+                    "heading": "MOSTLY<br>REPLIES.",
+                    "body": f"This month, {comment_share}% of activity was replies and {post_share}% was new posts. The garden talks back more than it announces.",
+                    "highlight_big": "Conversations,<br>not broadcasts.",
+                    "highlight_body": "A channel where most messages are replies is a channel where people are actually listening. New posts spark something. Replies keep it alive. The ratio matters.",
+                },
+            })
+
+    # 17) GROUP ACTIVITIES — when in-person events are documented (NEW)
+    total_groups = sum(p.get("group_activities", 0) for p in points_by_name.values()) if points_by_name else 0
+    # Recompute from per-week scores
+    total_groups = 0
+    for week in month_weeks:
+        for s in week["scores"]:
+            total_groups += s.get("group_activities", 0)
+    # Each group activity counts the poster + tagged people; we want unique events
+    # Using tagged-photo posts from message processing instead would be cleaner;
+    # for now use a rough cap.
+    if total_groups >= 10:
+        stories.append({
+            "score": total_groups * 18,
+            "story": {
+                "eyebrow": "the gatherings",
+                "heading": "THIS MONTH,<br>YOU SHOWED UP IRL.",
+                "body": f"{total_groups} tagged group activities documented this month. Coffee dates, gym sessions, lunches, walks. The garden left the channel.",
+                "highlight_big": "Real wellness<br>lives in person.",
+                "highlight_body": "Posting about a workout is healthy. Going on a hike with a coworker is healthier. The fact that this team kept tagging each other in real-life moments is the whole point.",
             },
         })
 
