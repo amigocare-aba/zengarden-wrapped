@@ -745,18 +745,53 @@ const roleBg={Leadership:'rgba(127,119,221,0.15)',BCBA:'rgba(55,138,221,0.15)',A
 const sigEmoji=window.sigEmoji={"Jerusha Daniel":"🙂","leslie orellana-amaya":"😎","Samantha Collazo":"🥺","Eleana Ferrer":"👩‍🍳","Ana Plaza":"✨","Razelle Abogadie":"💔","Tatiana Castillo":"🐾","Alex Arevalo":"🧸","Melissa Barrera":"😋","Zendy Wilson":"🫣","Stephany Carrasco":"🤗","Kimberly Lemus":"😁","Melitza":"😉","Nicole Burke":"😋","Jennifer Leiva":"👀","Jasmine Caceres":"😆","Lizzie Maldonado":"❤️","Jocelyn":"💗","Shelby Quigley":"🌿","Pamela martinez gonzalez":"❤️","Taylor Schindhelm":"😋","Katherin Hernandez":"🎉","Laura Outland":"🌳","Jessica Blanco":"☀️","Richard Saavedra":"🙌","Mimi Theodore":"❤️","Jhennifer Celestino Alva":"💪","Carla Helena":"😋","LeeAnn (HR)":"🥱","Camila Morales":"✨","adriana pereira":"🫠","Jeffrey Nsubuga":"🫡","Pierre":"❤️","Noor Javed":"🎈","Andre Perret Giesecke":"❤️","Valeria Macuare":"🇻🇪","Soraya Dos Santos":"🐶","A.J. Flynn":"😍","Hannah Roth":"🇻🇪","Aafia Syed":"❤️","Randy Sandoval":"🥹","Daniel Cuellar Martinez":"✨","Cristabell A Harrison":"👏","Veronica Lundgren":"😻","Colleen":"😍","William Gunn":"✨","Paul Tortora":"❤️","Marisol Cabrera":"😭"};
 const personEmoji = sigEmoji;
 // ── DATA-DRIVEN AVATAR EMOJI ───────────────────────────────────
-// Each person's "signature" emoji = top reaction they received this month.
-// Falls back to legacy sigEmoji curation, then to a default seedling.
+// Picks each person's most DISTINCTIVE reaction emoji — skips the
+// channel's overall top reactions (❤️, 😂) so the avatar isn't the
+// same for everyone. Order:
+//   1. First non-common reaction from what they GAVE
+//   2. First valid reaction GIVEN (any)
+//   3. Top received reaction
+//   4. Legacy sigEmoji
+//   5. 🌱 fallback
 window.getAvatarEmoji = function(name) {
   if (!window.D || !window.D.all_active) return (window.sigEmoji && window.sigEmoji[name]) || '🌱';
   var person = window.D.all_active.find(function(p) { return p.name === name; });
-  if (person && person.top_reactions && person.top_reactions.length > 0) {
-    var emoji = person.top_reactions[0];
-    // Skip Slack codes like :star-struck: — fall through to sigEmoji
-    if (emoji && !emoji.startsWith(':') && emoji.trim().length > 0) {
-      return emoji;
+  if (!person) return (window.sigEmoji && window.sigEmoji[name]) || '🌱';
+
+  // Most "common" reactions across the channel — skip these for distinctiveness
+  var COMMON = new Set(['❤️', '😂', '🤣', '👍', '🙌', '🎉', '👀']);
+  var isValid = function(e) { return e && !e.startsWith(':') && e.trim().length > 0; };
+
+  // 1. Try uncommon reaction GIVEN
+  if (person.reactions_given && person.reactions_given.length) {
+    for (var i = 0; i < person.reactions_given.length; i++) {
+      var e = person.reactions_given[i];
+      if (isValid(e) && !COMMON.has(e)) return e;
     }
   }
+
+  // 2. Try uncommon reaction RECEIVED
+  if (person.top_reactions && person.top_reactions.length) {
+    for (var j = 0; j < person.top_reactions.length; j++) {
+      var r = person.top_reactions[j];
+      if (isValid(r) && !COMMON.has(r)) return r;
+    }
+  }
+
+  // 3. Fall back to first valid reaction given
+  if (person.reactions_given && person.reactions_given.length) {
+    for (var k = 0; k < person.reactions_given.length; k++) {
+      if (isValid(person.reactions_given[k])) return person.reactions_given[k];
+    }
+  }
+
+  // 4. Fall back to first valid received
+  if (person.top_reactions && person.top_reactions.length) {
+    for (var m = 0; m < person.top_reactions.length; m++) {
+      if (isValid(person.top_reactions[m])) return person.top_reactions[m];
+    }
+  }
+
   return (window.sigEmoji && window.sigEmoji[name]) || '🌱';
 };
 
@@ -1399,9 +1434,8 @@ window.openCrewProfile = function openCrewProfile(idx) {
       // Eyebrow — below IG story header safe zone (~130px at 1920)
       + '<div style="text-align:center;padding:44px 16px 16px;font-size:9px;font-weight:700;letter-spacing:.1em;color:' + mc.sub + ';font-family:Cabin,sans-serif;">ZEN GARDEN · ' + (D.month || '').toUpperCase() + '</div>'
 
-      // Main content — centered with breathing room
+      // Main content — centered with breathing room (avatar removed for cleaner share card)
       + '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:0 20px 0;">'
-        + '<div style="font-size:48px;line-height:1;margin-bottom:2px;">' + em + '</div>'
         + '<div style="font-family:Bebas Neue,sans-serif;font-size:48px;line-height:.9;color:' + mc.text + ';">' + name.toUpperCase() + '</div>'
         + contentHTML
       + '</div>'
