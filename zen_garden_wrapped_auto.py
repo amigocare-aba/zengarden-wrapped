@@ -275,10 +275,57 @@ REACTION_TO_EMOJI = {
     'rose': '🌹', 'dog': '🐶', 'cat': '🐱', 'bear': '🧸',
     'yum': '😋', 'yellow_heart': '💛', 'purple_heart': '💜',
     'heart_hands': '🫶',
+    # added — common Slack reactions we were missing
+    'star-struck': '🤩', 'star_struck': '🤩',
+    'face_holding_back_tears': '🥹',
+    'bangbang': '‼️', 'exclamation': '❗', 'question': '❓',
+    'panda_face': '🐼', 'turtle': '🐢',
+    'jigsaw': '🧩',
+    'shushing_face': '🤫',
+    'cup_with_straw': '🥤',
+    'nail_care': '💅',
+    'drooling_face': '🤤',
+    'cold_sweat': '😰',
+    'partying_face': '🥳',
+    'flushed': '😳',
+    'sleeping': '😴',
+    'sneezing_face': '🤧',
+    'face_with_thermometer': '🤒',
+    'crown': '👑', 'medal': '🏅', 'trophy': '🏆',
+    'birthday': '🎂', 'gift': '🎁', 'balloon': '🎈',
+    'flag-gt': '🇬🇹', 'flag-us': '🇺🇸', 'flag-mx': '🇲🇽', 'flag-ve': '🇻🇪',
+    'sunny': '☀️', 'cloud': '☁️', 'umbrella': '☂️',
+    'boat': '🚤', 'airplane': '✈️',
+    'thumbs-up-peach': '👍', 'thumbs-up': '👍',
+    'check': '✓', 'heavy_check_mark': '✔️',
+    'pinched_fingers': '🤌',
+    'mending_heart': '❤️‍🩹',
+    'smiling_face_with_tear': '🥲',
+    'smiling_face_with_3_hearts': '🥰',
+    'sparkles': '✨',
+    'palms_up_together': '🤲',
+    'pleading_face': '🥺',
+    'kissing': '😗', 'kissing_smiling_eyes': '😙',
+    'face_with_monocle': '🧐',
+    'zany_face': '🤪',
+    'smirk': '😏',
+    'yawning_face': '🥱',
 }
 
 def reaction_to_display(name):
-    return REACTION_TO_EMOJI.get(name, f":{name}:")
+    """Convert Slack reaction name to display emoji.
+
+    Strips skin-tone modifiers like ::skin-tone-3 and tries the base name.
+    Falls back to a plain sparkle for custom workspace emojis we can't render.
+    """
+    if not name:
+        return '✨'
+    # Strip skin tone modifier
+    base = name.split('::')[0]
+    if base in REACTION_TO_EMOJI:
+        return REACTION_TO_EMOJI[base]
+    # Custom workspace emoji or unknown — use a placeholder that renders
+    return '✨'
 
 
 # ── SLACK API ─────────────────────────────────────────────────────
