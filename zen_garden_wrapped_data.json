@@ -7,7 +7,7 @@
   "total_pts": 2412,
   "total_payout": 830,
   "total_posts": 273,
-  "total_comments": 1301,
+  "total_comments": 1319,
   "bcba_avg": 48.8,
   "rbt_avg": 59.14,
   "lead_avg": 58.67,
@@ -18,14 +18,14 @@
     544
   ],
   "dim_counts": {
-    "Social": 38,
+    "Social": 37,
     "Physical": 45,
     "Environmental": 19,
     "Emotional": 19,
     "Intellectual": 30,
     "Occupational": 20,
     "Spiritual": 2,
-    "Financial": 2
+    "Financial": 4
   },
   "avg_sentiment": 0.35,
   "positive_pct": 100.0,
@@ -40,11 +40,11 @@
   "word_counts": [
     [
       "love",
-      102
+      106
     ],
     [
       "cute",
-      73
+      77
     ],
     [
       "looks",
@@ -52,11 +52,15 @@
     ],
     [
       "good",
-      59
+      60
     ],
     [
       "what",
       39
+    ],
+    [
+      "fun",
+      37
     ],
     [
       "beautiful",
@@ -67,10 +71,6 @@
       36
     ],
     [
-      "fun",
-      35
-    ],
-    [
       "pretty",
       34
     ],
@@ -79,11 +79,11 @@
       33
     ],
     [
-      "today",
-      29
+      "great",
+      30
     ],
     [
-      "great",
+      "today",
       29
     ],
     [
@@ -103,14 +103,14 @@
       "wellness": 7,
       "stress": 0,
       "encourage": 43,
-      "conn": 665,
+      "conn": 683,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 113,
       "wk2": 111,
       "wk3": 33,
       "wk4": 8,
-      "sentiment": 0.26,
+      "sentiment": 0.27,
       "top_words": [
         [
           "cute",
@@ -129,7 +129,7 @@
           5
         ],
         [
-          "literally",
+          "fun",
           4
         ]
       ],
@@ -219,22 +219,22 @@
       "wellness": 13,
       "stress": 0,
       "encourage": 35,
-      "conn": 493,
+      "conn": 510,
       "style": "Engager",
       "trend": "Down",
       "wk1": 86,
       "wk2": 40,
       "wk3": 20,
       "wk4": 24,
-      "sentiment": 0.34,
+      "sentiment": 0.36,
       "top_words": [
         [
           "love",
-          10
+          12
         ],
         [
           "cute",
-          7
+          8
         ],
         [
           "yummy",
@@ -332,14 +332,14 @@
       "wellness": 3,
       "stress": 0,
       "encourage": 91,
-      "conn": 402,
+      "conn": 409,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 50,
       "wk2": 45,
       "wk3": 15,
       "wk4": 22,
-      "sentiment": 0.32,
+      "sentiment": 0.33,
       "top_words": [
         [
           "good",
@@ -347,7 +347,7 @@
         ],
         [
           "love",
-          9
+          10
         ],
         [
           "nice",
@@ -391,8 +391,8 @@
       "dim": "Emotional",
       "wellness": 18,
       "stress": 0,
-      "encourage": 313,
-      "conn": 379,
+      "encourage": 315,
+      "conn": 387,
       "style": "Engager",
       "trend": "Down",
       "wk1": 44,
@@ -403,7 +403,7 @@
       "top_words": [
         [
           "good",
-          9
+          10
         ],
         [
           "beautiful",
@@ -450,7 +450,7 @@
       "wellness": 10,
       "stress": 0,
       "encourage": 32,
-      "conn": 355,
+      "conn": 359,
       "style": "Engager",
       "trend": "Up",
       "wk1": 32,
@@ -622,14 +622,14 @@
       "wellness": 3,
       "stress": 0,
       "encourage": 7,
-      "conn": 297,
+      "conn": 308,
       "style": "Pure Engager",
       "trend": "Down",
       "wk1": 41,
       "wk2": 37,
       "wk3": 15,
       "wk4": 10,
-      "sentiment": 0.33,
+      "sentiment": 0.35,
       "top_words": [
         [
           "awww",
@@ -737,7 +737,7 @@
       "streak": 4,
       "ci": 100,
       "dim": "Physical",
-      "wellness": 8,
+      "wellness": 9,
       "stress": 0,
       "encourage": 44,
       "conn": 269,
@@ -856,18 +856,18 @@
       "wellness": 7,
       "stress": 0,
       "encourage": 8,
-      "conn": 167,
+      "conn": 170,
       "style": "Balanced",
       "trend": "Down",
       "wk1": 34,
       "wk2": 8,
       "wk3": 10,
       "wk4": 6,
-      "sentiment": 0.34,
+      "sentiment": 0.36,
       "top_words": [
         [
           "cute",
-          4
+          5
         ],
         [
           "looks",
@@ -966,7 +966,7 @@
       "bonus": "$25",
       "streak": 4,
       "ci": 100,
-      "dim": "Social",
+      "dim": "Physical",
       "wellness": 8,
       "stress": 0,
       "encourage": 45,
@@ -1488,14 +1488,14 @@
       "wellness": 8,
       "stress": 0,
       "encourage": 27,
-      "conn": 36,
+      "conn": 40,
       "style": "Broadcaster",
       "trend": "Steady",
       "wk1": 7,
       "wk2": 4,
       "wk3": 5,
       "wk4": 7,
-      "sentiment": 0.44,
+      "sentiment": 0.46,
       "top_words": [
         [
           "thank",
@@ -1510,12 +1510,12 @@
           4
         ],
         [
-          "show",
+          "great",
           3
         ],
         [
-          "what",
-          2
+          "show",
+          3
         ]
       ],
       "top_emojis": [],
@@ -1532,7 +1532,7 @@
       "photos_shared": 6,
       "active_hour": 11,
       "active_label": "Morning Person ☀️",
-      "bestie": "Nicole",
+      "bestie": "Katherin",
       "most_hyped": 12
     },
     {
@@ -1718,14 +1718,14 @@
       "wellness": 3,
       "stress": 0,
       "encourage": 25,
-      "conn": 54,
+      "conn": 58,
       "style": "Balanced",
       "trend": "Down",
       "wk1": 6,
       "wk2": 4,
       "wk3": 6,
       "wk4": 0,
-      "sentiment": 0.45,
+      "sentiment": 0.42,
       "top_words": [
         [
           "coconut",
@@ -1760,8 +1760,8 @@
         "🫶"
       ],
       "photos_shared": 4,
-      "active_hour": 12,
-      "active_label": "Lunch Poster 🍽️",
+      "active_hour": 18,
+      "active_label": "Evening Energy 🌆",
       "bestie": "leslie",
       "most_hyped": 9
     },
@@ -1878,7 +1878,7 @@
       "photos_shared": 4,
       "active_hour": 9,
       "active_label": "Morning Person ☀️",
-      "bestie": "Samantha",
+      "bestie": "Nicole",
       "most_hyped": 6
     },
     {
@@ -1949,7 +1949,7 @@
       "wellness": 1,
       "stress": 0,
       "encourage": 10,
-      "conn": 31,
+      "conn": 35,
       "style": "Heavy Broadcaster",
       "trend": "Steady",
       "wk1": 2,
@@ -2258,7 +2258,7 @@
       "photos_shared": 0,
       "active_hour": 12,
       "active_label": "Lunch Poster 🍽️",
-      "bestie": "leslie",
+      "bestie": "Katherin",
       "most_hyped": 0
     },
     {
@@ -2310,7 +2310,7 @@
       "photos_shared": 0,
       "active_hour": 22,
       "active_label": "Night Owl 🦉",
-      "bestie": "Laura",
+      "bestie": "Zendy",
       "most_hyped": 0
     },
     {
@@ -2570,7 +2570,7 @@
       "photos_shared": 0,
       "active_hour": 16,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Samantha",
+      "bestie": "Jasmine",
       "most_hyped": 0
     },
     {
@@ -2624,7 +2624,7 @@
       "photos_shared": 2,
       "active_hour": 18,
       "active_label": "Evening Energy 🌆",
-      "bestie": "A.J.",
+      "bestie": "Katherin",
       "most_hyped": 7
     }
   ],
@@ -2641,11 +2641,11 @@
     },
     "most_loved": {
       "name": "leslie orellana-amaya",
-      "value": 665
+      "value": 683
     },
     "hype_machine": {
       "name": "Katherin Hernandez",
-      "value": 313
+      "value": 315
     },
     "most_motivating": {
       "name": "Katherin Hernandez",
@@ -2661,7 +2661,7 @@
     },
     "most_supportive": {
       "name": "leslie orellana-amaya",
-      "value": 665
+      "value": 683
     },
     "best_duo": {
       "name1": "leslie orellana-amaya",
@@ -2706,16 +2706,16 @@
     "avg_post_length_words": 5.9,
     "avg_post_length_chars": 31,
     "reading_time_min": 37,
-    "typing_time_min": 232,
+    "typing_time_min": 234,
     "avg_thread_depth": 5.3,
     "reaction_reach_pct": 97,
-    "avg_first_reply_min": 92,
+    "avg_first_reply_min": 93,
     "question_marks_total": 11,
     "caps_messages": 2,
     "emoji_only_posts": 11,
-    "total_messages": 1574,
-    "total_words_chan": 9292,
-    "total_chars": 49490
+    "total_messages": 1592,
+    "total_words_chan": 9365,
+    "total_chars": 49866
   },
   "patterns": {
     "power_hour": {
@@ -2746,7 +2746,7 @@
         1
       ]
     ],
-    "cross_role_count": 1671,
+    "cross_role_count": 1684,
     "weekend_pct": 28,
     "late_night_count": 13,
     "early_bird_count": 0,
@@ -2767,5 +2767,5 @@
     "😋",
     ":heart_hands::skin-tone-2:"
   ],
-  "updated_at": "2026-05-03 19:49"
+  "updated_at": "2026-05-03 20:04"
 }

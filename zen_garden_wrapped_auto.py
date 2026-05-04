@@ -142,7 +142,14 @@ DIMENSION_KEYWORDS = {
         'money', 'budget', 'save', 'saving', 'invest', 'stock', 'bond',
         'retirement', 'paycheck', 'salary', 'bonus', 'raise', 'expense',
         'debt', 'loan', 'mortgage', 'financial', 'finance', 'wealth',
-        'tax', '401k', 'roth'
+        'tax', '401k', 'roth',
+        # added: more everyday money talk
+        'cash', 'paid', 'pay ', 'price', 'cheap', 'expensive', 'afford',
+        'venmo', 'zelle', 'cashapp', 'paypal', 'tip', 'tipping',
+        'rent', 'apartment', 'credit', 'insurance', 'income', 'discount',
+        'coupon', 'sale', 'dollar', 'free', 'splurge', 'spend', 'cost',
+        # spanish
+        'dinero', 'plata', 'pagar', 'comprar', 'ahorrar', 'gastar'
     ]
 }
 
