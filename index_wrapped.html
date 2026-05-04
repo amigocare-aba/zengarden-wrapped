@@ -744,6 +744,23 @@ const roleColor={Leadership:'#7F77DD',BCBA:'#378ADD',Admin:'#EF9F27',RBT:'#1D9E7
 const roleBg={Leadership:'rgba(127,119,221,0.15)',BCBA:'rgba(55,138,221,0.15)',Admin:'rgba(239,159,39,0.15)',RBT:'rgba(29,158,117,0.15)'};
 const sigEmoji=window.sigEmoji={"Jerusha Daniel":"🙂","leslie orellana-amaya":"😎","Samantha Collazo":"🥺","Eleana Ferrer":"👩‍🍳","Ana Plaza":"✨","Razelle Abogadie":"💔","Tatiana Castillo":"🐾","Alex Arevalo":"🧸","Melissa Barrera":"😋","Zendy Wilson":"🫣","Stephany Carrasco":"🤗","Kimberly Lemus":"😁","Melitza":"😉","Nicole Burke":"😋","Jennifer Leiva":"👀","Jasmine Caceres":"😆","Lizzie Maldonado":"❤️","Jocelyn":"💗","Shelby Quigley":"🌿","Pamela martinez gonzalez":"❤️","Taylor Schindhelm":"😋","Katherin Hernandez":"🎉","Laura Outland":"🌳","Jessica Blanco":"☀️","Richard Saavedra":"🙌","Mimi Theodore":"❤️","Jhennifer Celestino Alva":"💪","Carla Helena":"😋","LeeAnn (HR)":"🥱","Camila Morales":"✨","adriana pereira":"🫠","Jeffrey Nsubuga":"🫡","Pierre":"❤️","Noor Javed":"🎈","Andre Perret Giesecke":"❤️","Valeria Macuare":"🇻🇪","Soraya Dos Santos":"🐶","A.J. Flynn":"😍","Hannah Roth":"🇻🇪","Aafia Syed":"❤️","Randy Sandoval":"🥹","Daniel Cuellar Martinez":"✨","Cristabell A Harrison":"👏","Veronica Lundgren":"😻","Colleen":"😍","William Gunn":"✨","Paul Tortora":"❤️","Marisol Cabrera":"😭"};
 const personEmoji = sigEmoji;
+// ── DATA-DRIVEN AVATAR EMOJI ───────────────────────────────────
+// Each person's "signature" emoji = top reaction they received this month.
+// Falls back to legacy sigEmoji curation, then to a default seedling.
+window.getAvatarEmoji = function(name) {
+  if (!window.D || !window.D.all_active) return (window.sigEmoji && window.sigEmoji[name]) || '🌱';
+  var person = window.D.all_active.find(function(p) { return p.name === name; });
+  if (person && person.top_reactions && person.top_reactions.length > 0) {
+    var emoji = person.top_reactions[0];
+    // Skip Slack codes like :star-struck: — fall through to sigEmoji
+    if (emoji && !emoji.startsWith(':') && emoji.trim().length > 0) {
+      return emoji;
+    }
+  }
+  return (window.sigEmoji && window.sigEmoji[name]) || '🌱';
+};
+
+
 const styleLabel={'Pure Engager':'🤝 Supporter','Engager':'💬 Connector','Balanced':'⚖️ All-Rounder','Broadcaster':'📢 Poster','Heavy Broadcaster':'📡 Megaphone'};
 function initials(n){const p=n.trim().split(' ');return p.length>1?(p[0][0]+p[p.length-1][0]).toUpperCase():n.slice(0,2).toUpperCase();}
 function haptic(p){ if(navigator.vibrate) navigator.vibrate(p||12); }
@@ -1142,7 +1159,7 @@ awards.forEach(([person,detail],i)=>{
             ${members.map(r=>{
               const fn = r.name.split(' ')[0];
               const name = fn.charAt(0).toUpperCase()+fn.slice(1).toLowerCase();
-              const em = personEmoji[r.name]||'🌱';
+              const em = getAvatarEmoji(r.name);
               return `<div style="display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:99px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--ink);">${em} ${name}</div>`;
             }).join('')}
           </div>
@@ -1167,7 +1184,7 @@ window.openCrewProfile = function openCrewProfile(idx) {
   if (!r) return;
   const fn = r.name.split(' ')[0];
   const name = fn.charAt(0).toUpperCase()+fn.slice(1).toLowerCase();
-  const em = personEmoji[r.name] || '🌱';
+  const em = getAvatarEmoji(r.name);
   const award = window.AWARD_MAP ? AWARD_MAP[name] : null;
 
   // Rank
@@ -1253,7 +1270,14 @@ window.openCrewProfile = function openCrewProfile(idx) {
   const _skipWords = new Set(['ooo','oooo','ooooo','ahh','ahhh','hiii','omggg','yesss','sooo','soo']);
   const topWord = (wd.top_words && wd.top_words.find(function(w){ return !_skipWords.has(w[0]); })) || null;
   const topReactions = (wd.top_reactions || []).map(convertSlackEmoji);
-  const topEmojis = (wd.top_emojis || []).map(convertSlackEmoji).filter(e => e && e.replace(/[\u200D\uFE0F\uFE0E\u200B\u200C]/g,'').trim().length > 0);
+  // "most used" = emojis they typed in messages; fall back to reactions they gave
+  // (almost no one types emojis but everyone reacts)
+  let topEmojis = (wd.top_emojis || []).map(convertSlackEmoji).filter(e => e && e.replace(/[\u200D\uFE0F\uFE0E\u200B\u200C]/g,'').trim().length > 0);
+  let topEmojisLabel = 'most used';
+  if (topEmojis.length === 0 && wd.reactions_given && wd.reactions_given.length) {
+    topEmojis = wd.reactions_given.map(convertSlackEmoji).filter(e => e && e.trim().length > 0);
+    topEmojisLabel = 'you reacted with';
+  }
   const photosShared = wd.photos_shared || 0;
   const activeLabel = wd.active_label || '';
   const bestie = wd.bestie || '';
@@ -1301,7 +1325,7 @@ window.openCrewProfile = function openCrewProfile(idx) {
     contentHTML += '<div style="display:flex;justify-content:center;gap:28px;">';
     if(hasEmojis){
       contentHTML += '<div style="text-align:center;">'
-        + '<div style="font-size:9px;color:' + labelColor + ';font-weight:600;font-family:Cabin,sans-serif;">most used</div>'
+        + '<div style="font-size:9px;color:' + labelColor + ';font-weight:600;font-family:Cabin,sans-serif;">' + topEmojisLabel + '</div>'
         + '<div style="font-size:22px;letter-spacing:4px;margin-top:2px;">' + topEmojis.slice(0,3).join(' ') + '</div>'
         + '</div>';
     }
@@ -1665,7 +1689,7 @@ const tierStyle={
   '$0':{bg:'#F1EFE8',col:'#5F5E5A',label:'🌰'},
 };
 document.getElementById('crewGrid').innerHTML=D.all_active.map((r,ri)=>{
-  const emoji=sigEmoji[r.name]||'✨';
+  const emoji=getAvatarEmoji(r.name);
   const ts=tierStyle[r.bonus]||tierStyle['$0'];
   const firstName=r.name.split(' ')[0];
   const fn=firstName.charAt(0).toUpperCase()+firstName.slice(1).toLowerCase();
