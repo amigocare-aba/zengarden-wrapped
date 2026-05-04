@@ -32,6 +32,7 @@ import os
 import re
 import sys
 import json
+import csv
 import argparse
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta
@@ -43,6 +44,13 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE = os.path.join(SCRIPT_DIR, "weekly_config.json")
 WEEKLY_JSON = os.path.join(SCRIPT_DIR, "zen_garden_weekly.json")
 WRAPPED_JSON = os.path.join(SCRIPT_DIR, "zen_garden_wrapped_data.json")
+MONTHLY_REPORTS_DIR = os.path.join(SCRIPT_DIR, "monthly_reports")
+GDRIVE_MONTHLY_DIR = os.path.join(
+    os.path.expanduser("~"),
+    "Library/CloudStorage",
+    "GoogleDrive-alex.arevalo@amigocareaba.com",
+    "Shared drives/10 OBM/x. Zen Garden/Data - Monthly CSV"
+)
 
 # ── SECRETS ─────────────────────────────────────────────────────────
 BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN", "")
@@ -1649,6 +1657,43 @@ def main():
         json.dump(output, f, indent=2, ensure_ascii=False)
 
     print(f"\n✅ Saved → {WRAPPED_JSON}")
+
+    # ── MONTHLY CSV (in repo + Google Drive) ──────────────────────
+    csv_filename = month_label.lower().replace(" ", "_") + "_wrapped.csv"
+    os.makedirs(MONTHLY_REPORTS_DIR, exist_ok=True)
+    repo_csv = os.path.join(MONTHLY_REPORTS_DIR, csv_filename)
+
+    csv_columns = [
+        "name", "role", "monthly_pts", "bonus_tier",
+        "wk1", "wk2", "wk3", "wk4",
+        "streak", "trend", "style",
+        "biggest_dimension", "wellness_posts",
+        "encourage_given", "connections", "photos_shared", "most_hyped_post",
+        "active_hour", "active_label", "bestie", "sentiment",
+    ]
+
+    def _write_csv(path, rows):
+        with open(path, "w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            w.writerow(csv_columns)
+            for p in rows:
+                w.writerow([
+                    p["name"], p["role"], p["pts"], p["bonus"],
+                    p["wk1"], p["wk2"], p["wk3"], p["wk4"],
+                    p["streak"], p["trend"], p["style"],
+                    p["dim"], p["wellness"],
+                    p["encourage"], p["conn"], p["photos_shared"], p["most_hyped"],
+                    p["active_hour"], p["active_label"], p["bestie"], p["sentiment"],
+                ])
+
+    _write_csv(repo_csv, all_active)
+    print(f"📋 Monthly CSV → {repo_csv}")
+
+    # Also write to Google Drive if accessible (local Mac only)
+    if os.path.isdir(GDRIVE_MONTHLY_DIR):
+        gdrive_csv = os.path.join(GDRIVE_MONTHLY_DIR, csv_filename)
+        _write_csv(gdrive_csv, all_active)
+        print(f"📋 Google Drive CSV → {gdrive_csv}")
 
 
 if __name__ == "__main__":

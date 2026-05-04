@@ -58,6 +58,7 @@ jobs:
           git config user.email "bot@amigocareaba.com"
           git add zen_garden_weekly.json run_status.json weekly_summary.txt weekly_reports/
           [ -f zen_garden_wrapped_data.json ] && git add zen_garden_wrapped_data.json || true
+          [ -d monthly_reports ] && git add monthly_reports/ || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
