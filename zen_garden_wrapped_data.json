@@ -1878,7 +1878,7 @@
       "photos_shared": 4,
       "active_hour": 9,
       "active_label": "Morning Person ☀️",
-      "bestie": "Samantha",
+      "bestie": "Nicole",
       "most_hyped": 6
     },
     {
@@ -2105,7 +2105,7 @@
       "photos_shared": 2,
       "active_hour": 22,
       "active_label": "Night Owl 🦉",
-      "bestie": "Ana",
+      "bestie": "Jerusha",
       "most_hyped": 9
     },
     {
@@ -2159,7 +2159,7 @@
       "photos_shared": 2,
       "active_hour": 11,
       "active_label": "Morning Person ☀️",
-      "bestie": "Ana",
+      "bestie": "Alex",
       "most_hyped": 4
     },
     {
@@ -2258,7 +2258,7 @@
       "photos_shared": 0,
       "active_hour": 12,
       "active_label": "Lunch Poster 🍽️",
-      "bestie": "Katherin",
+      "bestie": "leslie",
       "most_hyped": 0
     },
     {
@@ -2310,7 +2310,7 @@
       "photos_shared": 0,
       "active_hour": 22,
       "active_label": "Night Owl 🦉",
-      "bestie": "Katherin",
+      "bestie": "Jocelyn",
       "most_hyped": 0
     },
     {
@@ -2570,7 +2570,7 @@
       "photos_shared": 0,
       "active_hour": 16,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Katherin",
+      "bestie": "Jasmine",
       "most_hyped": 0
     },
     {
@@ -2624,7 +2624,7 @@
       "photos_shared": 2,
       "active_hour": 18,
       "active_label": "Evening Energy 🌆",
-      "bestie": "Katherin",
+      "bestie": "Jennifer",
       "most_hyped": 7
     }
   ],
@@ -2696,11 +2696,11 @@
     "heading": "THE\nDETAILS."
   },
   "real_story": {
-    "eyebrow": "the comeback",
-    "heading": "STEPHANY<br>CAME BACK.",
-    "body": "After a quiet week, Stephany showed up with 59 points in week 4. Sometimes the best story isn't who's loudest — it's who returns.",
-    "highlight_big": "That's what<br>this place is for.",
-    "highlight_body": "Bad weeks happen. Quiet stretches happen. The garden is here for the days you come back, not just the days you're on."
+    "eyebrow": "the most improved",
+    "heading": "ANA<br>MADE THE LEAP.",
+    "body": "Started at 18 in week 1. Climbed quietly through the month. Then in week 4 — 73 points. The biggest leap of the month.",
+    "highlight_big": "+55 pts<br>across the month.",
+    "highlight_body": "Most growth doesn't look dramatic in the moment. It looks like showing up — and showing up a little more next time."
   },
   "communication": {
     "avg_post_length_words": 5.9,
@@ -2767,5 +2767,5 @@
     "😋",
     "🫶"
   ],
-  "updated_at": "2026-05-03 20:22"
+  "updated_at": "2026-05-03 20:26"
 }

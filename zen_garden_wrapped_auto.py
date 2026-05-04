@@ -1455,15 +1455,27 @@ def main():
             },
         })
 
-    # 3) Big improver story
+    # 3) Big improver story (the "Most Improved" award winner)
+    # Boosted score so it wins over comeback when overall growth is significant —
+    # keeps Real Story aligned with the Awards section.
     if biggest_improver and improver_delta >= 15:
         first = biggest_improver["name"].split(" ")[0].capitalize()
+        # If the biggest jump was wk3→wk4, lean into that drama
+        wk3, wk4 = biggest_improver["wk3"], biggest_improver["wk4"]
+        wk1 = biggest_improver["wk1"]
+        if wk4 - wk3 >= 20 and wk4 > wk1:
+            body = f"Started at {wk1} in week 1. Climbed quietly through the month. Then in week 4 — {wk4} points. The biggest leap of the month."
+            heading = f"{first.upper()}<br>MADE THE LEAP."
+        else:
+            body = f"Started week 1 with {wk1} points. Ended week 4 with {wk4}. Quietly, week by week, the energy compounded."
+            heading = f"{first.upper()}<br>JUST KEPT GOING."
+
         stories.append({
-            "score": improver_delta * 4,
+            "score": improver_delta * 8 + 50,  # boosted to win over comeback for true improvers
             "story": {
-                "eyebrow": "the slow burn",
-                "heading": f"{first.upper()}<br>JUST KEPT GOING.",
-                "body": f"Started week 1 with {biggest_improver['wk1']} points. Ended week 4 with {biggest_improver['wk4']}. Quietly, week by week, the energy compounded.",
+                "eyebrow": "the most improved",
+                "heading": heading,
+                "body": body,
                 "highlight_big": f"+{improver_delta} pts<br>across the month.",
                 "highlight_body": "Most growth doesn't look dramatic in the moment. It looks like showing up — and showing up a little more next time.",
             },
