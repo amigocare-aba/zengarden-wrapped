@@ -1,19 +1,19 @@
 {
-  "last_run": "2026-06-07T17:22:21",
+  "last_run": "2026-06-14T17:23:00",
   "status": "success",
-  "week_number": 4,
-  "week_label": "Week 4 (May 24 – May 30)",
+  "week_number": 1,
+  "week_label": "Week 1 (Jun 7 – Jun 13)",
   "date_window": {
-    "start": "2026-05-24T00:00:00",
-    "end": "2026-05-31T00:00:00"
+    "start": "2026-06-07T00:00:00",
+    "end": "2026-06-14T00:00:00"
   },
   "config_hash": "bbcffe6b8d39",
-  "people_scored": 25,
-  "total_points": 231,
-  "group_activities_found": 1,
-  "csv_path": "week4_may24-30.csv",
+  "people_scored": 24,
+  "total_points": 229,
+  "group_activities_found": 2,
+  "csv_path": "week1_jun7-13.csv",
   "outputs": [
-    "week4_may24-30.csv",
+    "week1_jun7-13.csv",
     "zen_garden_weekly.json",
     "weekly_summary.txt"
   ],
