@@ -22,16 +22,18 @@
 // ── 2026 SCHEDULE ────────────────────────────────────────────────────
 // Each entry: form opens on `open`, closes on `close` (inclusive of close day).
 // Format: YYYY-MM-DD in America/New_York timezone
+// NEW MODEL: form opens the day after month end (same day as recap post)
+// and closes 7 days later.
 const SCHEDULE = [
-  { month: 'April',     open: '2026-05-03', close: '2026-05-10' },
-  { month: 'May',       open: '2026-05-31', close: '2026-06-07' },
-  { month: 'June',      open: '2026-07-05', close: '2026-07-12' },
-  { month: 'July',      open: '2026-08-02', close: '2026-08-09' },
-  { month: 'August',    open: '2026-08-30', close: '2026-09-06' },
-  { month: 'September', open: '2026-10-04', close: '2026-10-11' },
+  { month: 'April',     open: '2026-05-01', close: '2026-05-08' },
+  { month: 'May',       open: '2026-06-01', close: '2026-06-08' },
+  { month: 'June',      open: '2026-07-01', close: '2026-07-08' },
+  { month: 'July',      open: '2026-08-01', close: '2026-08-08' },
+  { month: 'August',    open: '2026-09-01', close: '2026-09-08' },
+  { month: 'September', open: '2026-10-01', close: '2026-10-08' },
   { month: 'October',   open: '2026-11-01', close: '2026-11-08' },
-  { month: 'November',  open: '2026-11-29', close: '2026-12-06' },
-  { month: 'December',  open: '2027-01-03', close: '2027-01-10' },
+  { month: 'November',  open: '2026-12-01', close: '2026-12-08' },
+  { month: 'December',  open: '2027-01-01', close: '2027-01-08' },
 ];
 
 const TIMEZONE = 'America/New_York';
