@@ -811,7 +811,10 @@ def main():
     all_active = []
 
     for uid, name in users.items():
-        if message_count[uid] == 0:
+        # Include anyone who earned points (even via group-activity tagging
+        # without posting themselves) OR sent messages themselves.
+        pts_from_tags = points_inline.get(uid, 0)
+        if message_count[uid] == 0 and pts_from_tags == 0 and name not in points_by_name:
             continue
 
         pts_data = points_by_name.get(name, {"wk1": 0, "wk2": 0, "wk3": 0, "wk4": 0, "pts": 0})

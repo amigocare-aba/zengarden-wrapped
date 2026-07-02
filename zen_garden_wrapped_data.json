@@ -2,19 +2,19 @@
   "month": "June 2026",
   "date_range": "Jun 1 – Jun 30",
   "total": 72,
-  "active": 34,
-  "participation_rate": 47.2,
-  "total_pts": 1060,
+  "active": 36,
+  "participation_rate": 50.0,
+  "total_pts": 1070,
   "total_payout": 380,
   "total_posts": 104,
   "total_comments": 543,
   "bcba_avg": 17.88,
-  "rbt_avg": 39.57,
+  "rbt_avg": 36.57,
   "lead_avg": 25.67,
   "wk_totals": [
     208,
-    286,
-    225,
+    291,
+    230,
     341
   ],
   "dim_counts": {
@@ -32,7 +32,7 @@
   "styles": {
     "Engager": 5,
     "Pure Engager": 19,
-    "Balanced": 6,
+    "Balanced": 8,
     "Broadcaster": 1,
     "Heavy Broadcaster": 3
   },
@@ -299,7 +299,7 @@
   "top_emojis_month": [
     [
       "❤️",
-      156
+      157
     ],
     [
       "😂",
@@ -310,16 +310,16 @@
       14
     ],
     [
-      "🙌",
-      11
-    ],
-    [
-      "🙌",
-      11
-    ],
-    [
       "🫶",
-      10
+      12
+    ],
+    [
+      "🙌",
+      11
+    ],
+    [
+      "🙌",
+      11
     ]
   ],
   "all_active": [
@@ -736,7 +736,7 @@
       "dim": "Physical",
       "wellness": 5,
       "stress": 0,
-      "encourage": 29,
+      "encourage": 32,
       "conn": 174,
       "style": "Pure Engager",
       "trend": "Up",
@@ -775,8 +775,8 @@
       ],
       "reactions_given": [
         "🫶",
-        "🙌",
-        "❤️"
+        "❤️",
+        "🙌"
       ],
       "photos_shared": 7,
       "active_hour": 11,
@@ -1349,7 +1349,7 @@
       "photos_shared": 0,
       "active_hour": 20,
       "active_label": "Night Owl 🦉",
-      "bestie": "Lizzie",
+      "bestie": "Samantha",
       "most_hyped": 0
     },
     {
@@ -1463,7 +1463,7 @@
       "photos_shared": 1,
       "active_hour": 11,
       "active_label": "Morning Person ☀️",
-      "bestie": "Lizzie",
+      "bestie": "Jerusha",
       "most_hyped": 4
     },
     {
@@ -1575,7 +1575,7 @@
       "photos_shared": 0,
       "active_hour": 22,
       "active_label": "Night Owl 🦉",
-      "bestie": "Razelle",
+      "bestie": "Ana",
       "most_hyped": 0
     },
     {
@@ -1689,6 +1689,35 @@
       "most_hyped": 7
     },
     {
+      "name": "Ivanna Rodriguez",
+      "role": "RBT",
+      "pts": 5,
+      "bonus": "$0",
+      "streak": 1,
+      "ci": 100,
+      "dim": "Social",
+      "wellness": 0,
+      "stress": 0,
+      "encourage": 0,
+      "conn": 0,
+      "style": "Balanced",
+      "trend": "Steady",
+      "wk1": 0,
+      "wk2": 0,
+      "wk3": 5,
+      "wk4": 0,
+      "sentiment": 0.0,
+      "top_words": [],
+      "top_emojis": [],
+      "top_reactions": [],
+      "reactions_given": [],
+      "photos_shared": 0,
+      "active_hour": -1,
+      "active_label": "",
+      "bestie": "",
+      "most_hyped": 0
+    },
+    {
       "name": "Emily Chesbrough",
       "role": "BCBA",
       "pts": 5,
@@ -1738,7 +1767,7 @@
       "photos_shared": 1,
       "active_hour": 16,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Richard",
+      "bestie": "Ana",
       "most_hyped": 6
     },
     {
@@ -1792,8 +1821,40 @@
       "photos_shared": 5,
       "active_hour": 19,
       "active_label": "Evening Energy 🌆",
-      "bestie": "leslie",
+      "bestie": "Jerusha",
       "most_hyped": 3
+    },
+    {
+      "name": "Fanie",
+      "role": "RBT",
+      "pts": 5,
+      "bonus": "$0",
+      "streak": 1,
+      "ci": 100,
+      "dim": "Social",
+      "wellness": 0,
+      "stress": 0,
+      "encourage": 3,
+      "conn": 0,
+      "style": "Balanced",
+      "trend": "Steady",
+      "wk1": 0,
+      "wk2": 5,
+      "wk3": 0,
+      "wk4": 0,
+      "sentiment": 0.0,
+      "top_words": [],
+      "top_emojis": [],
+      "top_reactions": [],
+      "reactions_given": [
+        "❤️",
+        "😂"
+      ],
+      "photos_shared": 0,
+      "active_hour": -1,
+      "active_label": "",
+      "bestie": "",
+      "most_hyped": 0
     },
     {
       "name": "Yolanda Rodriguez",
@@ -1905,7 +1966,7 @@
       "photos_shared": 1,
       "active_hour": 17,
       "active_label": "Evening Energy 🌆",
-      "bestie": "leslie",
+      "bestie": "Jessica",
       "most_hyped": 2
     },
     {
@@ -1962,7 +2023,7 @@
       "photos_shared": 2,
       "active_hour": 11,
       "active_label": "Morning Person ☀️",
-      "bestie": "Razelle",
+      "bestie": "Ana",
       "most_hyped": 2
     },
     {
@@ -2010,7 +2071,7 @@
       "photos_shared": 0,
       "active_hour": 16,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Eleana",
+      "bestie": "Jessica",
       "most_hyped": 0
     },
     {
@@ -2052,7 +2113,7 @@
       "photos_shared": 0,
       "active_hour": 16,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Xochilt",
+      "bestie": "Ana",
       "most_hyped": 0
     },
     {
@@ -2108,7 +2169,7 @@
       "photos_shared": 0,
       "active_hour": 18,
       "active_label": "Evening Energy 🌆",
-      "bestie": "leslie",
+      "bestie": "Jerusha",
       "most_hyped": 0
     },
     {
@@ -2146,7 +2207,7 @@
       "photos_shared": 0,
       "active_hour": 10,
       "active_label": "Morning Person ☀️",
-      "bestie": "Lizzie",
+      "bestie": "Jessica",
       "most_hyped": 0
     },
     {
@@ -2190,8 +2251,8 @@
       "photos_shared": 2,
       "active_hour": 11,
       "active_label": "Morning Person ☀️",
-      "bestie": "Jennifer",
-      "most_hyped": 2
+      "bestie": "Jessica",
+      "most_hyped": 3
     }
   ],
   "awards": {
@@ -2263,8 +2324,8 @@
   },
   "real_story": {
     "eyebrow": "the heart count",
-    "heading": "156 HEARTS.<br>ONE MONTH.",
-    "body": "❤️ was given 156 times this month. That's one heart every 277 minutes. For 30 days straight.",
+    "heading": "157 HEARTS.<br>ONE MONTH.",
+    "body": "❤️ was given 157 times this month. That's one heart every 275 minutes. For 30 days straight.",
     "highlight_big": "Most teams<br>don't say it once.",
     "highlight_body": "A workplace giving each other hearts at this rate isn't normal — and it's not by accident. It happens because someone, somewhere, posted first. And then someone else replied. And it kept going."
   },
@@ -2274,7 +2335,7 @@
     "reading_time_min": 13,
     "typing_time_min": 79,
     "avg_thread_depth": 5.4,
-    "reaction_reach_pct": 85,
+    "reaction_reach_pct": 87,
     "avg_first_reply_min": 118,
     "question_marks_total": 4,
     "caps_messages": 0,
@@ -2317,8 +2378,8 @@
     "❤️",
     "😂",
     "💜",
-    "🙌",
-    "🙌"
+    "🫶",
+    "✨"
   ],
-  "updated_at": "2026-07-01 20:43"
+  "updated_at": "2026-07-01 20:52"
 }
