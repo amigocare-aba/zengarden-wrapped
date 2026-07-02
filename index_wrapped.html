@@ -425,15 +425,15 @@ body::before{
   <!-- Stats — 3 numbers that tell the whole story -->
   <div class="anim-up-4" style="display:flex;gap:clamp(16px,4vw,32px);justify-content:center;align-items:flex-start;flex-wrap:wrap;max-width:800px;width:100%;">
     <div style="text-align:center;">
-      <div id="counter-payout" data-target="48" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,80px);color:var(--green);line-height:.9;letter-spacing:-.02em;">0</div>
+      <div id="counter-payout" data-target="0" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,80px);color:var(--green);line-height:.9;letter-spacing:-.02em;">0</div>
       <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;">people</div>
     </div>
     <div style="text-align:center;">
-      <div id="counter-posts" data-target="252" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,80px);color:var(--blue);line-height:.9;letter-spacing:-.02em;">0</div>
+      <div id="counter-posts" data-target="0" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,80px);color:var(--blue);line-height:.9;letter-spacing:-.02em;">0</div>
       <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;">posts</div>
     </div>
     <div style="text-align:center;">
-      <div id="counter-comments" data-target="1139" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,80px);color:var(--amber);line-height:.9;letter-spacing:-.02em;">0</div>
+      <div id="counter-comments" data-target="0" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,80px);color:var(--amber);line-height:.9;letter-spacing:-.02em;">0</div>
       <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px;">comments</div>
     </div>
   </div>
@@ -815,6 +815,13 @@ function initWrapped() {
   if (cPo) cPo.setAttribute('data-target', String(D.total_posts || 0));
   var cC = document.getElementById('counter-comments');
   if (cC) cC.setAttribute('data-target', String(D.total_comments || 0));
+  // Re-run the counter animation now that we have real targets
+  // (the IntersectionObserver may have already fired with 0 targets)
+  [cP, cPo, cC].forEach(function(el, i) {
+    if (!el) return;
+    el.textContent = '0';
+    setTimeout(function(){ if (typeof runCounter === 'function') runCounter(el); }, i * 120);
+  });
   if (D.month) document.title = '🌿 Zen Garden Wrapped · ' + D.month;
 
   // ── Did You Know — themed insights ─────────────────────────────
