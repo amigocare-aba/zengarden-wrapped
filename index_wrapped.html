@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Zen Garden">
 <meta property="og:title" content="Zen Garden Wrapped">
-<meta property="og:description" content="48 people. 252 posts. 1,139 comments. 2,604 reactions. When your workplace actually cares about wellness.">
+<meta property="og:description" content="Amigo Care ABA · Zen Garden Wrapped — monthly recap of team wellness activity.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://amigocare-aba.github.io/zengarden-wrapped/index_wrapped.html">
 <meta property="og:image" content="https://amigocare-aba.github.io/zengarden-wrapped/og-preview.png">
@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="Amigo Care ABA">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Zen Garden Wrapped">
-<meta name="twitter:description" content="48 people. 252 posts. 1,139 comments. 2,604 reactions. When your workplace actually cares about wellness.">
+<meta name="twitter:description" content="Amigo Care ABA · Zen Garden Wrapped — monthly recap of team wellness activity.">
 <meta name="twitter:image" content="https://amigocare-aba.github.io/zengarden-wrapped/og-preview.png">
 <meta name="description" content="Zen Garden Employee Wellness Program — Monthly Wrapped recap.">
 <title>🌿 Zen Garden Wrapped</title>
@@ -681,7 +681,7 @@ body::before{
         style="width:100%;padding:14px 14px 14px 42px;border-radius:14px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:16px;font-family:inherit;outline:none;box-sizing:border-box;"/>
     </div>
     <div id="crewSeeAll" style="text-align:left;margin-top:12px;margin-bottom:20px;max-width:400px;">
-      <button onclick="showAllCrew()" style="background:transparent;border:1.5px solid var(--purple);border-radius:99px;padding:12px 32px;font-family:'Cabin',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);cursor:pointer;transition:all .2s;box-shadow:0 0 12px rgba(139,92,246,0.3),0 0 24px rgba(139,92,246,0.15);">see all 48 people</button>
+      <button id="crewSeeAllBtn" onclick="showAllCrew()" style="background:transparent;border:1.5px solid var(--purple);border-radius:99px;padding:12px 32px;font-family:'Cabin',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);cursor:pointer;transition:all .2s;box-shadow:0 0 12px rgba(139,92,246,0.3),0 0 24px rgba(139,92,246,0.15);">see all people</button>
     </div>
     <div id="crewGrid" class="crew-grid" style="width:100%;display:none;"></div>
     <div id="crewHideBottom" style="text-align:center;margin-top:24px;display:none;">
@@ -914,6 +914,12 @@ function initWrapped() {
       var el = document.getElementById(id);
       if (el) el.textContent = typeMap[id];
     });
+  }
+
+  // ── Crew "see all" button text — real count of people, not stale 48 ──
+  var crewBtn = document.getElementById('crewSeeAllBtn');
+  if (crewBtn && D.all_active) {
+    crewBtn.textContent = 'see all ' + D.all_active.length + ' people';
   }
 })();
 
@@ -1800,7 +1806,7 @@ window.showAllCrew = function showAllCrew(){
     grid.style.display = 'none';
     if(hideBottom) hideBottom.style.display = 'none';
     document.querySelectorAll('#crewGrid .crew-card').forEach(function(c){ c.classList.remove('visible'); });
-    if(btn) btn.textContent = 'see all 48 people';
+    if(btn) btn.textContent = 'see all ' + ((window.D && window.D.all_active) ? window.D.all_active.length : '') + ' people';
     haptic([8]);
   } else {
     crewExpanded = true;
