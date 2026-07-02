@@ -944,11 +944,26 @@ def main():
     # Style counts
     style_counts = Counter(p["style"] for p in all_active)
 
-    # Global word counts (top 13)
+    # Global word counts — save top 50 so the page can filter perennial
+    # praise words (love/cute/good/nice) and surface month-specific vocab
     global_words = Counter()
     for uid, c in word_counts.items():
         global_words.update(c)
-    top_global_words = global_words.most_common(13)
+    top_global_words = global_words.most_common(50)
+
+    # Distinctive words — filter out common praise so what's shown feels
+    # different each month (June's "congrats" surfaces instead of "love"
+    # being #1 every single month like last month and the month before).
+    PERENNIAL_PRAISE = {
+        'love', 'cute', 'good', 'nice', 'looks', 'beautiful', 'great', 'amazing',
+        'wow', 'cool', 'pretty', 'day', 'best', 'perfect', 'fun', 'yum', 'yay',
+        'yummy', 'omg', 'today', 'hey', 'hi', 'thanks', 'thank', 'sweet',
+        'awesome', 'gorgeous', 'lovely', 'adorable', 'delicious',
+    }
+    distinctive_words = [(w, c) for w, c in top_global_words if w not in PERENNIAL_PRAISE][:13]
+
+    # Signature word — highest-count non-praise word (feels like "the moment")
+    signature_word = distinctive_words[0] if distinctive_words else None
 
     # ── AWARDS ────────────────────────────────────────────────────
     awards = {}
@@ -1047,6 +1062,16 @@ def main():
         global_emoji_counter.update(reactions_recv[uid])
     top_emoji_data = global_emoji_counter.most_common(1)[0] if global_emoji_counter else ('heart', 0)
     top_emoji_display = reaction_to_display(top_emoji_data[0])
+
+    # Top 6 emojis with counts (for the emoji bar chart) — display form, filter :codes:
+    top_emojis_display = []
+    for name, count in global_emoji_counter.most_common(20):
+        disp = reaction_to_display(name)
+        # Skip anything that came back as a Slack-code placeholder or empty
+        if disp and not disp.startswith(':') and disp != '✨':
+            top_emojis_display.append([disp, count])
+        if len(top_emojis_display) >= 6:
+            break
 
     # Top by category
     top_photographer = max(all_active, key=lambda p: p["photos_shared"]) if all_active else None
@@ -1887,6 +1912,9 @@ def main():
         "stress_flags": stress_flags,
         "styles": dict(style_counts),
         "word_counts": word_counts_global,
+        "distinctive_words": distinctive_words,
+        "signature_word": {"word": signature_word[0], "count": signature_word[1]} if signature_word else None,
+        "top_emojis_month": top_emojis_display,
         "all_active": all_active,
         "awards": awards,
         "did_you_know": did_you_know,

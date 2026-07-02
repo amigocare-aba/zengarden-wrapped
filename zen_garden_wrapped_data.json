@@ -88,6 +88,238 @@
     [
       "day",
       12
+    ],
+    [
+      "time",
+      12
+    ],
+    [
+      "what",
+      11
+    ],
+    [
+      "out",
+      11
+    ],
+    [
+      "today",
+      11
+    ],
+    [
+      "happy",
+      10
+    ],
+    [
+      "yummy",
+      10
+    ],
+    [
+      "ooo",
+      9
+    ],
+    [
+      "cute",
+      9
+    ],
+    [
+      "awww",
+      8
+    ],
+    [
+      "jealous",
+      8
+    ],
+    [
+      "view",
+      7
+    ],
+    [
+      "period",
+      7
+    ],
+    [
+      "sweet",
+      7
+    ],
+    [
+      "now",
+      7
+    ],
+    [
+      "need",
+      7
+    ],
+    [
+      "zen",
+      7
+    ],
+    [
+      "always",
+      6
+    ],
+    [
+      "tomatoes",
+      6
+    ],
+    [
+      "girl",
+      6
+    ],
+    [
+      "delicious",
+      6
+    ],
+    [
+      "walk",
+      6
+    ],
+    [
+      "better",
+      6
+    ],
+    [
+      "try",
+      6
+    ],
+    [
+      "client",
+      6
+    ],
+    [
+      "job",
+      5
+    ],
+    [
+      "relaxing",
+      5
+    ],
+    [
+      "water",
+      5
+    ],
+    [
+      "matcha",
+      5
+    ],
+    [
+      "made",
+      5
+    ],
+    [
+      "session",
+      5
+    ],
+    [
+      "intermediate",
+      5
+    ],
+    [
+      "game",
+      5
+    ],
+    [
+      "guys",
+      5
+    ],
+    [
+      "sounds",
+      5
+    ],
+    [
+      "yesterday",
+      5
+    ],
+    [
+      "let",
+      5
+    ],
+    [
+      "aymara",
+      5
+    ]
+  ],
+  "distinctive_words": [
+    [
+      "congrats",
+      14
+    ],
+    [
+      "time",
+      12
+    ],
+    [
+      "what",
+      11
+    ],
+    [
+      "out",
+      11
+    ],
+    [
+      "happy",
+      10
+    ],
+    [
+      "ooo",
+      9
+    ],
+    [
+      "awww",
+      8
+    ],
+    [
+      "jealous",
+      8
+    ],
+    [
+      "view",
+      7
+    ],
+    [
+      "period",
+      7
+    ],
+    [
+      "now",
+      7
+    ],
+    [
+      "need",
+      7
+    ],
+    [
+      "zen",
+      7
+    ]
+  ],
+  "signature_word": {
+    "word": "congrats",
+    "count": 14
+  },
+  "top_emojis_month": [
+    [
+      "❤️",
+      156
+    ],
+    [
+      "😂",
+      19
+    ],
+    [
+      "💜",
+      14
+    ],
+    [
+      "🙌",
+      11
+    ],
+    [
+      "🙌",
+      11
+    ],
+    [
+      "🫶",
+      10
     ]
   ],
   "all_active": [
@@ -1008,7 +1240,7 @@
       "photos_shared": 6,
       "active_hour": 20,
       "active_label": "Night Owl 🦉",
-      "bestie": "Samantha",
+      "bestie": "Jerusha",
       "most_hyped": 8
     },
     {
@@ -1560,7 +1792,7 @@
       "photos_shared": 5,
       "active_hour": 19,
       "active_label": "Evening Energy 🌆",
-      "bestie": "Jerusha",
+      "bestie": "leslie",
       "most_hyped": 3
     },
     {
@@ -1673,7 +1905,7 @@
       "photos_shared": 1,
       "active_hour": 17,
       "active_label": "Evening Energy 🌆",
-      "bestie": "Jessica",
+      "bestie": "leslie",
       "most_hyped": 2
     },
     {
@@ -1778,7 +2010,7 @@
       "photos_shared": 0,
       "active_hour": 16,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Xochilt",
+      "bestie": "Eleana",
       "most_hyped": 0
     },
     {
@@ -1876,7 +2108,7 @@
       "photos_shared": 0,
       "active_hour": 18,
       "active_label": "Evening Energy 🌆",
-      "bestie": "Lizzie",
+      "bestie": "leslie",
       "most_hyped": 0
     },
     {
@@ -1914,7 +2146,7 @@
       "photos_shared": 0,
       "active_hour": 10,
       "active_label": "Morning Person ☀️",
-      "bestie": "Xochilt",
+      "bestie": "Lizzie",
       "most_hyped": 0
     },
     {
@@ -1958,7 +2190,7 @@
       "photos_shared": 2,
       "active_hour": 11,
       "active_label": "Morning Person ☀️",
-      "bestie": "Jessica",
+      "bestie": "Jennifer",
       "most_hyped": 2
     }
   ],
@@ -2088,5 +2320,5 @@
     "🙌",
     "🙌"
   ],
-  "updated_at": "2026-07-01 20:31"
+  "updated_at": "2026-07-01 20:43"
 }

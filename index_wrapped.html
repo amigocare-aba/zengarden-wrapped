@@ -597,7 +597,7 @@ body::before{
 
   <div class="eyebrow anim-up" style="color:rgba(159,225,203,0.65);">channel vibes</div>
   <div class="slide-heading anim-up-2" style="color:#F7F4EE;text-shadow:0 0 80px rgba(29,158,117,0.4);">THE VIBE<br>IS REAL.</div>
-  <div class="slide-body anim-up-3" style="color:rgba(247,244,238,0.65);margin-bottom:24px;max-width:800px;">Almost every word in this channel was kind. The most used word was <strong style="color:#9FE1CB;text-shadow:0 0 20px rgba(159,225,203,0.6);">love</strong>. Said out loud. At work.</div>
+  <div id="vibeBody" class="slide-body anim-up-3" style="color:rgba(247,244,238,0.65);margin-bottom:24px;max-width:800px;">Almost every word in this channel was kind.</div>
 
   <div class="anim-up-4 vibes-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,2vw,18px);max-width:1200px;width:100%;">
     <div>
@@ -1017,17 +1017,33 @@ if (dimsBloomedText && D.month) {
 
 // ── WORD CLOUD + EMOJI BARS ───────────────────────────────────────
 const wColors=['#00E5FF','#69FF47','#FFD60A','#00FFCC','#FF9F0A','#5AC8FA','#FFE500','#30D158'];
-const monthEmojis=[['❤️',89,'#FF6B6B'],['😊',47,'#FFD700'],['🙌',38,'#00FF9F'],['🔥',31,'#FF9F0A'],['✨',28,'#00CFFF'],['💪',21,'#69FF47']];
+// Emoji palette colors for the bars
+const emojiColors=['#FF6B6B','#FFD700','#00FF9F','#FF9F0A','#00CFFF','#69FF47'];
+// Real month emojis from data (each element: [emoji, count]) — fall back to defaults
+const monthEmojisData = (D.top_emojis_month && D.top_emojis_month.length)
+  ? D.top_emojis_month
+  : [['❤️',89],['😊',47],['🙌',38],['🔥',31],['✨',28],['💪',21]];
+const monthEmojis = monthEmojisData.slice(0,6).map((pair, i) => [pair[0], pair[1], emojiColors[i % emojiColors.length]]);
 
-// Word cloud
+// Word cloud — prefer distinctive_words (filtered) over generic praise, fall back to word_counts
 const wcEl = document.getElementById('wordCloud');
-if(wcEl && D.word_counts){
-  const maxW = D.word_counts[0][1];
-  wcEl.innerHTML = D.word_counts.map(([w,c],i)=>{
+const wordsToShow = (D.distinctive_words && D.distinctive_words.length ? D.distinctive_words : D.word_counts) || [];
+if(wcEl && wordsToShow.length){
+  const maxW = wordsToShow[0][1];
+  wcEl.innerHTML = wordsToShow.map(([w,c],i)=>{
     const sz = Math.round(13 + (c/maxW)*22);
     const col = wColors[i % wColors.length];
     return '<span style="font-size:'+sz+'px;font-weight:700;color:'+col+';text-shadow:0 0 14px '+col+';border:1px solid '+col+'33;padding:2px 8px;border-radius:6px;margin:3px;display:inline-block;cursor:default;">'+w+'</span>';
   }).join('');
+}
+
+// Vibe body — surface the signature word so the copy shifts every month
+const vibeBody = document.getElementById('vibeBody');
+if(vibeBody && D.signature_word && D.signature_word.word){
+  const sw = D.signature_word.word;
+  const swCount = D.signature_word.count;
+  vibeBody.innerHTML = 'This month, the word that stood out was <strong style="color:#9FE1CB;text-shadow:0 0 20px rgba(159,225,203,0.6);">'
+    + sw + '</strong>. Said <strong style="color:#9FE1CB;">' + swCount + ' times</strong>. Every month has its own vocabulary.';
 }
 
 // Emoji bars
