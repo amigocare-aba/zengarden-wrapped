@@ -728,20 +728,56 @@ def main():
             print("⚠️  No wrapped JSON to post")
     else:
         # ── REGULAR WEEKLY POST ────────────────────────────────────
-        # SAFETY: Don't post a weekly summary if this week was already
-        # covered by a Wrapped post (gap-Sunday between months).
-        # E.g., on June 7, auto-detect picks May Week 4, but May Week 4
-        # already went out as part of the May 31 Wrapped — we'd duplicate.
-        skip_weekly_post = False
+        # GAP SUNDAY: when the auto-detected week's month was already
+        # Wrapped, don't duplicate the leaderboard. Post a brief transition
+        # message instead (so every Sunday has *something* in the channel).
         week_month_info = config.get("months", {}).get(month_label, {})
         wrapped_date_str = week_month_info.get("wrapped_post_date", "")
-        if wrapped_date_str and wrapped_date_str <= today_str:
-            # The week's month already had its Wrapped published. Skip the post.
-            skip_weekly_post = True
-            print(f"\n⏭️  Skipping weekly post — {month_label} already had its Wrapped on {wrapped_date_str}.")
-            print(f"   (Today is {today_str}; this is a gap Sunday between months.)")
+        is_gap_sunday = wrapped_date_str and wrapped_date_str < today_str
 
-        if not skip_weekly_post:
+        if is_gap_sunday:
+            # Find the next month and its Week 1 date for the teaser
+            next_month_label = None
+            next_week1_date = None
+            sorted_months = sorted(
+                config.get("months", {}).items(),
+                key=lambda kv: kv[1].get("start", "")
+            )
+            for label, info in sorted_months:
+                if info.get("start", "") > week_month_info.get("end", ""):
+                    next_month_label = label
+                    next_week1_date = info.get("start")
+                    break
+
+            wrapped_url = "https://amigocare-aba.github.io/zengarden-wrapped/index_wrapped.html"
+            month_short_done = month_label.split()[0]
+            next_short = (next_month_label or "next month").split()[0]
+            # The next weekly post happens the Sunday AFTER next month's Week 1 ends
+            from datetime import timedelta as _td
+            try:
+                w1_start = datetime.strptime(next_week1_date, "%Y-%m-%d") if next_week1_date else None
+                next_post_dt = (w1_start + _td(days=7)) if w1_start else None
+                next_post_str = next_post_dt.strftime("%A %B %-d") if next_post_dt else ""
+            except Exception:
+                next_post_str = ""
+
+            transition_msg = (
+                f"🌿 *Catching our breath between months.*\n\n"
+                f"{month_short_done}'s Wrapped is live → <{wrapped_url}|{month_short_done} recap>\n"
+                f"{next_short} Week 1 starts today — first weekly leaderboard drops "
+                f"{('next Sunday (' + next_post_str + ')') if next_post_str else 'next Sunday'}.\n\n"
+                f"_Keep posting. The garden is watching. 🌱_"
+            )
+
+            print(f"\n🌿 Gap Sunday detected — posting transition message instead.")
+            if posting_enabled:
+                post_to_slack(transition_msg)
+            else:
+                print("\n🔇 Slack post SUPPRESSED (--no-post or --simulate-date)")
+                print("─" * 50)
+                print(transition_msg)
+                print("─" * 50)
+        else:
             page_url = "https://amigocare-aba.github.io/zengarden-wrapped/weekly.html"
             slack_msg = summary_text + f"\n\n📊 <{page_url}|View full scoreboard>"
             if posting_enabled:

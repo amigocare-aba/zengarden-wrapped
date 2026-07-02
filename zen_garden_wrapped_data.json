@@ -92,7 +92,7 @@
   ],
   "all_active": [
     {
-      "name": "leslie orellana-amaya",
+      "name": "Jerusha Daniel",
       "role": "RBT",
       "pts": 123,
       "bonus": "$50",
@@ -464,7 +464,7 @@
           4
         ],
         [
-          "congrats",
+          "time",
           2
         ],
         [
@@ -1247,7 +1247,7 @@
       "most_hyped": 5
     },
     {
-      "name": "Chellsea Garbutt",
+      "name": "Camila Reyes",
       "role": "RBT",
       "pts": 17,
       "bonus": "$0",
@@ -1327,7 +1327,7 @@
           1
         ],
         [
-          "good",
+          "cinnamon",
           1
         ],
         [
@@ -1784,6 +1784,10 @@
         [
           "cross",
           1
+        ],
+        [
+          "pov",
+          1
         ]
       ],
       "top_emojis": [],
@@ -1806,7 +1810,7 @@
       "role": "RBT",
       "pts": 4,
       "bonus": "$0",
-      "streak": 2,
+      "streak": 3,
       "ci": 100,
       "dim": "Physical",
       "wellness": 2,
@@ -2145,7 +2149,7 @@
   ],
   "awards": {
     "longest_streak": {
-      "name": "leslie orellana-amaya",
+      "name": "Jerusha Daniel",
       "value": 4
     },
     "most_improved": {

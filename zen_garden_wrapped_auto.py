@@ -205,6 +205,11 @@ def extract_emojis(text):
     return EMOJI_RE.findall(text)
 
 
+def extract_mentions(text):
+    """Extract user IDs from Slack @mentions like <@U12345>."""
+    return re.findall(r'<@(U[A-Z0-9]+)>', text or '')
+
+
 def extract_words(text):
     text = re.sub(r'https?://\S+', '', text)
     text = re.sub(r'<[@#!][^>]+>', '', text)
@@ -509,6 +514,18 @@ def main():
         days_in = (dt.date() - start_date.date()).days
         return max(0, min(3, days_in // 7))
 
+    # ── Inline point tracking (self-contained, no weekly JSON needed) ──
+    points_inline = defaultdict(int)                       # uid -> total pts
+    wk_points_inline = defaultdict(lambda: [0, 0, 0, 0])   # uid -> [wk1, wk2, wk3, wk4]
+    posts_score_inline = defaultdict(int)                  # uid -> post count for 1pt
+    comments_score_inline = defaultdict(int)               # uid -> unique comment count for 2pt
+    groups_score_inline = defaultdict(int)                 # uid -> group activity count for 5pt
+    group_activity_threads_inline = set()                  # thread ts values
+
+    def award_pts(uid, pts, dt):
+        points_inline[uid] += pts
+        wk_points_inline[uid][week_idx_for_date(dt)] += pts
+
     print("📨 Fetching messages...")
     messages = get_all_messages(bot_client, channel_id, oldest, latest)
     print(f"   {len(messages)} top-level messages\n")
@@ -525,6 +542,27 @@ def main():
         text = msg.get("text", "")
         post_count[uid] += 1
         message_count[uid] += 1
+
+        # ── Inline point calc: detect group activity or regular post ──
+        ts = float(msg.get("ts", 0))
+        dt = datetime.fromtimestamp(ts)
+        mentions = extract_mentions(text)
+        photo = any(f.get("mimetype", "").startswith("image/")
+                    for f in msg.get("files", []))
+        valid_mentions = [m for m in mentions if m in users and m != uid]
+
+        if photo and len(valid_mentions) > 0:
+            # GROUP ACTIVITY: 5 pts to poster + each tagged person
+            group_activity_threads_inline.add(msg.get("ts"))
+            award_pts(uid, 5, dt)
+            groups_score_inline[uid] += 1
+            for m_uid in valid_mentions:
+                award_pts(m_uid, 5, dt)
+                groups_score_inline[m_uid] += 1
+        else:
+            # REGULAR POST: 1 pt to poster
+            award_pts(uid, 1, dt)
+            posts_score_inline[uid] += 1
 
         # Words
         for w in extract_words(text):
@@ -645,6 +683,10 @@ def main():
                 first_reply_ts = float(replies[0].get("ts", ts))
                 first_reply_lags.append(first_reply_ts - ts)
             participants = {uid}
+            # Track which repliers have been credited 2pts in this thread already
+            is_group_thread = msg.get("ts") in group_activity_threads_inline
+            credited_this_thread = set()
+            parent_uid = uid
             for reply in replies:
                 ruid = reply.get("user")
                 if not ruid or ruid not in users:
@@ -653,6 +695,14 @@ def main():
                 reply_count[ruid] += 1
                 message_count[ruid] += 1
                 participants.add(ruid)
+
+                # ── Inline point calc: 2pts per unique commenter per thread ──
+                if (not is_group_thread) and (ruid != parent_uid) and (ruid not in credited_this_thread):
+                    r_ts = float(reply.get("ts", 0))
+                    r_dt = datetime.fromtimestamp(r_ts)
+                    award_pts(ruid, 2, r_dt)
+                    comments_score_inline[ruid] += 1
+                    credited_this_thread.add(ruid)
 
                 # Track chars in replies too
                 rclean = re.sub(r'<[@#!][^>]+>', '', rtext)
@@ -692,26 +742,37 @@ def main():
 
     print(f"   Processed {thread_count} threads\n")
 
-    # ── Read weekly points for this month ────────────────────────
-    print("💰 Loading weekly points...")
-    weekly_data = {}
-    if os.path.exists(WEEKLY_JSON):
-        with open(WEEKLY_JSON) as f:
-            weekly_data = json.load(f)
-
-    # Get weeks for this month
-    month_weeks = [w for w in weekly_data.get("weeks", []) if w.get("month") == month_label]
-    month_weeks.sort(key=lambda w: w["week_number"])
-
-    # Build per-person points map: name -> {wk1, wk2, wk3, wk4, pts}
+    # ── Build points per person ──────────────────────────────────
+    # Prefer INLINE points (computed from Slack messages directly).
+    # Fall back to weekly JSON if inline computation somehow yielded nothing.
     points_by_name = defaultdict(lambda: {"wk1": 0, "wk2": 0, "wk3": 0, "wk4": 0, "pts": 0})
-    for week in month_weeks:
-        wn = week["week_number"]
-        for s in week["scores"]:
-            points_by_name[s["name"]][f"wk{wn}"] = s["points"]
-            points_by_name[s["name"]]["pts"] += s["points"]
 
-    print(f"   {len(month_weeks)} weeks loaded, {len(points_by_name)} people scored")
+    if points_inline:
+        print(f"💰 Using inline points ({len(points_inline)} people scored)")
+        for uid, pts in points_inline.items():
+            nm = users.get(uid)
+            if not nm:
+                continue
+            wks = wk_points_inline[uid]
+            points_by_name[nm] = {
+                "wk1": wks[0], "wk2": wks[1], "wk3": wks[2], "wk4": wks[3],
+                "pts": pts,
+            }
+        month_weeks = []  # not used when inline
+    else:
+        print("💰 Loading weekly points from JSON (inline was empty)...")
+        weekly_data = {}
+        if os.path.exists(WEEKLY_JSON):
+            with open(WEEKLY_JSON) as f:
+                weekly_data = json.load(f)
+        month_weeks = [w for w in weekly_data.get("weeks", []) if w.get("month") == month_label]
+        month_weeks.sort(key=lambda w: w["week_number"])
+        for week in month_weeks:
+            wn = week["week_number"]
+            for s in week["scores"]:
+                points_by_name[s["name"]][f"wk{wn}"] = s["points"]
+                points_by_name[s["name"]]["pts"] += s["points"]
+        print(f"   {len(month_weeks)} weeks loaded, {len(points_by_name)} people scored")
 
     # Role map from config
     role_map_by_name = {}
@@ -1739,12 +1800,14 @@ def main():
         })
 
     # 17) GROUP ACTIVITIES — when in-person events are documented (NEW)
-    total_groups = sum(p.get("group_activities", 0) for p in points_by_name.values()) if points_by_name else 0
-    # Recompute from per-week scores
-    total_groups = 0
-    for week in month_weeks:
-        for s in week["scores"]:
-            total_groups += s.get("group_activities", 0)
+    # Prefer inline count if available, else fall back to weekly JSON breakdown
+    if groups_score_inline:
+        total_groups = sum(groups_score_inline.values())
+    else:
+        total_groups = 0
+        for week in month_weeks:
+            for s in week["scores"]:
+                total_groups += s.get("group_activities", 0)
     # Each group activity counts the poster + tagged people; we want unique events
     # Using tagged-photo posts from message processing instead would be cleaner;
     # for now use a rough cap.
