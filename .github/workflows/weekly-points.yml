@@ -1,22 +1,37 @@
-name: Weekly Points Extraction
+name: Zen Garden Daily Runner
+
+# The script itself decides what to do based on today's date:
+#   - Sunday                  → post weekly leaderboard for current month
+#   - 1st of any month        → post monthly Wrapped recap for previous month
+#   - Any other day           → do nothing (silent no-op)
+# Runs every day at 12pm ET so both types of posts land on time.
 
 on:
   schedule:
-    # Every Sunday at 12pm ET
-    # DST note: Change to '0 17 * * 0' after Nov 1, 2026 (when EST starts).
-    #           Change back to '0 16 * * 0' after Mar 8, 2027 (when EDT resumes).
-    - cron: '0 16 * * 0'  # 16:00 UTC = 12pm EDT (Mar–Nov) / 11am EST (Nov–Mar)
+    # Every day at 12pm ET
+    # DST note: change to '0 17 * * *' after Nov 1, 2026 (when EST starts).
+    #           change back to '0 16 * * *' after Mar 8, 2027 (when EDT resumes).
+    - cron: '0 16 * * *'  # 16:00 UTC = 12pm EDT
   workflow_dispatch:
     inputs:
-      week_override:
-        description: 'Week number to process (leave blank for auto-detect)'
+      simulate_date:
+        description: 'Simulate a specific date (YYYY-MM-DD, leave blank for today)'
         required: false
         type: string
       dry_run:
-        description: 'Dry run — calculate points but do not save'
+        description: 'Dry run (calculate but do not write files or post)'
         required: false
         type: boolean
         default: false
+      force_weekly:
+        description: 'Force a weekly leaderboard post regardless of day'
+        required: false
+        type: boolean
+        default: false
+      force_monthly:
+        description: 'Force a monthly recap for this month label (e.g. "July 2026")'
+        required: false
+        type: string
 
 jobs:
   extract:
@@ -36,34 +51,41 @@ jobs:
       - name: Install dependencies
         run: pip install slack_sdk
 
-      - name: Run weekly extraction
+      - name: Run daily script
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_USER_TOKEN: ${{ secrets.SLACK_USER_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           ARGS=""
-          if [ -n "${{ inputs.week_override }}" ]; then
-            ARGS="--week ${{ inputs.week_override }}"
+          if [ -n "${{ inputs.simulate_date }}" ]; then
+            ARGS="$ARGS --simulate-date ${{ inputs.simulate_date }}"
           fi
           if [ "${{ inputs.dry_run }}" == "true" ]; then
             ARGS="$ARGS --dry-run"
           fi
-          python zen_garden_weekly_auto.py $ARGS
+          if [ "${{ inputs.force_weekly }}" == "true" ]; then
+            ARGS="$ARGS --force-weekly"
+          fi
+          if [ -n "${{ inputs.force_monthly }}" ]; then
+            ARGS="$ARGS --force-monthly \"${{ inputs.force_monthly }}\""
+          fi
+          eval "python zen_garden_weekly_auto.py $ARGS"
 
       - name: Commit and push results
         if: ${{ inputs.dry_run != true }}
         run: |
           git config user.name "Zen Garden Bot"
           git config user.email "bot@amigocareaba.com"
-          git add zen_garden_weekly.json run_status.json weekly_summary.txt weekly_reports/
+          git add zen_garden_weekly.json run_status.json weekly_reports/ || true
           [ -f zen_garden_wrapped_data.json ] && git add zen_garden_wrapped_data.json || true
           [ -d monthly_reports ] && git add monthly_reports/ || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            WEEK_LABEL=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('week_label','update'))")
-            git commit -m "Weekly points: ${WEEK_LABEL}"
+            ACTION=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('action', d.get('status','update')))")
+            MONTH=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('month','')) " || echo "")
+            git commit -m "Zen Garden: ${ACTION} · ${MONTH}"
             git push
           fi
 
@@ -80,7 +102,7 @@ jobs:
             echo "::warning::SLACK_ALERT_WEBHOOK_URL not set — skipping failure notification"
             exit 0
           fi
-          MSG="⚠️ *Zen Garden weekly run failed*\\n\\nWorkflow: \`${{ github.workflow }}\`\\nTriggered by: \`${{ github.event_name }}\`\\nDate: $(date -u '+%Y-%m-%d %H:%M UTC')\\n\\n<${RUN_URL}|View the failed run on GitHub>"
+          MSG="⚠️ *Zen Garden daily run failed*\\n\\nWorkflow: \`${{ github.workflow }}\`\\nTriggered by: \`${{ github.event_name }}\`\\nDate: $(date -u '+%Y-%m-%d %H:%M UTC')\\n\\n<${RUN_URL}|View the failed run on GitHub>"
           curl -s -X POST -H 'Content-Type: application/json' \
             --data "{\"text\":\"${MSG}\"}" \
             "$ALERT_URL" > /dev/null
