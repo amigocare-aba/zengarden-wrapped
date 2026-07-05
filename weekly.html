@@ -343,11 +343,20 @@ fetch('zen_garden_weekly.json?t=' + Date.now())
   .then(function(r) { return r.json(); })
   .then(function(data) {
     // Header badges — show latest week info
-    var latestWeek = data.weeks ? data.weeks[data.weeks.length - 1] : data;
-    document.getElementById('weekBadge').textContent = 'THROUGH WEEK ' + (data.current_week || 1);
-    document.getElementById('dateBadge').textContent = latestWeek.date_range || '';
+    // Guard against empty weeks[] (daily runs don't populate it) — fall back to
+    // the top-level date_range/month that the daily runner always writes.
+    var latestWeek =
+      (data.weeks && data.weeks.length > 0)
+        ? data.weeks[data.weeks.length - 1]
+        : data;
+    var weekLabel = data.current_week
+      ? 'THROUGH WEEK ' + data.current_week
+      : (data.month ? data.month.toUpperCase() : 'CURRENT MONTH');
+    document.getElementById('weekBadge').textContent = weekLabel;
+    document.getElementById('dateBadge').textContent =
+      (latestWeek && latestWeek.date_range) || data.date_range || '';
     document.getElementById('footerText').textContent =
-      'Updated ' + data.updated_at + ' · ' + data.month + ' · Amigo Care ABA';
+      'Updated ' + (data.updated_at || '') + ' · ' + (data.month || '') + ' · Amigo Care ABA';
 
     // Use cumulative scores if available, fall back to flat scores
     var scores = (data.cumulative || data.scores || []).slice().sort(function(a, b) {
