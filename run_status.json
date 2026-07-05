@@ -1,6 +1,9 @@
 {
-  "last_run": "2026-07-04T16:52:27",
-  "status": "no_op",
-  "reason": "not_sunday_or_first",
-  "date": "2026-07-04"
+  "last_run": "2026-07-05T16:53:48",
+  "status": "success",
+  "action": "weekly",
+  "month": "July 2026",
+  "date_range": "Jul 1 – Jul 4",
+  "people_scored": 12,
+  "total_points": 38
 }
