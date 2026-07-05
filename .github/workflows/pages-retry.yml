@@ -1,0 +1,59 @@
+name: Auto-retry failed Pages deploys
+
+# Watches the built-in "pages-build-deployment" workflow. If a run fails
+# (usually a transient "try again later" from GitHub Pages), reruns just
+# the failed jobs. Caps at 2 retries per run to avoid infinite loops.
+
+on:
+  workflow_run:
+    workflows: ["pages-build-deployment"]
+    types: [completed]
+
+permissions:
+  actions: write        # to rerun the workflow
+  contents: read
+
+jobs:
+  retry:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Count previous retry attempts
+        id: attempts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # run_attempt is 1 on first run, 2 after first rerun, etc.
+          ATTEMPT="${{ github.event.workflow_run.run_attempt }}"
+          echo "Previous attempts: $ATTEMPT"
+          if [ "$ATTEMPT" -ge 3 ]; then
+            echo "already_retried=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "already_retried=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Rerun failed Pages deployment
+        if: steps.attempts.outputs.already_retried != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          echo "Rerunning failed Pages deployment run #$RUN_ID"
+          gh api -X POST \
+            "repos/${{ github.repository }}/actions/runs/$RUN_ID/rerun-failed-jobs" \
+            --silent
+
+      - name: Alert if retry cap reached
+        if: steps.attempts.outputs.already_retried == 'true'
+        env:
+          ALERT_URL: ${{ secrets.SLACK_ALERT_WEBHOOK_URL }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+        run: |
+          if [ -z "$ALERT_URL" ]; then
+            echo "::warning::Retry cap reached; no alert webhook configured"
+            exit 0
+          fi
+          MSG="🚨 *GitHub Pages deployment failed after 2 retries*\\n\\nManual intervention needed. The live site may be stale.\\n\\n<${RUN_URL}|View the failed run on GitHub>"
+          curl -s -X POST -H 'Content-Type: application/json' \
+            --data "{\"text\":\"${MSG}\"}" \
+            "$ALERT_URL" > /dev/null

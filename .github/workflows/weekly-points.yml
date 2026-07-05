@@ -73,6 +73,7 @@ jobs:
           eval "python zen_garden_weekly_auto.py $ARGS"
 
       - name: Commit and push results
+        id: commit
         if: ${{ inputs.dry_run != true }}
         run: |
           git config user.name "Zen Garden Bot"
@@ -82,12 +83,40 @@ jobs:
           [ -d monthly_reports ] && git add monthly_reports/ || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
+            echo "committed=false" >> "$GITHUB_OUTPUT"
           else
             ACTION=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('action', d.get('status','update')))")
             MONTH=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('month','')) " || echo "")
             git commit -m "Zen Garden: ${ACTION} · ${MONTH}"
             git push
+            echo "committed=true" >> "$GITHUB_OUTPUT"
+            # Extract the expected updated_at for post-deploy verification
+            UPDATED_AT=$(python -c "import json; d=json.load(open('zen_garden_weekly.json')); print(d.get('updated_at',''))" 2>/dev/null || echo "")
+            echo "expected_updated_at=$UPDATED_AT" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Verify live weekly.html reflects new JSON
+        # Waits for GitHub Pages to redeploy and checks the served JSON matches
+        # what we just committed. Fails the job if the site is stale after 5 min,
+        # which triggers the failure alert to #wellnessprogram-group.
+        if: ${{ inputs.dry_run != true && steps.commit.outputs.committed == 'true' && steps.commit.outputs.expected_updated_at != '' }}
+        env:
+          EXPECTED: ${{ steps.commit.outputs.expected_updated_at }}
+        run: |
+          echo "Waiting for Pages to serve updated_at=$EXPECTED ..."
+          DEADLINE=$(( $(date +%s) + 300 ))
+          while [ $(date +%s) -lt $DEADLINE ]; do
+            # Cache-bust the JSON fetch
+            LIVE=$(curl -s "https://amigocare-aba.github.io/zengarden-wrapped/zen_garden_weekly.json?ts=$(date +%s)" | python3 -c "import sys,json; print(json.load(sys.stdin).get('updated_at',''))" 2>/dev/null || echo "")
+            if [ "$LIVE" = "$EXPECTED" ]; then
+              echo "✅ Live page shows updated_at=$LIVE"
+              exit 0
+            fi
+            echo "  ...still stale (live=$LIVE, want=$EXPECTED). Retrying in 20s."
+            sleep 20
+          done
+          echo "::error::Pages never picked up the new JSON (expected updated_at=$EXPECTED)"
+          exit 1
 
       # ── FAIL ALERT ────────────────────────────────────────────────
       # Runs ONLY if any previous step failed. Posts to private alerts channel.

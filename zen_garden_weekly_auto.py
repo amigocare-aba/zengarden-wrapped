@@ -82,24 +82,57 @@ if not BOT_TOKEN or not USER_TOKEN:
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "")
 
 
-def post_to_slack(text):
-    """Post a message to Slack via incoming webhook."""
+def post_to_slack(text, must_succeed=True):
+    """Post a message to Slack via incoming webhook.
+
+    Verifies HTTP status is 200 and body is "ok". Raises RuntimeError if
+    must_succeed=True (default) and delivery fails — this makes the GitHub
+    Action fail loudly so the failure alert fires.
+    """
     if not SLACK_WEBHOOK_URL:
         print("⚠️  No SLACK_WEBHOOK_URL set — skipping Slack post")
         return False
+    payload = json.dumps({"text": text}).encode("utf-8")
+    req = urllib.request.Request(
+        SLACK_WEBHOOK_URL,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+    )
     try:
-        payload = json.dumps({"text": text}).encode("utf-8")
-        req = urllib.request.Request(
-            SLACK_WEBHOOK_URL,
-            data=payload,
-            headers={"Content-Type": "application/json"},
-        )
-        urllib.request.urlopen(req)
-        print("📣 Posted summary to Slack")
-        return True
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            status = resp.status
+            body = resp.read().decode("utf-8", errors="replace").strip()
+        if status == 200 and body.lower() == "ok":
+            print(f"📣 Posted to Slack (HTTP {status}, body={body!r})")
+            return True
+        msg = f"Slack post returned unexpected response: HTTP {status}, body={body!r}"
+        print(f"⚠️  {msg}")
+        if must_succeed:
+            raise RuntimeError(msg)
+        return False
     except Exception as e:
         print(f"⚠️  Slack post failed: {e}")
+        if must_succeed:
+            raise
         return False
+
+
+def validate_json_written(path, required_keys=None):
+    """Load a JSON file we just wrote to confirm it parses and has expected keys.
+
+    Prevents downstream consumers (weekly.html, wrapped page) from seeing
+    a corrupted file. Raises RuntimeError on failure so the CI job fails.
+    """
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        raise RuntimeError(f"Invalid JSON at {path}: {e}")
+    if required_keys:
+        missing = [k for k in required_keys if k not in data]
+        if missing:
+            raise RuntimeError(f"{path} missing required keys: {missing}")
+    return data
 
 
 # ── CONFIG VALIDATION ───────────────────────────────────────────────
@@ -456,6 +489,8 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
     }
     with open(JSON_FILE, "w", encoding="utf-8") as f:
         json.dump(weekly_out, f, indent=2, ensure_ascii=False)
+    # Verify file parses and has the keys the frontend expects
+    validate_json_written(JSON_FILE, required_keys=["month", "cumulative", "updated_at"])
     print(f"\n✅ JSON → {JSON_FILE}")
 
     # Save weekly CSV
@@ -578,6 +613,7 @@ def run_monthly_recap(args, config, target_month, today, posting_enabled):
     }
     with open(JSON_FILE, "w", encoding="utf-8") as f:
         json.dump(reset_json, f, indent=2, ensure_ascii=False)
+    validate_json_written(JSON_FILE, required_keys=["month", "cumulative", "updated_at"])
     print(f"\n♻️  Reset {JSON_FILE} for new month")
 
     write_status({
