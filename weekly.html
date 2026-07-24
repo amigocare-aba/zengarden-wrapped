@@ -397,8 +397,11 @@ fetch('zen_garden_weekly.json?t=' + Date.now())
       else if (rank === 3) rankDisplay = '\uD83E\uDD49';
 
       // "+X this week" badge
+      // Only show when it's genuinely a delta — if this_week equals the total,
+      // the badge is either redundant (nothing was earned before this week) or
+      // stale data from an older extractor version that duplicated the value.
       var thisWeekHtml = '';
-      if (person.this_week && person.this_week > 0) {
+      if (person.this_week && person.this_week > 0 && person.this_week !== person.points) {
         thisWeekHtml = '<span style="font-size:10px;font-weight:700;color:var(--green);margin-left:4px;">+' + person.this_week + '</span>';
       }
 
