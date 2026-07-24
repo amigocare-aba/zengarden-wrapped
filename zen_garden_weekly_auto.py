@@ -334,16 +334,29 @@ def _cap_name(nm):
     return " ".join(w.capitalize() if w[0].islower() else w for w in nm.split())
 
 
-def _process_messages_for_points(bot_client, user_client, channel_name, oldest_ts, latest_ts, role_map):
+def _process_messages_for_points(bot_client, user_client, channel_name, oldest_ts, latest_ts, role_map, week_start_ts=None):
     """Fetch messages in [oldest_ts, latest_ts) and compute per-user points (1/2/5 rules).
     Returns dict of scores list + aggregate counts.
+
+    If week_start_ts is set, also tallies a per-user "week_points" for events whose
+    timestamp is >= week_start_ts, so callers can render a "+X this week" delta
+    without a second Slack round-trip.
     """
     channel_id = get_channel_id(bot_client, channel_name)
     users = get_users(user_client)
 
     points = defaultdict(int)
+    week_points = defaultdict(int)
     breakdown = defaultdict(lambda: {"posts": 0, "comments": 0, "group_activities": 0})
     group_activity_threads = set()
+
+    def _in_week(ts_str):
+        if week_start_ts is None or not ts_str:
+            return False
+        try:
+            return float(ts_str) >= week_start_ts
+        except (TypeError, ValueError):
+            return False
 
     messages = get_all_messages(bot_client, channel_id, oldest_ts, latest_ts)
 
@@ -358,16 +371,23 @@ def _process_messages_for_points(bot_client, user_client, channel_name, oldest_t
         mentions = extract_mentions(text)
         photo = has_image(msg)
         valid_mentions = [m for m in mentions if m in users and m != uid]
+        in_week = _in_week(msg.get("ts"))
         if photo and len(valid_mentions) > 0:
             group_activity_threads.add(msg.get("ts"))
             points[uid] += 5
             breakdown[uid]["group_activities"] += 1
+            if in_week:
+                week_points[uid] += 5
             for m_uid in valid_mentions:
                 points[m_uid] += 5
                 breakdown[m_uid]["group_activities"] += 1
+                if in_week:
+                    week_points[m_uid] += 5
         else:
             points[uid] += 1
             breakdown[uid]["posts"] += 1
+            if in_week:
+                week_points[uid] += 1
 
     # Pass 2: thread replies (unique per thread per replier, skip group threads)
     for msg in messages:
@@ -390,6 +410,9 @@ def _process_messages_for_points(bot_client, user_client, channel_name, oldest_t
             points[ruid] += 2
             breakdown[ruid]["comments"] += 1
             credited.add(ruid)
+            # Week credit follows the first (chronologically earliest) qualifying reply
+            if _in_week(reply.get("ts")):
+                week_points[ruid] += 2
 
     # Build scores list
     scores = []
@@ -398,6 +421,7 @@ def _process_messages_for_points(bot_client, user_client, channel_name, oldest_t
         scores.append({
             "name": nm,
             "points": total,
+            "week_points": week_points.get(uid, 0),
             "role": get_role(uid, role_map),
             "posts": breakdown[uid]["posts"],
             "comments": breakdown[uid]["comments"],
@@ -421,8 +445,17 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
     # End is end-of-day yesterday (start-of-day today, exclusive)
     end_exclusive = datetime.combine(today, datetime.min.time())
 
+    # "This week" delta = points earned since last Sunday, clamped to month start
+    # so early-in-month posts don't count days from the previous month.
+    week_start_dt = max(
+        datetime.combine(today - timedelta(days=7), datetime.min.time()),
+        month_start,
+    )
+    week_start_ts = week_start_dt.timestamp()
+
     date_range_str = f"{month_start.strftime('%b %-d')} – {yesterday.strftime('%b %-d')}"
-    print(f"📅 Weekly leaderboard — {target_month} · {date_range_str}\n")
+    print(f"📅 Weekly leaderboard — {target_month} · {date_range_str}")
+    print(f"   Week delta window: {week_start_dt.strftime('%b %-d')} onward\n")
 
     bot_client, user_client = make_clients()
     print("🔍 Fetching channel & users...")
@@ -433,7 +466,8 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
     print("📨 Fetching messages...")
     result = _process_messages_for_points(
         bot_client, user_client, config.get("channel", "zengarden"),
-        month_start.timestamp(), end_exclusive.timestamp(), role_map
+        month_start.timestamp(), end_exclusive.timestamp(), role_map,
+        week_start_ts=week_start_ts,
     )
     print(f"   Processed {result['message_count']} top-level messages\n")
 
@@ -483,7 +517,12 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
         "updated_at": today.isoformat(),
         "weeks": [],
         "cumulative": [
-            {"name": s["name"], "points": s["points"], "role": s["role"], "this_week": s["points"]}
+            {
+                "name": s["name"],
+                "points": s["points"],
+                "role": s["role"],
+                "this_week": s.get("week_points", 0),
+            }
             for s in scores
         ],
     }
