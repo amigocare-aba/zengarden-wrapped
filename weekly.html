@@ -419,7 +419,12 @@ fetch('zen_garden_weekly.json?t=' + Date.now())
         + '</div>';
     });
 
-    document.getElementById('scoreboard').innerHTML = html;
+    document.getElementById('scoreboard').innerHTML = html || (
+      '<div class="empty">' +
+      '🌱 New month just kicked off.<br>' +
+      '<small>The first weekly leaderboard posts this Sunday.</small>' +
+      '</div>'
+    );
 
     // ── Search filter ───────────────────────────────────────────
     document.getElementById('searchInput').addEventListener('input', function() {

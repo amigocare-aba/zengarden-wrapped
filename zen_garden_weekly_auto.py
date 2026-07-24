@@ -641,11 +641,22 @@ def run_monthly_recap(args, config, target_month, today, posting_enabled):
     else:
         print("\n🔇 Slack post SUPPRESSED (--no-post or --simulate-date)")
 
-    # Reset the weekly.json for the new month — will be populated by next Sunday
+    # Reset weekly.json for the new month — populated with the NEW month's
+    # label + date range so weekly.html shows a proper header even before the
+    # first Sunday leaderboard runs. Cumulative stays empty; the frontend
+    # renders an "awaiting first week" empty state until Sunday.
+    new_month_label = _current_month_label(today, config)
+    new_month_start_str = ""
+    if new_month_label and new_month_label in config.get("months", {}):
+        try:
+            nm_start = datetime.strptime(config["months"][new_month_label]["start"], "%Y-%m-%d").date()
+            new_month_start_str = f"{nm_start.strftime('%b %-d')} – {today.strftime('%b %-d')}"
+        except (KeyError, ValueError):
+            new_month_start_str = today.strftime("%b %-d")
     reset_json = {
-        "month": None,
+        "month": new_month_label,
         "current_week": None,
-        "date_range": None,
+        "date_range": new_month_start_str,
         "updated_at": today.isoformat(),
         "weeks": [],
         "cumulative": [],
