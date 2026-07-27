@@ -28,6 +28,7 @@ import json
 import csv
 import hashlib
 import argparse
+import time
 import urllib.request
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -233,13 +234,34 @@ def get_channel_id(bot_client, name):
     raise Exception(f"Channel '#{name}' not found.")
 
 
-def get_users(user_client):
-    result = user_client.users_list()
-    users = {}
-    for u in result["members"]:
-        if not u["is_bot"] and not u["deleted"] and u["id"] != "USLACKBOT":
-            users[u["id"]] = u.get("real_name") or u.get("name")
-    return users
+def get_users(user_client, max_retries=4):
+    """Fetch active workspace users. Retries on Slack rate limits (Tier 2:
+    ~20/min), waiting the Retry-After the API returns (bounded).
+    Raises on non-rate-limit errors so the caller sees them clearly."""
+    from slack_sdk.errors import SlackApiError
+    delay = 5.0
+    for attempt in range(1, max_retries + 1):
+        try:
+            result = user_client.users_list()
+            users = {}
+            for u in result["members"]:
+                if not u["is_bot"] and not u["deleted"] and u["id"] != "USLACKBOT":
+                    users[u["id"]] = u.get("real_name") or u.get("name")
+            return users
+        except SlackApiError as e:
+            err = e.response.get("error") if hasattr(e, "response") else ""
+            if err != "ratelimited" or attempt == max_retries:
+                raise
+            retry_after = 0
+            try:
+                retry_after = float(e.response.headers.get("Retry-After", 0))
+            except (AttributeError, TypeError, ValueError):
+                pass
+            wait = max(retry_after, delay)
+            wait = min(wait, 60)  # cap so we don't stall the whole job
+            print(f"⏳ users.list rate-limited (attempt {attempt}/{max_retries}), sleeping {wait:.0f}s")
+            time.sleep(wait)
+            delay *= 2
 
 
 def get_all_messages(bot_client, channel_id, oldest_ts, latest_ts):
@@ -334,16 +356,20 @@ def _cap_name(nm):
     return " ".join(w.capitalize() if w[0].islower() else w for w in nm.split())
 
 
-def _process_messages_for_points(bot_client, user_client, channel_name, oldest_ts, latest_ts, role_map, week_start_ts=None):
+def _process_messages_for_points(bot_client, user_client, channel_name, oldest_ts, latest_ts, role_map, week_start_ts=None, users=None):
     """Fetch messages in [oldest_ts, latest_ts) and compute per-user points (1/2/5 rules).
     Returns dict of scores list + aggregate counts.
 
     If week_start_ts is set, also tallies a per-user "week_points" for events whose
     timestamp is >= week_start_ts, so callers can render a "+X this week" delta
     without a second Slack round-trip.
+
+    Pass `users` (dict from get_users) to skip the users.list API call — the
+    caller already fetched it. Avoids double-hitting Slack's Tier 2 rate limit.
     """
     channel_id = get_channel_id(bot_client, channel_name)
-    users = get_users(user_client)
+    if users is None:
+        users = get_users(user_client)
 
     points = defaultdict(int)
     week_points = defaultdict(int)
@@ -468,6 +494,7 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
         bot_client, user_client, config.get("channel", "zengarden"),
         month_start.timestamp(), end_exclusive.timestamp(), role_map,
         week_start_ts=week_start_ts,
+        users=users_all,  # reuse the dict we already fetched — no second users.list call
     )
     print(f"   Processed {result['message_count']} top-level messages\n")
 
