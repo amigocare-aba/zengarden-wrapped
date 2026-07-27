@@ -52,10 +52,16 @@ jobs:
         run: pip install slack_sdk
 
       - name: Run daily script
+        id: run
+        # continue-on-error so the commit step below can still push
+        # run_status.json — that's how failures reach admin.html.
+        # The "Fail job if script failed" step re-fails the job afterwards.
+        continue-on-error: true
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_USER_TOKEN: ${{ secrets.SLACK_USER_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           ARGS=""
           if [ -n "${{ inputs.simulate_date }}" ]; then
@@ -72,6 +78,43 @@ jobs:
           fi
           eval "python zen_garden_weekly_auto.py $ARGS"
 
+      - name: Record failure status if script died before writing it
+        if: ${{ steps.run.outcome == 'failure' && inputs.dry_run != true }}
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'EOF'
+          import json, os
+          from datetime import datetime
+          path = "run_status.json"
+          today = datetime.now().date().isoformat()
+          try:
+              with open(path) as f:
+                  data = json.load(f)
+          except Exception:
+              data = {}
+          # If the script already wrote today's error status, keep its richer info
+          if data.get("status") == "error" and str(data.get("last_run", "")).startswith(today):
+              print("Script already recorded its own error status — leaving as-is")
+          else:
+              status = {
+                  "last_run": datetime.now().isoformat(timespec="seconds"),
+                  "status": "error",
+                  "date": today,
+                  "errors": ["Script crashed before writing status — see workflow logs"],
+                  "last_error": {
+                      "at": datetime.now().isoformat(timespec="seconds"),
+                      "action": None,
+                      "month": None,
+                      "errors": ["Script crashed before writing status"],
+                      "run_url": os.environ.get("RUN_URL", ""),
+                  },
+              }
+              with open(path, "w") as f:
+                  json.dump(status, f, indent=2)
+              print("Wrote fallback error status")
+          EOF
+
       - name: Commit and push results
         id: commit
         if: ${{ inputs.dry_run != true }}
@@ -85,8 +128,8 @@ jobs:
             echo "No changes to commit"
             echo "committed=false" >> "$GITHUB_OUTPUT"
           else
-            ACTION=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('action', d.get('status','update')))")
-            MONTH=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('month','')) " || echo "")
+            ACTION=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('action') or d.get('status') or 'update')")
+            MONTH=$(python -c "import json; d=json.load(open('run_status.json')); print(d.get('month') or '')" || echo "")
             git commit -m "Zen Garden: ${ACTION} · ${MONTH}"
             git push
             echo "committed=true" >> "$GITHUB_OUTPUT"
@@ -97,9 +140,9 @@ jobs:
 
       - name: Verify live weekly.html reflects new JSON
         # Waits for GitHub Pages to redeploy and checks the served JSON matches
-        # what we just committed. Fails the job if the site is stale after 5 min,
-        # which triggers the failure alert to #wellnessprogram-group.
-        if: ${{ inputs.dry_run != true && steps.commit.outputs.committed == 'true' && steps.commit.outputs.expected_updated_at != '' }}
+        # what we just committed. Fails the job if the site is stale after 5 min.
+        # Skipped when the script failed — the JSON wasn't refreshed in that case.
+        if: ${{ inputs.dry_run != true && steps.run.outcome == 'success' && steps.commit.outputs.committed == 'true' && steps.commit.outputs.expected_updated_at != '' }}
         env:
           EXPECTED: ${{ steps.commit.outputs.expected_updated_at }}
         run: |
@@ -118,9 +161,17 @@ jobs:
           echo "::error::Pages never picked up the new JSON (expected updated_at=$EXPECTED)"
           exit 1
 
-      # ── FAIL ALERT ────────────────────────────────────────────────
-      # Runs ONLY if any previous step failed. Posts to private alerts channel.
-      # Set SLACK_ALERT_WEBHOOK_URL in repo secrets to enable.
+      - name: Fail job if script failed
+        # The run step used continue-on-error so run_status.json could be
+        # committed. Re-fail here so the Actions UI shows red for the run.
+        if: ${{ steps.run.outcome == 'failure' }}
+        run: |
+          echo "::error::Daily script failed — status recorded to admin page. See 'Run daily script' step logs."
+          exit 1
+
+      # ── FAIL ALERT (optional) ─────────────────────────────────────
+      # Posts to Slack ONLY if SLACK_ALERT_WEBHOOK_URL is set; otherwise
+      # no-ops. Failures are always visible on admin.html via run_status.json.
       - name: Post failure alert to Slack
         if: failure()
         env:

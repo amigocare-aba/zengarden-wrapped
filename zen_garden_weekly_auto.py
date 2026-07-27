@@ -331,6 +331,35 @@ def get_role(uid, role_map):
 # ── WRITE STATUS ──────────────────────────────────────────────────
 
 def write_status(status_data):
+    """Write run_status.json (powers admin.html).
+
+    Persists `last_error` across runs so a Sunday failure stays visible on
+    the admin page even after Monday's no_op overwrites `status`. The banner
+    clears only when a run of the SAME action later succeeds.
+    """
+    prev_error = None
+    try:
+        with open(STATUS_FILE, "r", encoding="utf-8") as f:
+            prev_error = json.load(f).get("last_error")
+    except (OSError, ValueError):
+        pass
+
+    if status_data.get("status") == "error":
+        status_data["last_error"] = {
+            "at": status_data.get("last_run"),
+            "action": status_data.get("action"),
+            "month": status_data.get("month"),
+            "errors": status_data.get("errors", []),
+            "run_url": os.environ.get("GITHUB_RUN_URL", ""),
+        }
+    elif prev_error:
+        recovered = (
+            status_data.get("status") in ("success", "no_post")
+            and status_data.get("action") == prev_error.get("action")
+        )
+        if not recovered:
+            status_data["last_error"] = prev_error
+
     with open(STATUS_FILE, "w", encoding="utf-8") as f:
         json.dump(status_data, f, indent=2, ensure_ascii=False)
 
@@ -597,6 +626,7 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
         "date_range": date_range_str,
         "people_scored": people,
         "total_points": total_pts,
+        "group_activities_found": result.get("group_activities_found", 0),
     })
     print(f"\n✅ Done — {people} people, {total_pts} pts through {yesterday.strftime('%b %-d')}")
 
@@ -616,10 +646,10 @@ def run_monthly_recap(args, config, target_month, today, posting_enabled):
         print(result.stderr)
         write_status({
             "last_run": datetime.now().isoformat(timespec="seconds"),
-            "status": "wrapped_failed",
+            "status": "error",
             "action": "monthly",
             "month": target_month,
-            "error": result.stderr[:500],
+            "errors": [f"Wrapped extraction failed: {result.stderr[:500]}"],
         })
         sys.exit(1)
     print("   ✓ Wrapped data generated")
@@ -751,17 +781,35 @@ def main():
         print(f"❌ Could not resolve target month for {today_str}. Check weekly_config.json.")
         write_status({
             "last_run": datetime.now().isoformat(timespec="seconds"),
-            "status": "config_error",
+            "status": "error",
+            "action": action,
             "date": today_str,
+            "errors": [f"No month in weekly_config.json covers {today_str}"],
         })
         sys.exit(1)
 
     print(f"📅 {today_str} → {action.upper()} for {target_month}\n")
 
-    if action == "monthly":
-        run_monthly_recap(args, config, target_month, today, posting_enabled)
-    else:
-        run_weekly_leaderboard(args, config, target_month, today, posting_enabled)
+    try:
+        if action == "monthly":
+            run_monthly_recap(args, config, target_month, today, posting_enabled)
+        else:
+            run_weekly_leaderboard(args, config, target_month, today, posting_enabled)
+    except SystemExit:
+        raise
+    except Exception as e:
+        # Record the failure so admin.html surfaces it (workflow commits
+        # run_status.json even when this script exits non-zero).
+        print(f"\n❌ {action} run failed: {e}")
+        write_status({
+            "last_run": datetime.now().isoformat(timespec="seconds"),
+            "status": "error",
+            "action": action,
+            "month": target_month,
+            "date": today_str,
+            "errors": [f"{type(e).__name__}: {e}"],
+        })
+        sys.exit(1)
 
 
 if __name__ == "__main__":

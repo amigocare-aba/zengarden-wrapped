@@ -415,6 +415,32 @@ fetch('run_status.json?t=' + Date.now())
     var labelClass = 'status-label ' + status;
     var labelText = status.replace('_', ' ').toUpperCase();
 
+    function esc(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // ── PERSISTENT FAILURE BANNER ─────────────────────────────────
+    // last_error survives daily no_op overwrites; it clears only after a
+    // successful run of the same action (weekly/monthly). So a failed
+    // Sunday post stays visible here until it has actually been recovered.
+    var banner = '';
+    if (d.last_error) {
+      var le = d.last_error;
+      banner += '<div style="margin-bottom:16px;padding:16px 20px;background:rgba(216,90,48,0.10);border:2px solid var(--coral);border-radius:var(--r-sm);">';
+      banner += '<div style="font-size:14px;font-weight:800;color:var(--coral);margin-bottom:6px;">🚨 Unrecovered failure</div>';
+      banner += '<div style="font-size:12px;color:var(--ink);margin-bottom:4px;">' +
+        esc((le.action || 'run')) + ' run failed at ' + esc(le.at || '?') +
+        (le.month ? ' (' + esc(le.month) + ')' : '') + '</div>';
+      (le.errors || []).forEach(function(e) {
+        banner += '<div style="font-size:11px;font-family:monospace;color:var(--coral);margin-bottom:2px;">' + esc(e) + '</div>';
+      });
+      if (le.run_url) {
+        banner += '<a href="' + esc(le.run_url) + '" target="_blank" style="font-size:12px;font-weight:700;color:var(--coral);">View failed run on GitHub →</a>';
+      }
+      banner += '<div style="font-size:11px;color:var(--ink2);margin-top:6px;">To recover: GitHub → Actions → Zen Garden Daily Runner → Run workflow → check <strong>force_weekly</strong> (or set force_monthly). This banner clears automatically once that succeeds.</div>';
+      banner += '</div>';
+    }
+
     var html = '<div class="status-card">';
     html += '<div class="status-header">';
     html += '<div class="' + dotClass + '"></div>';
@@ -432,7 +458,7 @@ fetch('run_status.json?t=' + Date.now())
       html += '<div class="stat-grid">';
       html += '<div class="stat-box"><div class="stat-num">' + d.people_scored + '</div><div class="stat-label">People</div></div>';
       html += '<div class="stat-box"><div class="stat-num">' + d.total_points + '</div><div class="stat-label">Points</div></div>';
-      html += '<div class="stat-box"><div class="stat-num">' + d.group_activities_found + '</div><div class="stat-label">Group Activities</div></div>';
+      html += '<div class="stat-box"><div class="stat-num">' + (d.group_activities_found !== undefined ? d.group_activities_found : '—') + '</div><div class="stat-label">Group Activities</div></div>';
       html += '</div>';
     }
 
@@ -457,7 +483,7 @@ fetch('run_status.json?t=' + Date.now())
 
     html += '</div>';
 
-    document.getElementById('content').innerHTML = html;
+    document.getElementById('content').innerHTML = banner + html;
     document.getElementById('links').style.display = '';
   })
   .catch(function() {
