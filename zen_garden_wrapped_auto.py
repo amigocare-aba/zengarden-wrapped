@@ -33,6 +33,7 @@ import re
 import sys
 import json
 import csv
+import time
 import argparse
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta
@@ -334,10 +335,38 @@ def reaction_to_display(name):
 
 
 # ── SLACK API ─────────────────────────────────────────────────────
+def _slack_retry(fn, what, max_retries=4):
+    """Run a Slack API call; on 'ratelimited', honor Retry-After (bounded)
+    and retry. Non-rate-limit errors raise immediately; persistent rate
+    limits raise after max_retries so failures are loud, never silent."""
+    delay = 5.0
+    for attempt in range(1, max_retries + 1):
+        try:
+            return fn()
+        except SlackApiError as e:
+            err = e.response.get("error") if getattr(e, "response", None) else ""
+            if err != "ratelimited" or attempt == max_retries:
+                raise
+            retry_after = 0
+            try:
+                retry_after = float(e.response.headers.get("Retry-After", 0))
+            except (AttributeError, TypeError, ValueError):
+                pass
+            wait = min(max(retry_after, delay), 60)
+            print(f"⏳ {what} rate-limited (attempt {attempt}/{max_retries}), sleeping {wait:.0f}s")
+            time.sleep(wait)
+            delay *= 2
+
+
 def get_channel_id(client, name):
     cursor = None
     while True:
-        result = client.conversations_list(types="public_channel", limit=200, cursor=cursor)
+        result = _slack_retry(
+            lambda c=cursor: client.conversations_list(
+                types="public_channel", limit=200, cursor=c
+            ),
+            "conversations.list",
+        )
         for ch in result["channels"]:
             if ch["name"] == name:
                 return ch["id"]
@@ -348,7 +377,7 @@ def get_channel_id(client, name):
 
 
 def get_users(client):
-    result = client.users_list()
+    result = _slack_retry(client.users_list, "users.list")
     users = {}
     for u in result["members"]:
         if not u["is_bot"] and not u["deleted"] and u["id"] != "USLACKBOT":
@@ -360,9 +389,12 @@ def get_all_messages(client, channel_id, oldest, latest):
     messages = []
     cursor = None
     while True:
-        result = client.conversations_history(
-            channel=channel_id, oldest=str(oldest), latest=str(latest),
-            limit=200, cursor=cursor
+        result = _slack_retry(
+            lambda c=cursor: client.conversations_history(
+                channel=channel_id, oldest=str(oldest), latest=str(latest),
+                limit=200, cursor=c
+            ),
+            "conversations.history",
         )
         messages.extend(result["messages"])
         cursor = result.get("response_metadata", {}).get("next_cursor")
@@ -372,13 +404,21 @@ def get_all_messages(client, channel_id, oldest, latest):
 
 
 def get_replies(client, channel_id, ts, oldest, latest):
+    """Rate limits RETRY (and raise if persistent) — silently returning []
+    would undercount comment points. Missing threads return []."""
     try:
-        result = client.conversations_replies(
-            channel=channel_id, ts=ts, oldest=str(oldest), latest=str(latest),
-            limit=200
+        result = _slack_retry(
+            lambda: client.conversations_replies(
+                channel=channel_id, ts=ts, oldest=str(oldest), latest=str(latest),
+                limit=200
+            ),
+            "conversations.replies",
         )
         return result["messages"][1:]
-    except SlackApiError:
+    except SlackApiError as e:
+        err = e.response.get("error") if getattr(e, "response", None) else ""
+        if err == "ratelimited":
+            raise
         return []
 
 

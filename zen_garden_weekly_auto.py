@@ -222,8 +222,11 @@ def make_clients():
 def get_channel_id(bot_client, name):
     cursor = None
     while True:
-        result = bot_client.conversations_list(
-            types="public_channel", limit=200, cursor=cursor
+        result = _slack_retry(
+            lambda c=cursor: bot_client.conversations_list(
+                types="public_channel", limit=200, cursor=c
+            ),
+            "conversations.list",
         )
         for ch in result["channels"]:
             if ch["name"] == name:
@@ -234,22 +237,16 @@ def get_channel_id(bot_client, name):
     raise Exception(f"Channel '#{name}' not found.")
 
 
-def get_users(user_client, max_retries=4):
-    """Fetch active workspace users. Retries on Slack rate limits (Tier 2:
-    ~20/min), waiting the Retry-After the API returns (bounded).
-    Raises on non-rate-limit errors so the caller sees them clearly."""
-    from slack_sdk.errors import SlackApiError
+def _slack_retry(fn, what, max_retries=4):
+    """Run a Slack API call; on 'ratelimited', honor Retry-After (bounded)
+    and retry. Non-rate-limit errors raise immediately; persistent rate
+    limits raise after max_retries so failures are loud, never silent."""
     delay = 5.0
     for attempt in range(1, max_retries + 1):
         try:
-            result = user_client.users_list()
-            users = {}
-            for u in result["members"]:
-                if not u["is_bot"] and not u["deleted"] and u["id"] != "USLACKBOT":
-                    users[u["id"]] = u.get("real_name") or u.get("name")
-            return users
+            return fn()
         except SlackApiError as e:
-            err = e.response.get("error") if hasattr(e, "response") else ""
+            err = e.response.get("error") if getattr(e, "response", None) else ""
             if err != "ratelimited" or attempt == max_retries:
                 raise
             retry_after = 0
@@ -257,24 +254,36 @@ def get_users(user_client, max_retries=4):
                 retry_after = float(e.response.headers.get("Retry-After", 0))
             except (AttributeError, TypeError, ValueError):
                 pass
-            wait = max(retry_after, delay)
-            wait = min(wait, 60)  # cap so we don't stall the whole job
-            print(f"⏳ users.list rate-limited (attempt {attempt}/{max_retries}), sleeping {wait:.0f}s")
+            wait = min(max(retry_after, delay), 60)  # cap so we don't stall CI
+            print(f"⏳ {what} rate-limited (attempt {attempt}/{max_retries}), sleeping {wait:.0f}s")
             time.sleep(wait)
             delay *= 2
 
 
+def get_users(user_client):
+    """Fetch active workspace users (rate-limit safe)."""
+    result = _slack_retry(user_client.users_list, "users.list")
+    users = {}
+    for u in result["members"]:
+        if not u["is_bot"] and not u["deleted"] and u["id"] != "USLACKBOT":
+            users[u["id"]] = u.get("real_name") or u.get("name")
+    return users
+
+
 def get_all_messages(bot_client, channel_id, oldest_ts, latest_ts):
-    """Fetch ALL messages where start <= ts < end."""
+    """Fetch ALL messages where start <= ts < end (rate-limit safe)."""
     messages = []
     cursor = None
     while True:
-        result = bot_client.conversations_history(
-            channel=channel_id,
-            oldest=str(oldest_ts),
-            latest=str(latest_ts),
-            limit=200,
-            cursor=cursor
+        result = _slack_retry(
+            lambda c=cursor: bot_client.conversations_history(
+                channel=channel_id,
+                oldest=str(oldest_ts),
+                latest=str(latest_ts),
+                limit=200,
+                cursor=c,
+            ),
+            "conversations.history",
         )
         messages.extend(result["messages"])
         cursor = result.get("response_metadata", {}).get("next_cursor")
@@ -284,18 +293,29 @@ def get_all_messages(bot_client, channel_id, oldest_ts, latest_ts):
 
 
 def get_replies(bot_client, channel_id, thread_ts, oldest_ts, latest_ts):
-    """Fetch all replies in a thread within the date window."""
+    """Fetch all replies in a thread within the date window.
+
+    Rate limits RETRY (and raise if persistent) — silently returning []
+    here would undercount comment points with no visible error. Only a
+    genuinely missing/inaccessible thread returns [].
+    """
     try:
-        result = bot_client.conversations_replies(
-            channel=channel_id,
-            ts=thread_ts,
-            oldest=str(oldest_ts),
-            latest=str(latest_ts),
-            limit=200
+        result = _slack_retry(
+            lambda: bot_client.conversations_replies(
+                channel=channel_id,
+                ts=thread_ts,
+                oldest=str(oldest_ts),
+                latest=str(latest_ts),
+                limit=200,
+            ),
+            "conversations.replies",
         )
         return result["messages"][1:]  # skip parent
-    except SlackApiError:
-        return []
+    except SlackApiError as e:
+        err = e.response.get("error") if getattr(e, "response", None) else ""
+        if err == "ratelimited":
+            raise  # exhausted retries — fail loudly, don't undercount
+        return []  # thread_not_found etc. — treat as no replies
 
 
 # ── HELPERS ────────────────────────────────────────────────────────
