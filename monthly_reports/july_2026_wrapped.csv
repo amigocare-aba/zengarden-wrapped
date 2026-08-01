@@ -1,0 +1,36 @@
+name,role,monthly_pts,bonus_tier,wk1,wk2,wk3,wk4,streak,trend,style,biggest_dimension,wellness_posts,encourage_given,connections,photos_shared,most_hyped_post,active_hour,active_label,bestie,sentiment
+Samantha Collazo,RBT,111,$50,10,17,33,51,4,Up,Pure Engager,Physical,5,7,319,9,4,15,Afternoon Vibes 🌤️,Aafia,0.35
+Jerusha Daniel,RBT,110,$50,15,14,41,40,4,Up,Pure Engager,Social,5,7,281,10,2,22,Night Owl 🦉,Samantha,0.24
+Aafia Syed,RBT,104,$50,0,3,42,59,3,Up,Pure Engager,Social,9,9,267,10,7,23,After Hours 🌙,Samantha,0.38
+Ana Plaza,RBT,88,$50,0,34,0,54,2,Up,Pure Engager,Social,0,0,239,0,0,3,After Hours 🌙,Samantha,0.35
+Razelle Abogadie,RBT,82,$50,6,20,19,37,4,Up,Engager,Environmental,8,0,273,16,2,20,Night Owl 🦉,Samantha,0.4
+Kimberly Lemus,BCBA,37,$15,1,6,10,20,4,Up,Balanced,Financial,2,14,76,11,1,22,Night Owl 🦉,Jerusha,0.27
+Melitza,RBT,35,$15,6,9,14,6,4,Steady,Pure Engager,Physical,1,6,104,1,1,13,Lunch Poster 🍽️,Samantha,0.55
+Camila Morales,BCBA,28,$15,0,6,15,7,3,Up,Pure Engager,Occupational,1,2,67,1,5,0,After Hours 🌙,Aafia,0.45
+Jessica Blanco,RBT,27,$15,3,7,3,14,4,Up,Balanced,Social,3,11,102,8,1,20,Night Owl 🦉,Samantha,0.37
+Marisol Cabrera,RBT,27,$15,0,20,0,7,2,Up,Pure Engager,Social,0,1,71,0,0,23,After Hours 🌙,Samantha,0.33
+Lizzie Maldonado,RBT,26,$15,4,10,10,2,4,Down,Pure Engager,Physical,1,0,82,3,3,20,Night Owl 🦉,Samantha,0.47
+Alex Arevalo,Leadership,20,$0,8,7,2,3,4,Down,Pure Engager,Social,0,21,71,2,11,22,Night Owl 🦉,Jerusha,0.38
+Pierre,BCBA,20,$0,1,1,9,9,4,Up,Engager,Social,0,72,74,8,3,23,After Hours 🌙,Razelle,0.24
+Nicole Burke,BCBA,16,$0,0,0,9,7,2,Up,Engager,Social,2,4,51,4,1,20,Night Owl 🦉,Aafia,0.36
+Camila Reyes,RBT,13,$0,2,3,2,6,4,Up,Balanced,Occupational,2,0,41,2,13,19,Evening Energy 🌆,Samantha,0.67
+Jennifer Leiva,RBT,12,$0,3,3,2,4,4,Up,Engager,Occupational,1,2,45,2,3,18,Evening Energy 🌆,Samantha,0.12
+Melissa Barrera,RBT,12,$0,0,3,5,4,3,Up,Balanced,Social,2,2,45,4,2,15,Afternoon Vibes 🌤️,Samantha,0.2
+Andre Perret Giesecke,BCBA,10,$0,0,8,0,2,2,Up,Pure Engager,Social,0,7,38,0,0,2,After Hours 🌙,Razelle,0.2
+LeeAnn (HR),Admin,9,$0,0,2,3,4,3,Up,Balanced,Physical,2,6,29,2,4,20,Night Owl 🦉,Razelle,0.56
+Jeffrey Nsubuga,RBT,8,$0,1,0,0,7,2,Up,Heavy Broadcaster,Occupational,2,5,17,4,1,21,Night Owl 🦉,Samantha,0.0
+Xochilt Saavedra,RBT,8,$0,2,6,0,0,2,Down,Pure Engager,Social,0,2,23,0,0,4,After Hours 🌙,Samantha,0.0
+Mimi Theodore,Leadership,7,$0,3,2,1,1,4,Down,Balanced,Physical,3,5,17,0,2,12,Lunch Poster 🍽️,Aafia,0.67
+Laura Outland,RBT,7,$0,0,0,0,7,1,Up,Pure Engager,Social,0,5,14,0,0,21,Night Owl 🦉,Samantha,1.0
+Cristabell A Harrison,RBT,7,$0,0,0,0,7,1,Up,Broadcaster,Intellectual,2,7,4,1,1,2,After Hours 🌙,Samantha,0.67
+Chellsea Garbutt,RBT,6,$0,0,0,0,6,1,Up,Heavy Broadcaster,Intellectual,1,0,0,0,0,18,Evening Energy 🌆,,0.0
+Ivanna Rodriguez,RBT,5,$0,0,0,0,5,1,Up,Balanced,Social,0,0,0,0,0,-1,,,0.0
+Zendy Wilson,BCBA,5,$0,0,0,5,0,1,Steady,Balanced,Social,0,0,0,0,0,-1,,,0.0
+Katie Rivera Salgado,RBT,4,$0,2,0,2,0,2,Down,Pure Engager,Social,0,1,13,0,0,13,Lunch Poster 🍽️,Samantha,1.0
+Tatiana Castillo,RBT,2,$0,0,0,0,2,1,Up,Pure Engager,Social,0,0,7,0,0,15,Afternoon Vibes 🌤️,Samantha,0.0
+Richard Saavedra,RBT,2,$0,0,0,0,2,1,Up,Pure Engager,Social,0,2,10,0,0,23,After Hours 🌙,Samantha,1.0
+leslie orellana-amaya,RBT,2,$0,0,0,0,2,1,Up,Pure Engager,Social,0,2,9,0,0,16,Afternoon Vibes 🌤️,Razelle,0.0
+Jamie Chavez,RBT,2,$0,0,0,0,2,1,Up,Pure Engager,Social,0,1,9,0,0,16,Afternoon Vibes 🌤️,leslie,1.0
+Emily Chesbrough,BCBA,1,$0,1,0,0,0,1,Down,Heavy Broadcaster,Social,1,0,0,5,14,14,Afternoon Vibes 🌤️,,0.0
+Iris,RBT,1,$0,0,0,1,0,1,Steady,Heavy Broadcaster,Intellectual,1,6,5,1,1,1,After Hours 🌙,Samantha,0.0
+Yolanda Rodriguez,RBT,1,$0,0,1,0,0,1,Steady,Heavy Broadcaster,Social,1,12,7,1,4,3,After Hours 🌙,Samantha,1.0
