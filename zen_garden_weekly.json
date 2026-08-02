@@ -2,7 +2,14 @@
   "month": "August 2026",
   "current_week": null,
   "date_range": "Aug 1 – Aug 1",
-  "updated_at": "2026-08-01",
+  "updated_at": "2026-08-02",
   "weeks": [],
-  "cumulative": []
+  "cumulative": [
+    {
+      "name": "Yolanda Rodriguez",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1
+    }
+  ]
 }
