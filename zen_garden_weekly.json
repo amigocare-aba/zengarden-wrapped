@@ -1,14 +1,122 @@
 {
   "month": "August 2026",
   "current_week": null,
-  "date_range": "Aug 1 – Aug 1",
-  "updated_at": "2026-08-02",
+  "date_range": "Aug 1 – Aug 8",
+  "updated_at": "2026-08-09",
   "weeks": [],
   "cumulative": [
     {
+      "name": "Jerusha Daniel",
+      "points": 46,
+      "role": "RBT",
+      "this_week": 46
+    },
+    {
+      "name": "Razelle Abogadie",
+      "points": 31,
+      "role": "RBT",
+      "this_week": 31
+    },
+    {
+      "name": "Samantha Collazo",
+      "points": 23,
+      "role": "RBT",
+      "this_week": 23
+    },
+    {
+      "name": "Alex Arevalo",
+      "points": 13,
+      "role": "Leadership",
+      "this_week": 13
+    },
+    {
+      "name": "Jessica Blanco",
+      "points": 13,
+      "role": "RBT",
+      "this_week": 13
+    },
+    {
+      "name": "Melitza",
+      "points": 12,
+      "role": "RBT",
+      "this_week": 12
+    },
+    {
+      "name": "Kimberly Lemus",
+      "points": 9,
+      "role": "BCBA",
+      "this_week": 9
+    },
+    {
+      "name": "Aafia Syed",
+      "points": 8,
+      "role": "RBT",
+      "this_week": 8
+    },
+    {
+      "name": "Ana Plaza",
+      "points": 8,
+      "role": "RBT",
+      "this_week": 8
+    },
+    {
       "name": "Yolanda Rodriguez",
+      "points": 6,
+      "role": "RBT",
+      "this_week": 5
+    },
+    {
+      "name": "Jamie Chavez",
+      "points": 6,
+      "role": "RBT",
+      "this_week": 6
+    },
+    {
+      "name": "Andre Perret Giesecke",
+      "points": 6,
+      "role": "BCBA",
+      "this_week": 6
+    },
+    {
+      "name": "Jeffrey Nsubuga",
+      "points": 4,
+      "role": "RBT",
+      "this_week": 4
+    },
+    {
+      "name": "Jennifer Leiva",
+      "points": 4,
+      "role": "RBT",
+      "this_week": 4
+    },
+    {
+      "name": "leslie orellana-amaya",
+      "points": 4,
+      "role": "RBT",
+      "this_week": 4
+    },
+    {
+      "name": "Camila Reyes",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2
+    },
+    {
+      "name": "LeeAnn (HR)",
+      "points": 1,
+      "role": "Admin",
+      "this_week": 1
+    },
+    {
+      "name": "Lizzie Maldonado",
       "points": 1,
       "role": "RBT",
+      "this_week": 1
+    },
+    {
+      "name": "Shelby Quigley",
+      "points": 1,
+      "role": "Leadership",
       "this_week": 1
     }
   ]
