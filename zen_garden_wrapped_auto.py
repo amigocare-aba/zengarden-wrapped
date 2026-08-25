@@ -334,6 +334,28 @@ def reaction_to_display(name):
     return '✨'
 
 
+# ── BONUS GRANTS ──────────────────────────────────────────────────
+# Same rules as zen_garden_weekly_auto.py: Leadership/Admin post
+# "🎁 +15 @person @person — reason" (or "bonus +15 ..."). Everyone
+# mentioned gets the amount; the grant message earns no post points.
+
+BONUS_MAX_PER_GRANT = 25
+BONUS_GRANTER_ROLES = ("Leadership", "Admin")
+_BONUS_RE = re.compile(
+    r"^\s*(?:(?:🎁|:gift:)\s*(?:bonus\b)?|bonus\b)[\s:,\-–—]*\+?\s*(\d{1,3})\b",
+    re.IGNORECASE,
+)
+
+
+def _parse_bonus_amount(text):
+    """Return the bonus amount if `text` is a grant command, else None."""
+    m = _BONUS_RE.match(text or "")
+    if not m:
+        return None
+    amt = int(m.group(1))
+    return amt if amt > 0 else None
+
+
 # ── SLACK API ─────────────────────────────────────────────────────
 def _slack_retry(fn, what, max_retries=4):
     """Run a Slack API call; on 'ratelimited', honor Retry-After (bounded)
@@ -560,7 +582,17 @@ def main():
     posts_score_inline = defaultdict(int)                  # uid -> post count for 1pt
     comments_score_inline = defaultdict(int)               # uid -> unique comment count for 2pt
     groups_score_inline = defaultdict(int)                 # uid -> group activity count for 5pt
+    bonus_pts_inline = defaultdict(int)                    # uid -> bonus points from 🎁 grants
     group_activity_threads_inline = set()                  # thread ts values
+
+    # Authorized bonus granters, matched by real name from config roles
+    granter_names = set()
+    for _role in BONUS_GRANTER_ROLES:
+        for _n in config.get("roles", {}).get(_role, []):
+            granter_names.add(_n.lower())
+
+    def is_bonus_granter(uid):
+        return users.get(uid, "").lower() in granter_names
 
     def award_pts(uid, pts, dt):
         points_inline[uid] += pts
@@ -591,7 +623,14 @@ def main():
                     for f in msg.get("files", []))
         valid_mentions = [m for m in mentions if m in users and m != uid]
 
-        if photo and len(valid_mentions) > 0:
+        bonus_amt = _parse_bonus_amount(text)
+        if bonus_amt and valid_mentions and is_bonus_granter(uid):
+            # BONUS GRANT: N pts to each mentioned person, none to granter
+            bonus_amt = min(bonus_amt, BONUS_MAX_PER_GRANT)
+            for m_uid in valid_mentions:
+                award_pts(m_uid, bonus_amt, dt)
+                bonus_pts_inline[m_uid] += bonus_amt
+        elif photo and len(valid_mentions) > 0:
             # GROUP ACTIVITY: 5 pts to poster + each tagged person
             group_activity_threads_inline.add(msg.get("ts"))
             award_pts(uid, 5, dt)
@@ -922,6 +961,7 @@ def main():
             "role": get_role(name),
             "pts": pts,
             "bonus": bonus_tier(pts),
+            "bonus_pts": bonus_pts_inline.get(uid, 0),
             "streak": streak,
             "ci": 100,
             "dim": big_dim,
@@ -2031,7 +2071,7 @@ def main():
     repo_csv = os.path.join(MONTHLY_REPORTS_DIR, csv_filename)
 
     csv_columns = [
-        "name", "role", "monthly_pts", "bonus_tier",
+        "name", "role", "monthly_pts", "bonus_tier", "bonus_pts",
         "wk1", "wk2", "wk3", "wk4",
         "streak", "trend", "style",
         "biggest_dimension", "wellness_posts",
@@ -2045,7 +2085,7 @@ def main():
             w.writerow(csv_columns)
             for p in rows:
                 w.writerow([
-                    p["name"], p["role"], p["pts"], p["bonus"],
+                    p["name"], p["role"], p["pts"], p["bonus"], p.get("bonus_pts", 0),
                     p["wk1"], p["wk2"], p["wk3"], p["wk4"],
                     p["streak"], p["trend"], p["style"],
                     p["dim"], p["wellness"],

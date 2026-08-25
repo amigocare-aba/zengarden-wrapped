@@ -318,6 +318,31 @@ def get_replies(bot_client, channel_id, thread_ts, oldest_ts, latest_ts):
         return []  # thread_not_found etc. — treat as no replies
 
 
+# ── BONUS GRANTS ───────────────────────────────────────────────────
+# Leadership/Admin can award bonus points by posting in the channel:
+#   🎁 +15 @person @person — feedback poll
+#   bonus +15 @person — reason
+# The keyword (🎁 / :gift: / "bonus") is REQUIRED so casual "+1 @name"
+# messages never trigger a grant. Everyone @-mentioned gets the amount.
+# The grant message itself earns no post/group points.
+
+BONUS_MAX_PER_GRANT = 25
+BONUS_GRANTER_ROLES = {"Leadership", "Admin"}
+_BONUS_RE = re.compile(
+    r"^\s*(?:(?:🎁|:gift:)\s*(?:bonus\b)?|bonus\b)[\s:,\-–—]*\+?\s*(\d{1,3})\b",
+    re.IGNORECASE,
+)
+
+
+def _parse_bonus_amount(text):
+    """Return the bonus amount if `text` is a grant command, else None."""
+    m = _BONUS_RE.match(text or "")
+    if not m:
+        return None
+    amt = int(m.group(1))
+    return amt if amt > 0 else None
+
+
 # ── HELPERS ────────────────────────────────────────────────────────
 
 def extract_mentions(text):
@@ -422,7 +447,7 @@ def _process_messages_for_points(bot_client, user_client, channel_name, oldest_t
 
     points = defaultdict(int)
     week_points = defaultdict(int)
-    breakdown = defaultdict(lambda: {"posts": 0, "comments": 0, "group_activities": 0})
+    breakdown = defaultdict(lambda: {"posts": 0, "comments": 0, "group_activities": 0, "bonus_pts": 0})
     group_activity_threads = set()
 
     def _in_week(ts_str):
@@ -447,6 +472,21 @@ def _process_messages_for_points(bot_client, user_client, channel_name, oldest_t
         photo = has_image(msg)
         valid_mentions = [m for m in mentions if m in users and m != uid]
         in_week = _in_week(msg.get("ts"))
+
+        # BONUS GRANT: authorized granter + keyword + amount + mentions
+        bonus_amt = _parse_bonus_amount(text)
+        if bonus_amt and valid_mentions and get_role(uid, role_map) in BONUS_GRANTER_ROLES:
+            if bonus_amt > BONUS_MAX_PER_GRANT:
+                print(f"⚠️  Bonus grant of {bonus_amt} exceeds cap — clamping to {BONUS_MAX_PER_GRANT}")
+                bonus_amt = BONUS_MAX_PER_GRANT
+            for m_uid in valid_mentions:
+                points[m_uid] += bonus_amt
+                breakdown[m_uid]["bonus_pts"] += bonus_amt
+                if in_week:
+                    week_points[m_uid] += bonus_amt
+            print(f"🎁 Bonus: +{bonus_amt} each to {len(valid_mentions)} people (granted by {users[uid]})")
+            continue  # grant message itself earns no post/group points
+
         if photo and len(valid_mentions) > 0:
             group_activity_threads.add(msg.get("ts"))
             points[uid] += 5
@@ -501,6 +541,7 @@ def _process_messages_for_points(bot_client, user_client, channel_name, oldest_t
             "posts": breakdown[uid]["posts"],
             "comments": breakdown[uid]["comments"],
             "group_activities": breakdown[uid]["group_activities"],
+            "bonus_pts": breakdown[uid]["bonus_pts"],
         })
 
     return {
@@ -598,6 +639,7 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
                 "points": s["points"],
                 "role": s["role"],
                 "this_week": s.get("week_points", 0),
+                "bonus_pts": s.get("bonus_pts", 0),
             }
             for s in scores
         ],
@@ -615,10 +657,11 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
     csv_path = os.path.join(REPORTS_DIR, csv_name)
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["name", "role", "points", "posts", "comments", "group_activities"])
+        w.writerow(["name", "role", "points", "posts", "comments", "group_activities", "bonus_pts"])
         for s in scores:
             w.writerow([s["name"], s["role"], s["points"],
-                        s["posts"], s["comments"], s["group_activities"]])
+                        s["posts"], s["comments"], s["group_activities"],
+                        s.get("bonus_pts", 0)])
     print(f"📋 CSV → {csv_path}")
 
     # Also save to Google Drive if accessible (local Mac only)
@@ -626,10 +669,11 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
         gdrive_csv = os.path.join(GDRIVE_CSV_DIR, csv_name)
         with open(gdrive_csv, "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
-            w.writerow(["name", "role", "points", "posts", "comments", "group_activities"])
+            w.writerow(["name", "role", "points", "posts", "comments", "group_activities", "bonus_pts"])
             for s in scores:
                 w.writerow([s["name"], s["role"], s["points"],
-                            s["posts"], s["comments"], s["group_activities"]])
+                            s["posts"], s["comments"], s["group_activities"],
+                            s.get("bonus_pts", 0)])
         print(f"📋 Google Drive CSV → {gdrive_csv}")
 
     # Post to Slack

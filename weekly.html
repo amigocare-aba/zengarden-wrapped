@@ -405,12 +405,18 @@ fetch('zen_garden_weekly.json?t=' + Date.now())
         thisWeekHtml = '<span style="font-size:10px;font-weight:700;color:var(--green);margin-left:4px;">+' + person.this_week + '</span>';
       }
 
+      // 🎁 chip when this person has bonus points this month
+      var bonusChip = '';
+      if (person.bonus_pts && person.bonus_pts > 0) {
+        bonusChip = '<span class="role-pill" style="background:rgba(239,159,39,0.14);color:#B8730A;margin-left:4px;" title="Bonus points">🎁 +' + person.bonus_pts + '</span>';
+      }
+
       html += '<div class="' + cls + '">'
         + '<div class="rank">' + rankDisplay + '</div>'
         + '<div class="avatar" style="background:' + bg + ';border:2px solid ' + border + ';color:' + dark + ';font-size:14px;font-weight:700;">' + initials + '</div>'
         + '<div class="info">'
         + '<div class="name">' + displayName + '</div>'
-        + '<span class="role-pill" style="background:' + rp.bg + ';color:' + rp.col + ';">' + role + '</span>'
+        + '<span class="role-pill" style="background:' + rp.bg + ';color:' + rp.col + ';">' + role + '</span>' + bonusChip
         + '</div>'
         + '<div>'
         + '<div class="points" style="color:' + dark + ';">' + person.points + thisWeekHtml + '</div>'
