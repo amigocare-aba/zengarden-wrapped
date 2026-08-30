@@ -1,6 +1,10 @@
 {
-  "last_run": "2026-08-29T18:59:10",
-  "status": "no_op",
-  "reason": "not_sunday_or_first",
-  "date": "2026-08-29"
+  "last_run": "2026-08-30T18:55:05",
+  "status": "success",
+  "action": "weekly",
+  "month": "August 2026",
+  "date_range": "Aug 1 – Aug 29",
+  "people_scored": 35,
+  "total_points": 1173,
+  "group_activities_found": 9
 }
