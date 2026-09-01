@@ -1,144 +1,221 @@
 {
-  "month": "July 2026",
-  "date_range": "Jul 1 – Jul 31",
-  "total": 72,
-  "active": 35,
-  "participation_rate": 48.6,
-  "total_pts": 855,
-  "total_payout": 340,
-  "total_posts": 92,
-  "total_comments": 435,
-  "bcba_avg": 16.71,
-  "rbt_avg": 28.08,
-  "lead_avg": 13.5,
+  "month": "August 2026",
+  "date_range": "Aug 1 – Aug 31",
+  "total": 69,
+  "active": 36,
+  "participation_rate": 52.2,
+  "total_pts": 1212,
+  "total_payout": 460,
+  "total_posts": 138,
+  "total_comments": 602,
+  "bcba_avg": 17.67,
+  "rbt_avg": 40.68,
+  "lead_avg": 26.67,
   "wk_totals": [
-    68,
-    182,
-    228,
-    377
+    186,
+    347,
+    480,
+    199
   ],
   "dim_counts": {
-    "Physical": 15,
-    "Environmental": 7,
-    "Intellectual": 7,
-    "Social": 16,
-    "Occupational": 7,
-    "Emotional": 2,
-    "Financial": 1
+    "Intellectual": 16,
+    "Environmental": 12,
+    "Physical": 25,
+    "Occupational": 12,
+    "Social": 9,
+    "Emotional": 6,
+    "Financial": 2,
+    "Spiritual": 1
   },
-  "avg_sentiment": 0.51,
+  "avg_sentiment": 0.37,
   "positive_pct": 100.0,
   "stress_flags": 0,
   "styles": {
-    "Pure Engager": 17,
-    "Engager": 4,
-    "Balanced": 8,
-    "Heavy Broadcaster": 5,
-    "Broadcaster": 1
+    "Engager": 12,
+    "Pure Engager": 12,
+    "Balanced": 6,
+    "Heavy Broadcaster": 3,
+    "Broadcaster": 3
   },
   "word_counts": [
     [
-      "looks",
-      36
-    ],
-    [
-      "good",
-      33
-    ],
-    [
       "love",
-      31
+      49
+    ],
+    [
+      "looks",
+      34
     ],
     [
       "cute",
-      22
+      29
+    ],
+    [
+      "good",
+      27
+    ],
+    [
+      "wow",
+      23
+    ],
+    [
+      "beautiful",
+      18
     ],
     [
       "fun",
-      21
+      18
     ],
     [
-      "what",
-      16
-    ],
-    [
-      "pretty",
-      15
+      "today",
+      18
     ],
     [
       "amazing",
       15
     ],
     [
-      "today",
-      14
-    ],
-    [
-      "time",
-      13
-    ],
-    [
-      "congrats",
-      12
-    ],
-    [
-      "beautiful",
-      12
-    ],
-    [
-      "nice",
-      12
-    ],
-    [
-      "wow",
-      11
-    ],
-    [
-      "out",
-      11
-    ],
-    [
-      "need",
-      11
+      "pretty",
+      15
     ],
     [
       "cool",
-      10
+      15
     ],
     [
-      "awww",
-      9
+      "what",
+      14
+    ],
+    [
+      "need",
+      13
     ],
     [
       "great",
-      9
-    ],
-    [
-      "little",
-      8
-    ],
-    [
-      "best",
-      8
+      13
     ],
     [
       "session",
-      8
+      13
+    ],
+    [
+      "guys",
+      12
+    ],
+    [
+      "awww",
+      12
+    ],
+    [
+      "out",
+      12
+    ],
+    [
+      "first",
+      11
+    ],
+    [
+      "nice",
+      11
+    ],
+    [
+      "walk",
+      11
+    ],
+    [
+      "client",
+      11
     ],
     [
       "yum",
-      8
+      11
     ],
     [
-      "yummy",
-      8
+      "zen",
+      10
     ],
     [
-      "always",
-      8
+      "thank",
+      10
     ],
     [
       "now",
+      10
+    ],
+    [
+      "down",
+      10
+    ],
+    [
+      "hope",
+      10
+    ],
+    [
+      "home",
+      10
+    ],
+    [
+      "morning",
+      10
+    ],
+    [
+      "made",
+      10
+    ],
+    [
+      "don",
+      9
+    ],
+    [
+      "definitely",
+      9
+    ],
+    [
+      "jealous",
+      9
+    ],
+    [
+      "yummm",
+      9
+    ],
+    [
+      "didn",
+      8
+    ],
+    [
+      "sky",
+      8
+    ],
+    [
+      "sure",
+      8
+    ],
+    [
+      "never",
+      8
+    ],
+    [
+      "delicious",
+      8
+    ],
+    [
+      "cutie",
+      8
+    ],
+    [
+      "during",
+      8
+    ],
+    [
+      "here",
+      8
+    ],
+    [
+      "day",
+      7
+    ],
+    [
+      "used",
       7
     ],
     [
@@ -146,222 +223,147 @@
       7
     ],
     [
-      "family",
-      7
-    ],
-    [
-      "try",
-      7
-    ],
-    [
-      "wait",
-      7
-    ],
-    [
-      "year",
-      7
-    ],
-    [
-      "morning",
-      6
-    ],
-    [
-      "nature",
-      6
-    ],
-    [
-      "girl",
-      6
-    ],
-    [
       "new",
-      6
+      7
     ],
     [
-      "let",
-      6
+      "who",
+      7
     ],
     [
-      "made",
-      6
+      "school",
+      7
     ],
     [
-      "tomatoes",
-      6
-    ],
-    [
-      "next",
-      6
-    ],
-    [
-      "doing",
-      6
-    ],
-    [
-      "hope",
-      5
-    ],
-    [
-      "game",
-      5
-    ],
-    [
-      "delicious",
-      5
-    ],
-    [
-      "guys",
-      5
-    ],
-    [
-      "walk",
-      5
-    ],
-    [
-      "getting",
-      5
-    ],
-    [
-      "never",
-      5
-    ],
-    [
-      "saw",
-      5
-    ],
-    [
-      "here",
-      5
-    ],
-    [
-      "mom",
-      5
+      "many",
+      7
     ]
   ],
   "distinctive_words": [
     [
       "what",
-      16
+      14
     ],
     [
-      "time",
+      "need",
       13
     ],
     [
-      "congrats",
+      "session",
+      13
+    ],
+    [
+      "guys",
+      12
+    ],
+    [
+      "awww",
       12
     ],
     [
       "out",
+      12
+    ],
+    [
+      "first",
       11
     ],
     [
-      "need",
+      "walk",
       11
     ],
     [
-      "awww",
-      9
+      "client",
+      11
     ],
     [
-      "little",
-      8
-    ],
-    [
-      "session",
-      8
-    ],
-    [
-      "always",
-      8
+      "zen",
+      10
     ],
     [
       "now",
-      7
+      10
     ],
     [
-      "there",
-      7
+      "down",
+      10
     ],
     [
-      "family",
-      7
-    ],
-    [
-      "try",
-      7
+      "hope",
+      10
     ]
   ],
   "signature_word": {
     "word": "what",
-    "count": 16
+    "count": 14
   },
   "top_emojis_month": [
     [
       "❤️",
-      126
+      159
     ],
     [
       "😂",
-      16
+      37
     ],
     [
       "🫶",
+      24
+    ],
+    [
+      "🫶",
+      24
+    ],
+    [
+      "🫶",
+      21
+    ],
+    [
+      "💜",
       14
-    ],
-    [
-      "😋",
-      10
-    ],
-    [
-      "🫶",
-      5
-    ],
-    [
-      "😍",
-      4
     ]
   ],
   "all_active": [
     {
-      "name": "Samantha Collazo",
+      "name": "Jerusha Daniel",
       "role": "RBT",
-      "pts": 111,
+      "pts": 127,
       "bonus": "$50",
+      "bonus_pts": 0,
       "streak": 4,
       "ci": 100,
-      "dim": "Physical",
-      "wellness": 5,
+      "dim": "Environmental",
+      "wellness": 8,
       "stress": 0,
-      "encourage": 7,
-      "conn": 319,
-      "style": "Pure Engager",
-      "trend": "Up",
-      "wk1": 10,
-      "wk2": 17,
-      "wk3": 33,
-      "wk4": 51,
-      "sentiment": 0.35,
+      "encourage": 5,
+      "conn": 320,
+      "style": "Engager",
+      "trend": "Down",
+      "wk1": 44,
+      "wk2": 50,
+      "wk3": 29,
+      "wk4": 4,
+      "sentiment": 0.21,
       "top_words": [
         [
-          "looks",
-          5
+          "yum",
+          7
         ],
         [
-          "then",
-          5
+          "fun",
+          4
         ],
         [
-          "awww",
-          5
+          "zen",
+          4
         ],
         [
           "love",
-          4
+          3
         ],
         [
-          "amazing",
-          4
+          "guys",
+          3
         ]
       ],
       "top_emojis": [],
@@ -371,220 +373,226 @@
         "✨"
       ],
       "reactions_given": [
-        "❤️"
+        "❤️",
+        "🫶"
       ],
-      "photos_shared": 9,
-      "active_hour": 15,
-      "active_label": "Afternoon Vibes 🌤️",
+      "photos_shared": 15,
+      "active_hour": 22,
+      "active_label": "Night Owl 🦉",
       "bestie": "Aafia",
-      "most_hyped": 4
+      "most_hyped": 6
     },
     {
-      "name": "Jerusha Daniel",
+      "name": "Razelle Abogadie",
       "role": "RBT",
-      "pts": 110,
+      "pts": 119,
       "bonus": "$50",
+      "bonus_pts": 0,
       "streak": 4,
       "ci": 100,
-      "dim": "Social",
-      "wellness": 5,
+      "dim": "Environmental",
+      "wellness": 7,
       "stress": 0,
-      "encourage": 7,
-      "conn": 281,
-      "style": "Pure Engager",
-      "trend": "Up",
-      "wk1": 15,
-      "wk2": 14,
-      "wk3": 41,
-      "wk4": 40,
-      "sentiment": 0.24,
+      "encourage": 4,
+      "conn": 266,
+      "style": "Engager",
+      "trend": "Down",
+      "wk1": 31,
+      "wk2": 28,
+      "wk3": 51,
+      "wk4": 9,
+      "sentiment": 0.4,
       "top_words": [
         [
-          "good",
+          "cute",
+          7
+        ],
+        [
+          "love",
           6
         ],
         [
-          "guys",
-          3
-        ],
-        [
-          "today",
-          3
+          "awww",
+          4
         ],
         [
           "pretty",
           3
         ],
         [
-          "love",
+          "delicious",
           3
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
         "❤️",
-        "💪",
-        "😍"
+        "🫶",
+        "💜"
       ],
       "reactions_given": [
         "❤️",
-        "🤣",
-        "✨"
+        "🫶",
+        "❗"
       ],
-      "photos_shared": 10,
-      "active_hour": 22,
-      "active_label": "Night Owl 🦉",
-      "bestie": "Samantha",
-      "most_hyped": 2
+      "photos_shared": 22,
+      "active_hour": 0,
+      "active_label": "After Hours 🌙",
+      "bestie": "Jerusha",
+      "most_hyped": 6
     },
     {
       "name": "Aafia Syed",
       "role": "RBT",
-      "pts": 104,
+      "pts": 114,
       "bonus": "$50",
-      "streak": 3,
+      "bonus_pts": 0,
+      "streak": 4,
       "ci": 100,
-      "dim": "Social",
-      "wellness": 9,
+      "dim": "Emotional",
+      "wellness": 10,
       "stress": 0,
-      "encourage": 9,
-      "conn": 267,
-      "style": "Pure Engager",
-      "trend": "Up",
-      "wk1": 0,
-      "wk2": 3,
-      "wk3": 42,
-      "wk4": 59,
-      "sentiment": 0.38,
+      "encourage": 4,
+      "conn": 302,
+      "style": "Engager",
+      "trend": "Down",
+      "wk1": 7,
+      "wk2": 73,
+      "wk3": 30,
+      "wk4": 4,
+      "sentiment": 0.27,
       "top_words": [
         [
           "good",
-          6
+          4
         ],
         [
-          "looks",
-          6
+          "client",
+          4
         ],
         [
-          "love",
-          5
+          "cat",
+          4
         ],
         [
           "today",
-          3
+          4
         ],
         [
-          "time",
+          "wait",
           3
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
         "❤️",
-        "😂",
+        "🫶",
         "🫶"
       ],
       "reactions_given": [
-        "❤️",
+        "🫶",
         "🙌",
-        "😍"
+        "❤️"
       ],
-      "photos_shared": 10,
-      "active_hour": 23,
-      "active_label": "After Hours 🌙",
-      "bestie": "Samantha",
-      "most_hyped": 7
+      "photos_shared": 14,
+      "active_hour": 20,
+      "active_label": "Night Owl 🦉",
+      "bestie": "Jerusha",
+      "most_hyped": 6
     },
     {
       "name": "Ana Plaza",
       "role": "RBT",
-      "pts": 88,
+      "pts": 112,
       "bonus": "$50",
-      "streak": 2,
+      "bonus_pts": 0,
+      "streak": 3,
       "ci": 100,
       "dim": "Social",
       "wellness": 0,
       "stress": 0,
       "encourage": 0,
-      "conn": 239,
+      "conn": 316,
       "style": "Pure Engager",
-      "trend": "Up",
-      "wk1": 0,
-      "wk2": 34,
-      "wk3": 0,
-      "wk4": 54,
-      "sentiment": 0.35,
+      "trend": "Down",
+      "wk1": 8,
+      "wk2": 0,
+      "wk3": 102,
+      "wk4": 2,
+      "sentiment": 0.31,
       "top_words": [
         [
           "cute",
-          5
+          7
         ],
         [
-          "nice",
-          5
+          "beautiful",
+          4
         ],
         [
-          "cool",
-          3
+          "yummm",
+          4
+        ],
+        [
+          "wow",
+          4
         ],
         [
           "looks",
-          3
-        ],
-        [
-          "good",
-          3
+          4
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
-        "❤️"
+        "❤️",
+        "😂"
       ],
       "reactions_given": [],
       "photos_shared": 0,
-      "active_hour": 3,
+      "active_hour": 1,
       "active_label": "After Hours 🌙",
-      "bestie": "Samantha",
+      "bestie": "Jerusha",
       "most_hyped": 0
     },
     {
-      "name": "Razelle Abogadie",
+      "name": "Samantha Collazo",
       "role": "RBT",
-      "pts": 82,
+      "pts": 110,
       "bonus": "$50",
+      "bonus_pts": 0,
       "streak": 4,
       "ci": 100,
-      "dim": "Environmental",
-      "wellness": 8,
+      "dim": "Physical",
+      "wellness": 6,
       "stress": 0,
-      "encourage": 0,
-      "conn": 273,
-      "style": "Engager",
-      "trend": "Up",
-      "wk1": 6,
-      "wk2": 20,
-      "wk3": 19,
-      "wk4": 37,
-      "sentiment": 0.4,
+      "encourage": 2,
+      "conn": 306,
+      "style": "Pure Engager",
+      "trend": "Down",
+      "wk1": 23,
+      "wk2": 39,
+      "wk3": 36,
+      "wk4": 12,
+      "sentiment": 0.28,
       "top_words": [
         [
-          "delicious",
-          5
+          "awww",
+          4
+        ],
+        [
+          "wow",
+          3
+        ],
+        [
+          "omgggg",
+          3
         ],
         [
           "fun",
-          5
+          3
         ],
         [
-          "love",
-          4
-        ],
-        [
-          "looks",
-          4
-        ],
-        [
-          "cool",
+          "amazing",
           3
         ]
       ],
@@ -592,266 +600,454 @@
       "top_reactions": [
         "❤️",
         "😂",
+        "✨"
+      ],
+      "reactions_given": [
+        "😂",
+        "❤️"
+      ],
+      "photos_shared": 8,
+      "active_hour": 17,
+      "active_label": "Evening Energy 🌆",
+      "bestie": "Jerusha",
+      "most_hyped": 3
+    },
+    {
+      "name": "Jessica Blanco",
+      "role": "RBT",
+      "pts": 65,
+      "bonus": "$25",
+      "bonus_pts": 0,
+      "streak": 4,
+      "ci": 100,
+      "dim": "Occupational",
+      "wellness": 4,
+      "stress": 0,
+      "encourage": 24,
+      "conn": 166,
+      "style": "Engager",
+      "trend": "Down",
+      "wk1": 11,
+      "wk2": 16,
+      "wk3": 31,
+      "wk4": 7,
+      "sentiment": 0.29,
+      "top_words": [
+        [
+          "love",
+          3
+        ],
+        [
+          "little",
+          2
+        ],
+        [
+          "during",
+          2
+        ],
+        [
+          "session",
+          2
+        ],
+        [
+          "jealous",
+          2
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️",
+        "🫶",
+        "✨"
+      ],
+      "reactions_given": [
+        "❤️",
+        "🫶",
+        "😂"
+      ],
+      "photos_shared": 11,
+      "active_hour": 22,
+      "active_label": "Night Owl 🦉",
+      "bestie": "Razelle",
+      "most_hyped": 3
+    },
+    {
+      "name": "Alex Arevalo",
+      "role": "Leadership",
+      "pts": 63,
+      "bonus": "$25",
+      "bonus_pts": 0,
+      "streak": 4,
+      "ci": 100,
+      "dim": "Physical",
+      "wellness": 3,
+      "stress": 0,
+      "encourage": 47,
+      "conn": 186,
+      "style": "Pure Engager",
+      "trend": "Up",
+      "wk1": 11,
+      "wk2": 20,
+      "wk3": 19,
+      "wk4": 13,
+      "sentiment": 0.34,
+      "top_words": [
+        [
+          "love",
+          7
+        ],
+        [
+          "there",
+          4
+        ],
+        [
+          "looks",
+          4
+        ],
+        [
+          "need",
+          4
+        ],
+        [
+          "nice",
+          4
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️",
+        "😂",
+        "🥹"
+      ],
+      "reactions_given": [
+        "🫶",
+        "❤️",
+        "😂"
+      ],
+      "photos_shared": 3,
+      "active_hour": 0,
+      "active_label": "After Hours 🌙",
+      "bestie": "Aafia",
+      "most_hyped": 7
+    },
+    {
+      "name": "Leslie Orellana-Amaya",
+      "role": "RBT",
+      "pts": 61,
+      "bonus": "$25",
+      "bonus_pts": 0,
+      "streak": 4,
+      "ci": 100,
+      "dim": "Physical",
+      "wellness": 4,
+      "stress": 0,
+      "encourage": 1,
+      "conn": 172,
+      "style": "Pure Engager",
+      "trend": "Up",
+      "wk1": 4,
+      "wk2": 2,
+      "wk3": 47,
+      "wk4": 8,
+      "sentiment": 0.15,
+      "top_words": [
+        [
+          "walk",
+          4
+        ],
+        [
+          "love",
+          2
+        ],
+        [
+          "yummm",
+          2
+        ],
+        [
+          "cute",
+          2
+        ],
+        [
+          "yummy",
+          2
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️",
+        "🌿",
+        "🙌"
+      ],
+      "reactions_given": [
+        "❤️"
+      ],
+      "photos_shared": 6,
+      "active_hour": 2,
+      "active_label": "After Hours 🌙",
+      "bestie": "Ana",
+      "most_hyped": 3
+    },
+    {
+      "name": "Yolanda Rodriguez",
+      "role": "RBT",
+      "pts": 56,
+      "bonus": "$25",
+      "bonus_pts": 0,
+      "streak": 4,
+      "ci": 100,
+      "dim": "Physical",
+      "wellness": 6,
+      "stress": 0,
+      "encourage": 61,
+      "conn": 176,
+      "style": "Engager",
+      "trend": "Up",
+      "wk1": 6,
+      "wk2": 23,
+      "wk3": 15,
+      "wk4": 12,
+      "sentiment": 0.34,
+      "top_words": [
+        [
+          "good",
+          5
+        ],
+        [
+          "love",
+          5
+        ],
+        [
+          "cute",
+          4
+        ],
+        [
+          "went",
+          3
+        ],
+        [
+          "yasss",
+          2
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️",
+        "🫶",
         "🫶"
       ],
-      "reactions_given": [],
-      "photos_shared": 16,
+      "reactions_given": [
+        "❤️",
+        "🫶",
+        "💜"
+      ],
+      "photos_shared": 13,
       "active_hour": 20,
       "active_label": "Night Owl 🦉",
-      "bestie": "Samantha",
+      "bestie": "Jerusha",
       "most_hyped": 2
+    },
+    {
+      "name": "Jamie Chavez",
+      "role": "RBT",
+      "pts": 55,
+      "bonus": "$25",
+      "bonus_pts": 0,
+      "streak": 4,
+      "ci": 100,
+      "dim": "Intellectual",
+      "wellness": 8,
+      "stress": 0,
+      "encourage": 6,
+      "conn": 158,
+      "style": "Engager",
+      "trend": "Up",
+      "wk1": 6,
+      "wk2": 5,
+      "wk3": 21,
+      "wk4": 23,
+      "sentiment": 0.33,
+      "top_words": [
+        [
+          "love",
+          8
+        ],
+        [
+          "wow",
+          3
+        ],
+        [
+          "walk",
+          3
+        ],
+        [
+          "sister",
+          3
+        ],
+        [
+          "session",
+          3
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "💜",
+        "🫶",
+        "🫶"
+      ],
+      "reactions_given": [
+        "❤️",
+        "🫶",
+        "😆"
+      ],
+      "photos_shared": 7,
+      "active_hour": 10,
+      "active_label": "Morning Person ☀️",
+      "bestie": "Samantha",
+      "most_hyped": 5
+    },
+    {
+      "name": "Melitza",
+      "role": "RBT",
+      "pts": 50,
+      "bonus": "$25",
+      "bonus_pts": 0,
+      "streak": 4,
+      "ci": 100,
+      "dim": "Social",
+      "wellness": 0,
+      "stress": 0,
+      "encourage": 2,
+      "conn": 144,
+      "style": "Pure Engager",
+      "trend": "Down",
+      "wk1": 10,
+      "wk2": 16,
+      "wk3": 16,
+      "wk4": 8,
+      "sentiment": 0.44,
+      "top_words": [
+        [
+          "looks",
+          7
+        ],
+        [
+          "wow",
+          5
+        ],
+        [
+          "good",
+          3
+        ],
+        [
+          "cool",
+          2
+        ],
+        [
+          "peaceful",
+          2
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️",
+        "💜"
+      ],
+      "reactions_given": [
+        "🫶",
+        "❤️"
+      ],
+      "photos_shared": 0,
+      "active_hour": 21,
+      "active_label": "Night Owl 🦉",
+      "bestie": "Jerusha",
+      "most_hyped": 0
+    },
+    {
+      "name": "Pierre",
+      "role": "BCBA",
+      "pts": 38,
+      "bonus": "$15",
+      "bonus_pts": 0,
+      "streak": 3,
+      "ci": 100,
+      "dim": "Environmental",
+      "wellness": 1,
+      "stress": 0,
+      "encourage": 151,
+      "conn": 89,
+      "style": "Balanced",
+      "trend": "Up",
+      "wk1": 0,
+      "wk2": 15,
+      "wk3": 10,
+      "wk4": 13,
+      "sentiment": 0.08,
+      "top_words": [
+        [
+          "preference",
+          2
+        ],
+        [
+          "gummy",
+          2
+        ],
+        [
+          "bears",
+          2
+        ],
+        [
+          "cool",
+          2
+        ],
+        [
+          "wink",
+          2
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️",
+        "🫶",
+        "🫶"
+      ],
+      "reactions_given": [
+        "❤️",
+        "🫶",
+        "😂"
+      ],
+      "photos_shared": 17,
+      "active_hour": 0,
+      "active_label": "After Hours 🌙",
+      "bestie": "Samantha",
+      "most_hyped": 6
     },
     {
       "name": "Kimberly Lemus",
       "role": "BCBA",
       "pts": 37,
       "bonus": "$15",
-      "streak": 4,
-      "ci": 100,
-      "dim": "Financial",
-      "wellness": 2,
-      "stress": 0,
-      "encourage": 14,
-      "conn": 76,
-      "style": "Balanced",
-      "trend": "Up",
-      "wk1": 1,
-      "wk2": 6,
-      "wk3": 10,
-      "wk4": 20,
-      "sentiment": 0.27,
-      "top_words": [
-        [
-          "app",
-          2
-        ],
-        [
-          "sam",
-          2
-        ],
-        [
-          "fun",
-          2
-        ],
-        [
-          "yum",
-          2
-        ],
-        [
-          "wanted",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "❤️",
-        "😋",
-        "😂"
-      ],
-      "reactions_given": [
-        "❤️",
-        "😋",
-        "😍"
-      ],
-      "photos_shared": 11,
-      "active_hour": 22,
-      "active_label": "Night Owl 🦉",
-      "bestie": "Jerusha",
-      "most_hyped": 1
-    },
-    {
-      "name": "Melitza",
-      "role": "RBT",
-      "pts": 35,
-      "bonus": "$15",
+      "bonus_pts": 0,
       "streak": 4,
       "ci": 100,
       "dim": "Physical",
-      "wellness": 1,
+      "wellness": 2,
       "stress": 0,
-      "encourage": 6,
-      "conn": 104,
-      "style": "Pure Engager",
-      "trend": "Steady",
-      "wk1": 6,
+      "encourage": 12,
+      "conn": 121,
+      "style": "Engager",
+      "trend": "Down",
+      "wk1": 9,
       "wk2": 9,
-      "wk3": 14,
-      "wk4": 6,
-      "sentiment": 0.55,
+      "wk3": 16,
+      "wk4": 3,
+      "sentiment": 0.29,
       "top_words": [
         [
-          "good",
+          "love",
           4
         ],
         [
-          "looks",
-          3
-        ],
-        [
-          "love",
-          2
-        ],
-        [
-          "beautiful",
-          2
-        ],
-        [
-          "pretty",
-          2
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "💅"
-      ],
-      "reactions_given": [
-        "❤️"
-      ],
-      "photos_shared": 1,
-      "active_hour": 13,
-      "active_label": "Lunch Poster 🍽️",
-      "bestie": "Samantha",
-      "most_hyped": 1
-    },
-    {
-      "name": "Camila Morales",
-      "role": "BCBA",
-      "pts": 28,
-      "bonus": "$15",
-      "streak": 3,
-      "ci": 100,
-      "dim": "Occupational",
-      "wellness": 1,
-      "stress": 0,
-      "encourage": 2,
-      "conn": 67,
-      "style": "Pure Engager",
-      "trend": "Up",
-      "wk1": 0,
-      "wk2": 6,
-      "wk3": 15,
-      "wk4": 7,
-      "sentiment": 0.45,
-      "top_words": [
-        [
-          "congrats",
-          2
-        ],
-        [
-          "missed",
-          1
-        ],
-        [
-          "pretty",
-          1
-        ],
-        [
-          "butterfly",
-          1
-        ],
-        [
-          "pointed",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "❤️",
-        "🫶"
-      ],
-      "reactions_given": [
-        "❤️",
-        "🤣"
-      ],
-      "photos_shared": 1,
-      "active_hour": 0,
-      "active_label": "After Hours 🌙",
-      "bestie": "Aafia",
-      "most_hyped": 5
-    },
-    {
-      "name": "Jessica Blanco",
-      "role": "RBT",
-      "pts": 27,
-      "bonus": "$15",
-      "streak": 4,
-      "ci": 100,
-      "dim": "Social",
-      "wellness": 3,
-      "stress": 0,
-      "encourage": 11,
-      "conn": 102,
-      "style": "Balanced",
-      "trend": "Up",
-      "wk1": 3,
-      "wk2": 7,
-      "wk3": 3,
-      "wk4": 14,
-      "sentiment": 0.37,
-      "top_words": [
-        [
-          "congrats",
-          2
-        ],
-        [
-          "house",
-          2
-        ],
-        [
-          "love",
-          2
-        ],
-        [
-          "time",
-          2
-        ],
-        [
-          "game",
-          2
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "❤️",
-        "😋",
-        "🫶"
-      ],
-      "reactions_given": [
-        "❤️",
-        "😂"
-      ],
-      "photos_shared": 8,
-      "active_hour": 20,
-      "active_label": "Night Owl 🦉",
-      "bestie": "Samantha",
-      "most_hyped": 1
-    },
-    {
-      "name": "Marisol Cabrera",
-      "role": "RBT",
-      "pts": 27,
-      "bonus": "$15",
-      "streak": 2,
-      "ci": 100,
-      "dim": "Social",
-      "wellness": 0,
-      "stress": 0,
-      "encourage": 1,
-      "conn": 71,
-      "style": "Pure Engager",
-      "trend": "Up",
-      "wk1": 0,
-      "wk2": 20,
-      "wk3": 0,
-      "wk4": 7,
-      "sentiment": 0.33,
-      "top_words": [
-        [
-          "literally",
-          3
-        ],
-        [
-          "freaking",
+          "after",
           2
         ],
         [
@@ -859,104 +1055,223 @@
           2
         ],
         [
-          "tag",
-          1
-        ],
-        [
-          "there",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "😆",
-        "❤️"
-      ],
-      "reactions_given": [
-        "❤️"
-      ],
-      "photos_shared": 0,
-      "active_hour": 23,
-      "active_label": "After Hours 🌙",
-      "bestie": "Samantha",
-      "most_hyped": 0
-    },
-    {
-      "name": "Lizzie Maldonado",
-      "role": "RBT",
-      "pts": 26,
-      "bonus": "$15",
-      "streak": 4,
-      "ci": 100,
-      "dim": "Physical",
-      "wellness": 1,
-      "stress": 0,
-      "encourage": 0,
-      "conn": 82,
-      "style": "Pure Engager",
-      "trend": "Down",
-      "wk1": 4,
-      "wk2": 10,
-      "wk3": 10,
-      "wk4": 2,
-      "sentiment": 0.47,
-      "top_words": [
-        [
-          "good",
-          3
-        ],
-        [
-          "looks",
+          "guy",
           2
         ],
         [
-          "cute",
-          1
-        ],
-        [
-          "yesterdays",
-          1
-        ],
-        [
-          "activities",
+          "variety",
           1
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
         "❤️",
-        "😍",
-        "🫶"
+        "😂",
+        "🤤"
       ],
-      "reactions_given": [],
-      "photos_shared": 3,
-      "active_hour": 20,
-      "active_label": "Night Owl 🦉",
-      "bestie": "Samantha",
+      "reactions_given": [
+        "😂",
+        "😋",
+        "❤️"
+      ],
+      "photos_shared": 6,
+      "active_hour": 1,
+      "active_label": "After Hours 🌙",
+      "bestie": "Jerusha",
       "most_hyped": 3
     },
     {
-      "name": "Alex Arevalo",
-      "role": "Leadership",
-      "pts": 20,
-      "bonus": "$0",
-      "streak": 4,
+      "name": "Marisol Cabrera",
+      "role": "RBT",
+      "pts": 36,
+      "bonus": "$15",
+      "bonus_pts": 0,
+      "streak": 2,
       "ci": 100,
       "dim": "Social",
       "wellness": 0,
       "stress": 0,
-      "encourage": 21,
-      "conn": 71,
+      "encourage": 1,
+      "conn": 57,
       "style": "Pure Engager",
-      "trend": "Down",
-      "wk1": 8,
-      "wk2": 7,
-      "wk3": 2,
-      "wk4": 3,
-      "sentiment": 0.38,
+      "trend": "Up",
+      "wk1": 0,
+      "wk2": 0,
+      "wk3": 4,
+      "wk4": 32,
+      "sentiment": 0.16,
       "top_words": [
         [
-          "today",
+          "definitely",
+          3
+        ],
+        [
+          "planning",
+          2
+        ],
+        [
+          "motivation",
+          1
+        ],
+        [
+          "needed",
+          1
+        ],
+        [
+          "yesss",
+          1
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️",
+        "💜",
+        "👍"
+      ],
+      "reactions_given": [
+        "✨"
+      ],
+      "photos_shared": 0,
+      "active_hour": 23,
+      "active_label": "After Hours 🌙",
+      "bestie": "Lizzie",
+      "most_hyped": 0
+    },
+    {
+      "name": "Lizzie Maldonado",
+      "role": "RBT",
+      "pts": 35,
+      "bonus": "$15",
+      "bonus_pts": 0,
+      "streak": 4,
+      "ci": 100,
+      "dim": "Physical",
+      "wellness": 4,
+      "stress": 0,
+      "encourage": 0,
+      "conn": 102,
+      "style": "Engager",
+      "trend": "Up",
+      "wk1": 1,
+      "wk2": 10,
+      "wk3": 11,
+      "wk4": 13,
+      "sentiment": 0.22,
+      "top_words": [
+        [
+          "finally",
+          2
+        ],
+        [
+          "morning",
+          2
+        ],
+        [
+          "good",
+          2
+        ],
+        [
+          "fish",
+          2
+        ],
+        [
+          "looks",
+          2
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️",
+        "💪",
+        "💪"
+      ],
+      "reactions_given": [],
+      "photos_shared": 4,
+      "active_hour": 14,
+      "active_label": "Afternoon Vibes 🌤️",
+      "bestie": "Ana",
+      "most_hyped": 3
+    },
+    {
+      "name": "Jennifer Leiva",
+      "role": "RBT",
+      "pts": 21,
+      "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 4,
+      "ci": 100,
+      "dim": "Physical",
+      "wellness": 1,
+      "stress": 0,
+      "encourage": 1,
+      "conn": 83,
+      "style": "Engager",
+      "trend": "Steady",
+      "wk1": 4,
+      "wk2": 6,
+      "wk3": 7,
+      "wk4": 4,
+      "sentiment": 0.0,
+      "top_words": [
+        [
+          "soo",
+          2
+        ],
+        [
+          "many",
+          2
+        ],
+        [
+          "woo",
+          1
+        ],
+        [
+          "whooo",
+          1
+        ],
+        [
+          "goodies",
+          1
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️",
+        "✨",
+        "😂"
+      ],
+      "reactions_given": [
+        "❤️"
+      ],
+      "photos_shared": 2,
+      "active_hour": 0,
+      "active_label": "After Hours 🌙",
+      "bestie": "Leslie",
+      "most_hyped": 4
+    },
+    {
+      "name": "Nicole Burke",
+      "role": "BCBA",
+      "pts": 15,
+      "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 3,
+      "ci": 100,
+      "dim": "Physical",
+      "wellness": 2,
+      "stress": 0,
+      "encourage": 5,
+      "conn": 65,
+      "style": "Balanced",
+      "trend": "Up",
+      "wk1": 0,
+      "wk2": 8,
+      "wk3": 4,
+      "wk4": 3,
+      "sentiment": 0.33,
+      "top_words": [
+        [
+          "benefit",
           2
         ],
         [
@@ -964,740 +1279,511 @@
           2
         ],
         [
-          "let",
+          "doctor",
           2
         ],
         [
-          "love",
+          "over",
           2
         ],
         [
-          "rooting",
+          "barbacoa",
           2
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
         "❤️",
-        "🤣",
-        "✨"
+        "🫶",
+        "🫶"
       ],
       "reactions_given": [
         "🫶",
         "❤️",
-        "👀"
+        "🤌"
       ],
-      "photos_shared": 2,
-      "active_hour": 22,
-      "active_label": "Night Owl 🦉",
-      "bestie": "Jerusha",
-      "most_hyped": 11
+      "photos_shared": 5,
+      "active_hour": 14,
+      "active_label": "Afternoon Vibes 🌤️",
+      "bestie": "Ana",
+      "most_hyped": 9
     },
     {
-      "name": "Pierre",
-      "role": "BCBA",
-      "pts": 20,
+      "name": "Richard Saavedra",
+      "role": "RBT",
+      "pts": 12,
       "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 3,
+      "ci": 100,
+      "dim": "Social",
+      "wellness": 0,
+      "stress": 0,
+      "encourage": 0,
+      "conn": 12,
+      "style": "Engager",
+      "trend": "Up",
+      "wk1": 0,
+      "wk2": 5,
+      "wk3": 5,
+      "wk4": 2,
+      "sentiment": 0.5,
+      "top_words": [
+        [
+          "great",
+          1
+        ],
+        [
+          "tracks",
+          1
+        ],
+        [
+          "cute",
+          1
+        ],
+        [
+          "zened",
+          1
+        ],
+        [
+          "mexico",
+          1
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "❤️"
+      ],
+      "reactions_given": [],
+      "photos_shared": 1,
+      "active_hour": 15,
+      "active_label": "Afternoon Vibes 🌤️",
+      "bestie": "Samantha",
+      "most_hyped": 4
+    },
+    {
+      "name": "Jeffrey Nsubuga",
+      "role": "RBT",
+      "pts": 12,
+      "bonus": "$0",
+      "bonus_pts": 0,
       "streak": 4,
       "ci": 100,
       "dim": "Social",
       "wellness": 0,
       "stress": 0,
-      "encourage": 72,
-      "conn": 74,
-      "style": "Engager",
-      "trend": "Up",
-      "wk1": 1,
+      "encourage": 4,
+      "conn": 28,
+      "style": "Heavy Broadcaster",
+      "trend": "Steady",
+      "wk1": 4,
       "wk2": 1,
-      "wk3": 9,
-      "wk4": 9,
-      "sentiment": 0.24,
+      "wk3": 3,
+      "wk4": 4,
+      "sentiment": 0.0,
       "top_words": [
         [
-          "guli",
-          5
-        ],
-        [
-          "tomatoes",
+          "landscape",
           4
         ],
         [
-          "year",
-          4
-        ],
-        [
-          "always",
+          "tobit",
           3
         ],
         [
-          "herbs",
-          3
+          "domenichino",
+          2
+        ],
+        [
+          "tobias",
+          2
+        ],
+        [
+          "book",
+          2
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
         "❤️",
-        "😋",
-        "🫶"
+        "✨",
+        "💪"
       ],
       "reactions_given": [
-        "❤️",
-        "😂",
-        "😋"
+        "👍",
+        "❤️"
       ],
-      "photos_shared": 8,
-      "active_hour": 23,
+      "photos_shared": 9,
+      "active_hour": 2,
       "active_label": "After Hours 🌙",
       "bestie": "Razelle",
-      "most_hyped": 3
+      "most_hyped": 2
     },
     {
-      "name": "Nicole Burke",
-      "role": "BCBA",
-      "pts": 16,
+      "name": "Mimi Theodore",
+      "role": "Leadership",
+      "pts": 11,
       "bonus": "$0",
-      "streak": 2,
+      "bonus_pts": 0,
+      "streak": 3,
       "ci": 100,
-      "dim": "Social",
-      "wellness": 2,
+      "dim": "Financial",
+      "wellness": 1,
       "stress": 0,
-      "encourage": 4,
-      "conn": 51,
-      "style": "Engager",
+      "encourage": 8,
+      "conn": 27,
+      "style": "Pure Engager",
       "trend": "Up",
       "wk1": 0,
-      "wk2": 0,
-      "wk3": 9,
-      "wk4": 7,
-      "sentiment": 0.36,
+      "wk2": 4,
+      "wk3": 2,
+      "wk4": 5,
+      "sentiment": 0.43,
       "top_words": [
         [
-          "what",
-          2
+          "need",
+          3
         ],
         [
           "great",
           2
         ],
         [
-          "thats",
+          "books",
           2
         ],
         [
-          "vodka",
+          "don",
           2
         ],
         [
-          "made",
-          2
+          "shoutout",
+          1
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
-        "😋",
+        "❤️"
+      ],
+      "reactions_given": [
         "🫶",
-        "❤️"
-      ],
-      "reactions_given": [
-        "😂",
-        "❤️"
-      ],
-      "photos_shared": 4,
-      "active_hour": 20,
-      "active_label": "Night Owl 🦉",
-      "bestie": "Aafia",
-      "most_hyped": 1
-    },
-    {
-      "name": "Camila Reyes",
-      "role": "RBT",
-      "pts": 13,
-      "bonus": "$0",
-      "streak": 4,
-      "ci": 100,
-      "dim": "Occupational",
-      "wellness": 2,
-      "stress": 0,
-      "encourage": 0,
-      "conn": 41,
-      "style": "Balanced",
-      "trend": "Up",
-      "wk1": 2,
-      "wk2": 3,
-      "wk3": 2,
-      "wk4": 6,
-      "sentiment": 0.67,
-      "top_words": [
-        [
-          "looks",
-          2
-        ],
-        [
-          "yummy",
-          2
-        ],
-        [
-          "saw",
-          1
-        ],
-        [
-          "park",
-          1
-        ],
-        [
-          "during",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
         "❤️",
-        "🚀"
+        "🥹"
       ],
-      "reactions_given": [],
-      "photos_shared": 2,
-      "active_hour": 19,
-      "active_label": "Evening Energy 🌆",
-      "bestie": "Samantha",
-      "most_hyped": 13
-    },
-    {
-      "name": "Jennifer Leiva",
-      "role": "RBT",
-      "pts": 12,
-      "bonus": "$0",
-      "streak": 4,
-      "ci": 100,
-      "dim": "Occupational",
-      "wellness": 1,
-      "stress": 0,
-      "encourage": 2,
-      "conn": 45,
-      "style": "Engager",
-      "trend": "Up",
-      "wk1": 3,
-      "wk2": 3,
-      "wk3": 2,
-      "wk4": 4,
-      "sentiment": 0.12,
-      "top_words": [
-        [
-          "awwww",
-          1
-        ],
-        [
-          "yessss",
-          1
-        ],
-        [
-          "oooooooo",
-          1
-        ],
-        [
-          "minions",
-          1
-        ],
-        [
-          "monsters",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "❤️",
-        "🫶",
-        "✨"
-      ],
-      "reactions_given": [
-        "❤️",
-        "😆"
-      ],
-      "photos_shared": 2,
-      "active_hour": 18,
-      "active_label": "Evening Energy 🌆",
-      "bestie": "Samantha",
-      "most_hyped": 3
-    },
-    {
-      "name": "Melissa Barrera",
-      "role": "RBT",
-      "pts": 12,
-      "bonus": "$0",
-      "streak": 3,
-      "ci": 100,
-      "dim": "Social",
-      "wellness": 2,
-      "stress": 0,
-      "encourage": 2,
-      "conn": 45,
-      "style": "Balanced",
-      "trend": "Up",
-      "wk1": 0,
-      "wk2": 3,
-      "wk3": 5,
-      "wk4": 4,
-      "sentiment": 0.2,
-      "top_words": [
-        [
-          "until",
-          2
-        ],
-        [
-          "out",
-          2
-        ],
-        [
-          "imagined",
-          1
-        ],
-        [
-          "stepping",
-          1
-        ],
-        [
-          "cute",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "😋",
-        "❤️",
-        "😂"
-      ],
-      "reactions_given": [
-        "❤️"
-      ],
-      "photos_shared": 4,
+      "photos_shared": 0,
       "active_hour": 15,
       "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Samantha",
+      "bestie": "Pierre",
       "most_hyped": 2
     },
     {
       "name": "Andre Perret Giesecke",
       "role": "BCBA",
-      "pts": 10,
+      "pts": 9,
       "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 4,
+      "ci": 100,
+      "dim": "Intellectual",
+      "wellness": 1,
+      "stress": 0,
+      "encourage": 10,
+      "conn": 12,
+      "style": "Engager",
+      "trend": "Down",
+      "wk1": 4,
+      "wk2": 2,
+      "wk3": 2,
+      "wk4": 1,
+      "sentiment": 0.6,
+      "top_words": [
+        [
+          "good",
+          2
+        ],
+        [
+          "monday",
+          1
+        ],
+        [
+          "vibes",
+          1
+        ],
+        [
+          "music",
+          1
+        ],
+        [
+          "track",
+          1
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "✨",
+        "❤️"
+      ],
+      "reactions_given": [
+        "❤️",
+        "🫶",
+        "😂"
+      ],
+      "photos_shared": 1,
+      "active_hour": 21,
+      "active_label": "Night Owl 🦉",
+      "bestie": "Jerusha",
+      "most_hyped": 2
+    },
+    {
+      "name": "Ivanna Rodriguez",
+      "role": "RBT",
+      "pts": 7,
+      "bonus": "$0",
+      "bonus_pts": 0,
       "streak": 2,
       "ci": 100,
       "dim": "Social",
       "wellness": 0,
       "stress": 0,
-      "encourage": 7,
-      "conn": 38,
+      "encourage": 0,
+      "conn": 7,
       "style": "Pure Engager",
-      "trend": "Up",
+      "trend": "Steady",
       "wk1": 0,
-      "wk2": 8,
-      "wk3": 0,
-      "wk4": 2,
-      "sentiment": 0.2,
+      "wk2": 2,
+      "wk3": 5,
+      "wk4": 0,
+      "sentiment": 0.0,
       "top_words": [
         [
-          "france",
-          2
-        ],
-        [
-          "logo",
-          2
-        ],
-        [
-          "indeed",
-          1
-        ],
-        [
-          "morocco",
-          1
-        ],
-        [
-          "hakimi",
+          "down",
           1
         ]
       ],
       "top_emojis": [],
       "top_reactions": [],
-      "reactions_given": [
-        "❤️",
-        "😂",
-        "🚀"
-      ],
+      "reactions_given": [],
       "photos_shared": 0,
-      "active_hour": 2,
-      "active_label": "After Hours 🌙",
-      "bestie": "Razelle",
+      "active_hour": 18,
+      "active_label": "Evening Energy 🌆",
+      "bestie": "Alex",
       "most_hyped": 0
     },
     {
       "name": "LeeAnn (HR)",
       "role": "Admin",
-      "pts": 9,
+      "pts": 7,
       "bonus": "$0",
-      "streak": 3,
+      "bonus_pts": 0,
+      "streak": 2,
       "ci": 100,
-      "dim": "Physical",
-      "wellness": 2,
+      "dim": "Social",
+      "wellness": 5,
       "stress": 0,
       "encourage": 6,
-      "conn": 29,
-      "style": "Balanced",
-      "trend": "Up",
-      "wk1": 0,
-      "wk2": 2,
-      "wk3": 3,
-      "wk4": 4,
-      "sentiment": 0.56,
-      "top_words": [
-        [
-          "love",
-          2
-        ],
-        [
-          "new",
-          2
-        ],
-        [
-          "ooo",
-          1
-        ],
-        [
-          "yummy",
-          1
-        ],
-        [
-          "best",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "✨",
-        "❤️",
-        "🌸"
-      ],
-      "reactions_given": [
-        "❤️",
-        "✨",
-        "🫶"
-      ],
-      "photos_shared": 2,
-      "active_hour": 20,
-      "active_label": "Night Owl 🦉",
-      "bestie": "Razelle",
-      "most_hyped": 4
-    },
-    {
-      "name": "Jeffrey Nsubuga",
-      "role": "RBT",
-      "pts": 8,
-      "bonus": "$0",
-      "streak": 2,
-      "ci": 100,
-      "dim": "Occupational",
-      "wellness": 2,
-      "stress": 0,
-      "encourage": 5,
-      "conn": 17,
+      "conn": 31,
       "style": "Heavy Broadcaster",
       "trend": "Up",
-      "wk1": 1,
-      "wk2": 0,
-      "wk3": 0,
-      "wk4": 7,
-      "sentiment": 0.0,
-      "top_words": [
-        [
-          "georgia",
-          2
-        ],
-        [
-          "keefe",
-          2
-        ],
-        [
-          "today",
-          1
-        ],
-        [
-          "session",
-          1
-        ],
-        [
-          "including",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "👏",
-        "✨"
-      ],
-      "reactions_given": [
-        "❤️",
-        "😆"
-      ],
-      "photos_shared": 4,
-      "active_hour": 21,
-      "active_label": "Night Owl 🦉",
-      "bestie": "Samantha",
-      "most_hyped": 1
-    },
-    {
-      "name": "Xochilt Saavedra",
-      "role": "RBT",
-      "pts": 8,
-      "bonus": "$0",
-      "streak": 2,
-      "ci": 100,
-      "dim": "Social",
-      "wellness": 0,
-      "stress": 0,
-      "encourage": 2,
-      "conn": 23,
-      "style": "Pure Engager",
-      "trend": "Down",
-      "wk1": 2,
-      "wk2": 6,
-      "wk3": 0,
-      "wk4": 0,
-      "sentiment": 0.0,
-      "top_words": [
-        [
-          "yea",
-          1
-        ],
-        [
-          "gloomy",
-          1
-        ],
-        [
-          "today",
-          1
-        ],
-        [
-          "wait",
-          1
-        ],
-        [
-          "real",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [],
-      "reactions_given": [
-        "❤️"
-      ],
-      "photos_shared": 0,
-      "active_hour": 4,
-      "active_label": "After Hours 🌙",
-      "bestie": "Samantha",
-      "most_hyped": 0
-    },
-    {
-      "name": "Mimi Theodore",
-      "role": "Leadership",
-      "pts": 7,
-      "bonus": "$0",
-      "streak": 4,
-      "ci": 100,
-      "dim": "Physical",
-      "wellness": 3,
-      "stress": 0,
-      "encourage": 5,
-      "conn": 17,
-      "style": "Balanced",
-      "trend": "Down",
-      "wk1": 3,
-      "wk2": 2,
-      "wk3": 1,
-      "wk4": 1,
-      "sentiment": 0.67,
-      "top_words": [
-        [
-          "little",
-          2
-        ],
-        [
-          "planters",
-          2
-        ],
-        [
-          "what",
-          2
-        ],
-        [
-          "love",
-          2
-        ],
-        [
-          "tips",
-          2
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "❤️",
-        "🙌",
-        "🌱"
-      ],
-      "reactions_given": [
-        "❤️"
-      ],
-      "photos_shared": 0,
-      "active_hour": 12,
-      "active_label": "Lunch Poster 🍽️",
-      "bestie": "Aafia",
-      "most_hyped": 2
-    },
-    {
-      "name": "Laura Outland",
-      "role": "RBT",
-      "pts": 7,
-      "bonus": "$0",
-      "streak": 1,
-      "ci": 100,
-      "dim": "Social",
-      "wellness": 0,
-      "stress": 0,
-      "encourage": 5,
-      "conn": 14,
-      "style": "Pure Engager",
-      "trend": "Up",
       "wk1": 0,
-      "wk2": 0,
+      "wk2": 3,
       "wk3": 0,
-      "wk4": 7,
-      "sentiment": 1.0,
+      "wk4": 4,
+      "sentiment": 0.29,
       "top_words": [
         [
-          "spotted",
-          1
+          "amazing",
+          2
         ],
         [
-          "second",
-          1
+          "night",
+          2
         ],
         [
-          "trio",
+          "boys",
+          2
+        ],
+        [
+          "hear",
           1
         ],
         [
           "thank",
           1
-        ],
-        [
-          "pardon",
-          1
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [],
-      "reactions_given": [
-        "❤️",
-        "😂"
-      ],
-      "photos_shared": 0,
-      "active_hour": 21,
-      "active_label": "Night Owl 🦉",
-      "bestie": "Samantha",
-      "most_hyped": 0
-    },
-    {
-      "name": "Cristabell A Harrison",
-      "role": "RBT",
-      "pts": 7,
-      "bonus": "$0",
-      "streak": 1,
-      "ci": 100,
-      "dim": "Intellectual",
-      "wellness": 2,
-      "stress": 0,
-      "encourage": 7,
-      "conn": 4,
-      "style": "Broadcaster",
-      "trend": "Up",
-      "wk1": 0,
-      "wk2": 0,
-      "wk3": 0,
-      "wk4": 7,
-      "sentiment": 0.67,
-      "top_words": [
-        [
-          "duplo",
-          3
-        ],
-        [
-          "lego",
-          2
-        ],
-        [
-          "building",
-          2
-        ],
-        [
-          "always",
-          2
-        ],
-        [
-          "win",
-          2
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
-        "❤️"
-      ],
-      "reactions_given": [
+        "😋",
         "❤️",
         "🫶"
       ],
-      "photos_shared": 1,
-      "active_hour": 2,
-      "active_label": "After Hours 🌙",
-      "bestie": "Samantha",
-      "most_hyped": 1
+      "reactions_given": [
+        "🫶",
+        "❤️",
+        "🤩"
+      ],
+      "photos_shared": 5,
+      "active_hour": 21,
+      "active_label": "Night Owl 🦉",
+      "bestie": "Ana",
+      "most_hyped": 4
     },
     {
-      "name": "Chellsea Garbutt",
-      "role": "RBT",
+      "name": "Shelby Quigley",
+      "role": "Leadership",
       "pts": 6,
       "bonus": "$0",
-      "streak": 1,
+      "bonus_pts": 0,
+      "streak": 3,
       "ci": 100,
       "dim": "Intellectual",
       "wellness": 1,
       "stress": 0,
+      "encourage": 3,
+      "conn": 16,
+      "style": "Broadcaster",
+      "trend": "Up",
+      "wk1": 1,
+      "wk2": 2,
+      "wk3": 0,
+      "wk4": 3,
+      "sentiment": 0.5,
+      "top_words": [
+        [
+          "looking",
+          1
+        ],
+        [
+          "good",
+          1
+        ],
+        [
+          "chance",
+          1
+        ],
+        [
+          "share",
+          1
+        ],
+        [
+          "zengarden",
+          1
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "🫶",
+        "❤️",
+        "🫶"
+      ],
+      "reactions_given": [
+        "😂",
+        "❤️",
+        "💜"
+      ],
+      "photos_shared": 2,
+      "active_hour": 19,
+      "active_label": "Evening Energy 🌆",
+      "bestie": "Alex",
+      "most_hyped": 13
+    },
+    {
+      "name": "A.J. Flynn",
+      "role": "BCBA",
+      "pts": 5,
+      "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 1,
+      "ci": 100,
+      "dim": "Social",
+      "wellness": 0,
+      "stress": 0,
       "encourage": 0,
       "conn": 0,
-      "style": "Heavy Broadcaster",
-      "trend": "Up",
+      "style": "Balanced",
+      "trend": "Steady",
       "wk1": 0,
       "wk2": 0,
-      "wk3": 0,
-      "wk4": 6,
+      "wk3": 5,
+      "wk4": 0,
       "sentiment": 0.0,
       "top_words": [],
       "top_emojis": [],
       "top_reactions": [],
       "reactions_given": [],
       "photos_shared": 0,
-      "active_hour": 18,
-      "active_label": "Evening Energy 🌆",
+      "active_hour": -1,
+      "active_label": "",
       "bestie": "",
       "most_hyped": 0
     },
     {
-      "name": "Ivanna Rodriguez",
+      "name": "Camila Reyes",
       "role": "RBT",
       "pts": 5,
       "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 2,
+      "ci": 100,
+      "dim": "Social",
+      "wellness": 0,
+      "stress": 0,
+      "encourage": 1,
+      "conn": 23,
+      "style": "Balanced",
+      "trend": "Down",
+      "wk1": 2,
+      "wk2": 3,
+      "wk3": 0,
+      "wk4": 0,
+      "sentiment": 0.0,
+      "top_words": [
+        [
+          "probably",
+          1
+        ],
+        [
+          "worn",
+          1
+        ],
+        [
+          "black",
+          1
+        ],
+        [
+          "stop",
+          1
+        ],
+        [
+          "hungry",
+          1
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "🫠"
+      ],
+      "reactions_given": [
+        "😂"
+      ],
+      "photos_shared": 2,
+      "active_hour": 18,
+      "active_label": "Evening Energy 🌆",
+      "bestie": "Samantha",
+      "most_hyped": 1
+    },
+    {
+      "name": "Jerzel Alvarado",
+      "role": "RBT",
+      "pts": 5,
+      "bonus": "$0",
+      "bonus_pts": 0,
       "streak": 1,
       "ci": 100,
       "dim": "Social",
       "wellness": 0,
       "stress": 0,
-      "encourage": 0,
+      "encourage": 3,
       "conn": 0,
       "style": "Balanced",
       "trend": "Up",
@@ -1709,125 +1795,192 @@
       "top_words": [],
       "top_emojis": [],
       "top_reactions": [],
-      "reactions_given": [],
-      "photos_shared": 0,
-      "active_hour": -1,
-      "active_label": "",
-      "bestie": "",
-      "most_hyped": 0
-    },
-    {
-      "name": "Zendy Wilson",
-      "role": "BCBA",
-      "pts": 5,
-      "bonus": "$0",
-      "streak": 1,
-      "ci": 100,
-      "dim": "Social",
-      "wellness": 0,
-      "stress": 0,
-      "encourage": 0,
-      "conn": 0,
-      "style": "Balanced",
-      "trend": "Steady",
-      "wk1": 0,
-      "wk2": 0,
-      "wk3": 5,
-      "wk4": 0,
-      "sentiment": 0.0,
-      "top_words": [],
-      "top_emojis": [],
-      "top_reactions": [],
-      "reactions_given": [],
-      "photos_shared": 0,
-      "active_hour": -1,
-      "active_label": "",
-      "bestie": "",
-      "most_hyped": 0
-    },
-    {
-      "name": "Katie Rivera Salgado",
-      "role": "RBT",
-      "pts": 4,
-      "bonus": "$0",
-      "streak": 2,
-      "ci": 100,
-      "dim": "Social",
-      "wellness": 0,
-      "stress": 0,
-      "encourage": 1,
-      "conn": 13,
-      "style": "Pure Engager",
-      "trend": "Down",
-      "wk1": 2,
-      "wk2": 0,
-      "wk3": 2,
-      "wk4": 0,
-      "sentiment": 1.0,
-      "top_words": [
-        [
-          "looks",
-          2
-        ],
-        [
-          "amazing",
-          2
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [],
       "reactions_given": [
+        "💪",
+        "😂",
         "❤️"
       ],
       "photos_shared": 0,
-      "active_hour": 13,
-      "active_label": "Lunch Poster 🍽️",
-      "bestie": "Samantha",
+      "active_hour": -1,
+      "active_label": "",
+      "bestie": "",
       "most_hyped": 0
     },
     {
-      "name": "Tatiana Castillo",
+      "name": "Iris",
       "role": "RBT",
-      "pts": 2,
+      "pts": 4,
       "bonus": "$0",
-      "streak": 1,
+      "bonus_pts": 0,
+      "streak": 2,
       "ci": 100,
-      "dim": "Social",
-      "wellness": 0,
+      "dim": "Environmental",
+      "wellness": 2,
       "stress": 0,
-      "encourage": 0,
-      "conn": 7,
-      "style": "Pure Engager",
-      "trend": "Up",
+      "encourage": 15,
+      "conn": 21,
+      "style": "Balanced",
+      "trend": "Steady",
       "wk1": 0,
-      "wk2": 0,
-      "wk3": 0,
-      "wk4": 2,
+      "wk2": 1,
+      "wk3": 3,
+      "wk4": 0,
       "sentiment": 0.0,
       "top_words": [
         [
-          "pointer",
+          "crocheting",
           1
         ],
         [
-          "buck",
+          "turn",
+          1
+        ],
+        [
+          "brain",
+          1
+        ],
+        [
+          "off",
+          1
+        ],
+        [
+          "school",
           1
         ]
       ],
       "top_emojis": [],
-      "top_reactions": [],
-      "reactions_given": [],
-      "photos_shared": 0,
-      "active_hour": 15,
-      "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Samantha",
-      "most_hyped": 0
+      "top_reactions": [
+        "😂",
+        "❤️",
+        "✨"
+      ],
+      "reactions_given": [
+        "❤️",
+        "😂",
+        "🫶"
+      ],
+      "photos_shared": 4,
+      "active_hour": 19,
+      "active_label": "Evening Energy 🌆",
+      "bestie": "Alex",
+      "most_hyped": 9
     },
     {
-      "name": "Richard Saavedra",
+      "name": "Cristabell A Harrison",
+      "role": "RBT",
+      "pts": 4,
+      "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 2,
+      "ci": 100,
+      "dim": "Intellectual",
+      "wellness": 4,
+      "stress": 0,
+      "encourage": 13,
+      "conn": 11,
+      "style": "Broadcaster",
+      "trend": "Up",
+      "wk1": 0,
+      "wk2": 0,
+      "wk3": 3,
+      "wk4": 1,
+      "sentiment": 0.83,
+      "top_words": [
+        [
+          "thanks",
+          2
+        ],
+        [
+          "everyone",
+          2
+        ],
+        [
+          "support",
+          2
+        ],
+        [
+          "kindness",
+          2
+        ],
+        [
+          "sure",
+          2
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "✨"
+      ],
+      "reactions_given": [
+        "❤️"
+      ],
+      "photos_shared": 1,
+      "active_hour": 15,
+      "active_label": "Afternoon Vibes 🌤️",
+      "bestie": "Pierre",
+      "most_hyped": 1
+    },
+    {
+      "name": "Emily Chesbrough",
+      "role": "BCBA",
+      "pts": 2,
+      "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 2,
+      "ci": 100,
+      "dim": "Intellectual",
+      "wellness": 2,
+      "stress": 0,
+      "encourage": 0,
+      "conn": 4,
+      "style": "Engager",
+      "trend": "Up",
+      "wk1": 0,
+      "wk2": 0,
+      "wk3": 1,
+      "wk4": 1,
+      "sentiment": 0.14,
+      "top_words": [
+        [
+          "buy",
+          2
+        ],
+        [
+          "marker",
+          2
+        ],
+        [
+          "spell",
+          2
+        ],
+        [
+          "color",
+          2
+        ],
+        [
+          "imagine",
+          1
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [
+        "😂",
+        "✨",
+        "❤️"
+      ],
+      "reactions_given": [],
+      "photos_shared": 1,
+      "active_hour": 16,
+      "active_label": "Afternoon Vibes 🌤️",
+      "bestie": "Alex",
+      "most_hyped": 2
+    },
+    {
+      "name": "Laura Outland",
       "role": "RBT",
       "pts": 2,
       "bonus": "$0",
+      "bonus_pts": 0,
       "streak": 1,
       "ci": 100,
       "dim": "Social",
@@ -1841,400 +1994,409 @@
       "wk2": 0,
       "wk3": 0,
       "wk4": 2,
-      "sentiment": 1.0,
+      "sentiment": 0.5,
       "top_words": [
         [
-          "looks",
-          2
-        ],
-        [
-          "good",
+          "what",
           1
         ],
         [
-          "super",
+          "leftover",
           1
         ],
         [
-          "fun",
+          "snacks",
+          1
+        ],
+        [
+          "gotten",
+          1
+        ],
+        [
+          "eaten",
           1
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
+        "😂",
         "❤️"
       ],
       "reactions_given": [
-        "❤️"
+        "🥹",
+        "🤤"
       ],
       "photos_shared": 0,
-      "active_hour": 23,
+      "active_hour": 1,
       "active_label": "After Hours 🌙",
-      "bestie": "Samantha",
+      "bestie": "Alex",
       "most_hyped": 0
     },
     {
-      "name": "leslie orellana-amaya",
+      "name": "Daniel Cuellar Martinez",
       "role": "RBT",
       "pts": 2,
       "bonus": "$0",
-      "streak": 1,
-      "ci": 100,
-      "dim": "Social",
-      "wellness": 0,
-      "stress": 0,
-      "encourage": 2,
-      "conn": 9,
-      "style": "Pure Engager",
-      "trend": "Up",
-      "wk1": 0,
-      "wk2": 0,
-      "wk3": 0,
-      "wk4": 2,
-      "sentiment": 0.0,
-      "top_words": [],
-      "top_emojis": [],
-      "top_reactions": [
-        "🫶"
-      ],
-      "reactions_given": [
-        "❤️"
-      ],
-      "photos_shared": 0,
-      "active_hour": 16,
-      "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "Razelle",
-      "most_hyped": 0
-    },
-    {
-      "name": "Jamie Chavez",
-      "role": "RBT",
-      "pts": 2,
-      "bonus": "$0",
+      "bonus_pts": 0,
       "streak": 1,
       "ci": 100,
       "dim": "Social",
       "wellness": 0,
       "stress": 0,
       "encourage": 1,
-      "conn": 9,
+      "conn": 7,
       "style": "Pure Engager",
-      "trend": "Up",
+      "trend": "Steady",
       "wk1": 0,
-      "wk2": 0,
+      "wk2": 2,
       "wk3": 0,
-      "wk4": 2,
-      "sentiment": 1.0,
+      "wk4": 0,
+      "sentiment": 0.0,
       "top_words": [
         [
-          "beautiful",
-          1
-        ],
-        [
-          "congrats",
+          "down",
           1
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
-        "🫶"
+        "💛"
       ],
       "reactions_given": [
         "❤️"
       ],
       "photos_shared": 0,
-      "active_hour": 16,
-      "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "leslie",
+      "active_hour": 17,
+      "active_label": "Evening Energy 🌆",
+      "bestie": "Alex",
       "most_hyped": 0
     },
     {
-      "name": "Emily Chesbrough",
-      "role": "BCBA",
-      "pts": 1,
+      "name": "Melissa Barrera",
+      "role": "RBT",
+      "pts": 2,
       "bonus": "$0",
+      "bonus_pts": 0,
       "streak": 1,
       "ci": 100,
       "dim": "Social",
-      "wellness": 1,
+      "wellness": 0,
       "stress": 0,
       "encourage": 0,
-      "conn": 0,
-      "style": "Heavy Broadcaster",
-      "trend": "Down",
-      "wk1": 1,
-      "wk2": 0,
-      "wk3": 0,
-      "wk4": 0,
-      "sentiment": 0.0,
-      "top_words": [
-        [
-          "family",
-          5
-        ],
-        [
-          "month",
-          3
-        ],
-        [
-          "interested",
-          3
-        ],
-        [
-          "please",
-          3
-        ],
-        [
-          "additionally",
-          3
-        ]
-      ],
-      "top_emojis": [],
-      "top_reactions": [
-        "❤️"
-      ],
-      "reactions_given": [],
-      "photos_shared": 5,
-      "active_hour": 14,
-      "active_label": "Afternoon Vibes 🌤️",
-      "bestie": "",
-      "most_hyped": 14
-    },
-    {
-      "name": "Iris",
-      "role": "RBT",
-      "pts": 1,
-      "bonus": "$0",
-      "streak": 1,
-      "ci": 100,
-      "dim": "Intellectual",
-      "wellness": 1,
-      "stress": 0,
-      "encourage": 6,
-      "conn": 5,
-      "style": "Heavy Broadcaster",
+      "conn": 7,
+      "style": "Broadcaster",
       "trend": "Steady",
       "wk1": 0,
       "wk2": 0,
-      "wk3": 1,
+      "wk3": 2,
       "wk4": 0,
       "sentiment": 0.0,
       "top_words": [
         [
-          "kiddo",
+          "final",
           1
         ],
         [
-          "putting",
+          "stop",
           1
         ],
         [
-          "artistic",
+          "zen",
           1
         ],
         [
-          "abilities",
+          "dizzy",
           1
         ],
         [
-          "test",
+          "sure",
           1
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
-        "✨"
-      ],
-      "reactions_given": [
         "❤️",
         "✨"
       ],
-      "photos_shared": 1,
+      "reactions_given": [],
+      "photos_shared": 2,
       "active_hour": 1,
       "active_label": "After Hours 🌙",
-      "bestie": "Samantha",
-      "most_hyped": 1
+      "bestie": "Ana",
+      "most_hyped": 2
     },
     {
-      "name": "Yolanda Rodriguez",
-      "role": "RBT",
-      "pts": 1,
+      "name": "Jasmine Caceres",
+      "role": "Admin",
+      "pts": 2,
       "bonus": "$0",
+      "bonus_pts": 0,
       "streak": 1,
       "ci": 100,
       "dim": "Social",
-      "wellness": 1,
+      "wellness": 0,
       "stress": 0,
-      "encourage": 12,
+      "encourage": 7,
       "conn": 7,
-      "style": "Heavy Broadcaster",
+      "style": "Pure Engager",
       "trend": "Steady",
       "wk1": 0,
-      "wk2": 1,
+      "wk2": 2,
       "wk3": 0,
       "wk4": 0,
       "sentiment": 1.0,
       "top_words": [
         [
-          "love",
-          2
-        ],
+          "amazing",
+          1
+        ]
+      ],
+      "top_emojis": [],
+      "top_reactions": [],
+      "reactions_given": [
+        "😂",
+        "❤️",
+        "🫶"
+      ],
+      "photos_shared": 0,
+      "active_hour": 17,
+      "active_label": "Evening Energy 🌆",
+      "bestie": "Alex",
+      "most_hyped": 0
+    },
+    {
+      "name": "Fanie",
+      "role": "RBT",
+      "pts": 1,
+      "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 1,
+      "ci": 100,
+      "dim": "Social",
+      "wellness": 1,
+      "stress": 0,
+      "encourage": 4,
+      "conn": 8,
+      "style": "Heavy Broadcaster",
+      "trend": "Up",
+      "wk1": 0,
+      "wk2": 0,
+      "wk3": 0,
+      "wk4": 1,
+      "sentiment": 0.0,
+      "top_words": [
         [
-          "guys",
+          "ready",
           1
         ],
         [
-          "went",
+          "rep",
           1
         ],
         [
-          "wedding",
+          "amigo",
           1
         ],
         [
-          "weekend",
+          "care",
+          1
+        ],
+        [
+          "towson",
           1
         ]
       ],
       "top_emojis": [],
       "top_reactions": [
-        "❤️"
+        "🫶",
+        "🫶",
+        "🫶"
       ],
       "reactions_given": [
-        "❤️"
+        "❤️",
+        "🫶",
+        "😂"
       ],
       "photos_shared": 1,
-      "active_hour": 3,
-      "active_label": "After Hours 🌙",
-      "bestie": "Samantha",
-      "most_hyped": 4
+      "active_hour": 18,
+      "active_label": "Evening Energy 🌆",
+      "bestie": "Alex",
+      "most_hyped": 6
+    },
+    {
+      "name": "Chellsea Garbutt",
+      "role": "RBT",
+      "pts": 0,
+      "bonus": "$0",
+      "bonus_pts": 0,
+      "streak": 0,
+      "ci": 100,
+      "dim": "Social",
+      "wellness": 0,
+      "stress": 0,
+      "encourage": 2,
+      "conn": 4,
+      "style": "Pure Engager",
+      "trend": "Steady",
+      "wk1": 0,
+      "wk2": 0,
+      "wk3": 0,
+      "wk4": 0,
+      "sentiment": 0.0,
+      "top_words": [],
+      "top_emojis": [],
+      "top_reactions": [
+        "😂"
+      ],
+      "reactions_given": [
+        "🫶",
+        "❤️"
+      ],
+      "photos_shared": 0,
+      "active_hour": 15,
+      "active_label": "Afternoon Vibes 🌤️",
+      "bestie": "Alex",
+      "most_hyped": 0
     }
   ],
   "awards": {
     "longest_streak": {
-      "name": "Samantha Collazo",
+      "name": "Jerusha Daniel",
       "value": 4
     },
     "most_improved": {
-      "name": "Aafia Syed",
-      "delta": 59,
+      "name": "Marisol Cabrera",
+      "delta": 32,
       "wk1": 0,
-      "wk4": 59
+      "wk4": 32
     },
     "most_loved": {
-      "name": "Samantha Collazo",
-      "value": 319
+      "name": "Jerusha Daniel",
+      "value": 320
     },
     "hype_machine": {
       "name": "Pierre",
-      "value": 72
+      "value": 151
     },
     "most_motivating": {
       "name": "Aafia Syed",
-      "value": 9
+      "value": 10
     },
     "silent_mvp": {
-      "name": "Melitza",
-      "value": 104
+      "name": "Alex Arevalo",
+      "value": 186
     },
     "photo_energy": {
       "name": "Razelle Abogadie",
-      "value": 16
+      "value": 22
     },
     "most_supportive": {
-      "name": "Samantha Collazo",
-      "value": 319
+      "name": "Jerusha Daniel",
+      "value": 320
     },
     "best_duo": {
-      "name1": "Samantha Collazo",
-      "name2": "Jerusha Daniel"
+      "name1": "Jerusha Daniel",
+      "name2": "Ana Plaza"
     }
   },
   "did_you_know": [
     {
-      "emoji": "📖",
+      "emoji": "🛋️",
+      "color": "amber",
+      "text": "Plot twist: <b>29%</b> of posts came on weekends. Wellness doesn't clock out."
+    },
+    {
+      "emoji": "📝",
       "color": "blue",
-      "text": "If you read every message back-to-back, it'd take <b>15 minutes</b>."
+      "text": "Average post: <b>6.4 words</b>. Short and sweet."
+    },
+    {
+      "emoji": "💥",
+      "color": "green",
+      "text": "<b>August 26 at 4:15 PM</b> — one post got <b>13 reactions</b>. The garden's loudest moment."
     },
     {
       "emoji": "🌌",
       "color": "blue",
-      "text": "<b>The Garden's July Aura:</b> Warm + Connected"
-    },
-    {
-      "emoji": "💬",
-      "color": "green",
-      "text": "Your top word: <b>looks</b>. Said <b>36 times</b>."
-    },
-    {
-      "emoji": "💚",
-      "color": "green",
-      "text": "Most teams never say <b>'looks'</b> at work. You said it <b>36 times</b>."
+      "text": "<b>The Garden's August Aura:</b> Warm + Energized"
     }
   ],
   "insight_theme": {
     "key": "combined",
-    "eyebrow": "wait, really?",
-    "heading": "DID YOU\nKNOW?"
+    "eyebrow": "fun facts",
+    "heading": "INSIDE THE\nGARDEN."
   },
   "real_story": {
-    "eyebrow": "the most improved",
-    "heading": "AAFIA<br>JUST KEPT GOING.",
-    "body": "Started week 1 with 0 points. Ended week 4 with 59. Quietly, week by week, the energy compounded.",
-    "highlight_big": "+59 pts<br>across the month.",
-    "highlight_body": "Most growth doesn't look dramatic in the moment. It looks like showing up — and showing up a little more next time."
+    "eyebrow": "the wave",
+    "heading": "WEEK 3<br>WAS A WAVE.",
+    "body": "480 points in a single week — well above the month's average. Whatever was in the air, it caught.",
+    "highlight_big": "That energy<br>is the goal.",
+    "highlight_body": "When a week peaks like this, it's usually because someone leaned in and the rest followed. Notice it. Repeat it."
   },
   "communication": {
-    "avg_post_length_words": 7.0,
-    "avg_post_length_chars": 37,
-    "reading_time_min": 15,
-    "typing_time_min": 93,
-    "avg_thread_depth": 5.2,
-    "reaction_reach_pct": 89,
-    "avg_first_reply_min": 83,
-    "question_marks_total": 6,
-    "caps_messages": 0,
-    "emoji_only_posts": 3,
-    "total_messages": 527,
-    "total_words_chan": 3706,
-    "total_chars": 19413
+    "avg_post_length_words": 6.4,
+    "avg_post_length_chars": 33,
+    "reading_time_min": 19,
+    "typing_time_min": 118,
+    "avg_thread_depth": 4.6,
+    "reaction_reach_pct": 94,
+    "avg_first_reply_min": 249,
+    "question_marks_total": 20,
+    "caps_messages": 1,
+    "emoji_only_posts": 1,
+    "total_messages": 740,
+    "total_words_chan": 4700,
+    "total_chars": 24706
   },
   "patterns": {
     "power_hour": {
-      "datetime": "July 9 at 8:06 PM",
+      "datetime": "August 16 at 10:09 PM",
       "count": 4
     },
     "mood_arc": [
-      0.0,
-      0.25,
-      0.15,
-      0.22
+      0.14,
+      0.17,
+      0.17,
+      0.21
     ],
-    "weather_posts": 7,
+    "weather_posts": 10,
     "food_posts": 13,
-    "pet_posts": 2,
-    "bilingual_posts": 1,
-    "food_specifics": [],
-    "cross_role_count": 360,
-    "weekend_pct": 16,
-    "late_night_count": 9,
-    "early_bird_count": 12,
+    "pet_posts": 4,
+    "bilingual_posts": 0,
+    "food_specifics": [
+      [
+        "bread",
+        1
+      ],
+      [
+        "sushi",
+        1
+      ],
+      [
+        "pizza",
+        1
+      ]
+    ],
+    "cross_role_count": 493,
+    "weekend_pct": 29,
+    "late_night_count": 12,
+    "early_bird_count": 13,
     "top_opener": [
-      "Razelle Abogadie",
-      5
+      "Jeffrey Nsubuga",
+      6
     ],
     "top_closer": [
-      "Jerusha Daniel",
-      5
+      "Yolanda Rodriguez",
+      4
     ]
   },
-  "aura": "Warm + Connected",
+  "aura": "Warm + Energized",
   "color_palette": [
     "❤️",
     "😂",
     "🫶",
-    "😋",
+    "🫶",
     "🫶"
   ],
-  "updated_at": "2026-08-01 16:46"
+  "updated_at": "2026-09-01 18:58"
 }
