@@ -1,8 +1,6 @@
 {
-  "last_run": "2026-09-01T18:58:24",
-  "status": "success",
-  "action": "monthly",
-  "month": "August 2026",
-  "form_url": "https://docs.google.com/forms/d/e/1FAIpQLSdWxjbnvPqlmxKQO2IAYVQV52zsCEJZ9a2QIZNl0FUmjwKCmQ/viewform",
-  "wrapped_url": "https://amigocare-aba.github.io/zengarden-wrapped/index_wrapped.html"
+  "last_run": "2026-09-02T19:03:40",
+  "status": "no_op",
+  "reason": "not_sunday_or_first",
+  "date": "2026-09-02"
 }
