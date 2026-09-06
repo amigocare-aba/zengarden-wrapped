@@ -1,8 +1,128 @@
 {
   "month": "September 2026",
   "current_week": null,
-  "date_range": "Sep 1 – Sep 1",
-  "updated_at": "2026-09-01",
+  "date_range": "Sep 1 – Sep 5",
+  "updated_at": "2026-09-06",
   "weeks": [],
-  "cumulative": []
+  "cumulative": [
+    {
+      "name": "Jerusha Daniel",
+      "points": 16,
+      "role": "RBT",
+      "this_week": 16,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Aafia Syed",
+      "points": 11,
+      "role": "RBT",
+      "this_week": 11,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jamie Chavez",
+      "points": 11,
+      "role": "RBT",
+      "this_week": 11,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Lizzie Maldonado",
+      "points": 8,
+      "role": "RBT",
+      "this_week": 8,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Xochilt Saavedra",
+      "points": 7,
+      "role": "RBT",
+      "this_week": 7,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Pierre",
+      "points": 7,
+      "role": "BCBA",
+      "this_week": 7,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Emily Chesbrough",
+      "points": 5,
+      "role": "BCBA",
+      "this_week": 5,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Alex Arevalo",
+      "points": 4,
+      "role": "Leadership",
+      "this_week": 4,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Yolanda Rodriguez",
+      "points": 3,
+      "role": "RBT",
+      "this_week": 3,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Kimberly Lemus",
+      "points": 3,
+      "role": "BCBA",
+      "this_week": 3,
+      "bonus_pts": 0
+    },
+    {
+      "name": "LeeAnn (HR)",
+      "points": 2,
+      "role": "Admin",
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Melitza",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Mimi Theodore",
+      "points": 2,
+      "role": "Leadership",
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Leslie Orellana-Amaya",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Razelle Abogadie",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Melissa Barrera",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jeffrey Nsubuga",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1,
+      "bonus_pts": 0
+    }
+  ]
 }
