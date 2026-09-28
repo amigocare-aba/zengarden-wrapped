@@ -1,10 +1,6 @@
 {
-  "last_run": "2026-09-27T19:24:33",
-  "status": "success",
-  "action": "weekly",
-  "month": "September 2026",
-  "date_range": "Sep 1 – Sep 26",
-  "people_scored": 35,
-  "total_points": 916,
-  "group_activities_found": 10
+  "last_run": "2026-09-28T21:27:25",
+  "status": "no_op",
+  "reason": "not_sunday_or_first",
+  "date": "2026-09-28"
 }
