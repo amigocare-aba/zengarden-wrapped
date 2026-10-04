@@ -1,8 +1,121 @@
 {
   "month": "October 2026",
   "current_week": null,
-  "date_range": "Oct 1 – Oct 1",
-  "updated_at": "2026-10-01",
+  "date_range": "Oct 1 – Oct 3",
+  "updated_at": "2026-10-04",
   "weeks": [],
-  "cumulative": []
+  "cumulative": [
+    {
+      "name": "Jerusha Daniel",
+      "points": 10,
+      "role": "RBT",
+      "this_week": 10,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Razelle Abogadie",
+      "points": 8,
+      "role": "RBT",
+      "this_week": 8,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Pierre",
+      "points": 7,
+      "role": "BCBA",
+      "this_week": 7,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Kimberly Lemus",
+      "points": 6,
+      "role": "BCBA",
+      "this_week": 6,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Alex Arevalo",
+      "points": 6,
+      "role": "Leadership",
+      "this_week": 6,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Colleen",
+      "points": 5,
+      "role": "RBT",
+      "this_week": 5,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jeffrey Nsubuga",
+      "points": 4,
+      "role": "RBT",
+      "this_week": 4,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Melitza",
+      "points": 4,
+      "role": "RBT",
+      "this_week": 4,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Richard Saavedra",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Lizzie Maldonado",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jennifer Leiva",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Melissa Barrera",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jerzel Alvarado",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jessica Blanco",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Nicole Burke",
+      "points": 1,
+      "role": "BCBA",
+      "this_week": 1,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Mimi Theodore",
+      "points": 1,
+      "role": "Leadership",
+      "this_week": 1,
+      "bonus_pts": 0
+    }
+  ]
 }
