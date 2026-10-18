@@ -1,190 +1,211 @@
 {
   "month": "October 2026",
   "current_week": null,
-  "date_range": "Oct 1 – Oct 10",
-  "updated_at": "2026-10-11",
+  "date_range": "Oct 1 – Oct 17",
+  "updated_at": "2026-10-18",
   "weeks": [],
   "cumulative": [
     {
       "name": "Jamie Chavez",
-      "points": 51,
+      "points": 91,
       "role": "RBT",
-      "this_week": 51,
+      "this_week": 40,
       "bonus_pts": 0
     },
     {
       "name": "Jerusha Daniel",
-      "points": 40,
+      "points": 74,
       "role": "RBT",
-      "this_week": 30,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Razelle Abogadie",
-      "points": 25,
-      "role": "RBT",
-      "this_week": 17,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Pierre",
-      "points": 23,
-      "role": "BCBA",
-      "this_week": 16,
+      "this_week": 34,
       "bonus_pts": 0
     },
     {
       "name": "Aafia Syed",
-      "points": 19,
+      "points": 43,
       "role": "RBT",
-      "this_week": 19,
+      "this_week": 24,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Razelle Abogadie",
+      "points": 40,
+      "role": "RBT",
+      "this_week": 15,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Pierre",
+      "points": 37,
+      "role": "BCBA",
+      "this_week": 14,
       "bonus_pts": 0
     },
     {
       "name": "Lizzie Maldonado",
-      "points": 19,
+      "points": 34,
       "role": "RBT",
-      "this_week": 17,
+      "this_week": 15,
       "bonus_pts": 0
     },
     {
       "name": "Alex Arevalo",
-      "points": 13,
+      "points": 30,
       "role": "Leadership",
-      "this_week": 7,
+      "this_week": 17,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Melitza",
+      "points": 24,
+      "role": "RBT",
+      "this_week": 16,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jessica Blanco",
+      "points": 22,
+      "role": "RBT",
+      "this_week": 18,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Samantha Collazo",
+      "points": 20,
+      "role": "RBT",
+      "this_week": 16,
       "bonus_pts": 0
     },
     {
       "name": "Kimberly Lemus",
+      "points": 16,
+      "role": "BCBA",
+      "this_week": 7,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Laura Outland",
+      "points": 13,
+      "role": "RBT",
+      "this_week": 9,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jeffrey Nsubuga",
+      "points": 10,
+      "role": "RBT",
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Mimi Theodore",
+      "points": 9,
+      "role": "Leadership",
+      "this_week": 4,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Yolanda Rodriguez",
+      "points": 9,
+      "role": "RBT",
+      "this_week": 3,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Andre Perret Giesecke",
       "points": 9,
       "role": "BCBA",
-      "this_week": 3,
+      "this_week": 2,
       "bonus_pts": 0
     },
     {
       "name": "Colleen",
       "points": 9,
       "role": "RBT",
-      "this_week": 4,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Jeffrey Nsubuga",
-      "points": 8,
-      "role": "RBT",
-      "this_week": 4,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Melitza",
-      "points": 8,
-      "role": "RBT",
-      "this_week": 4,
+      "this_week": 0,
       "bonus_pts": 0
     },
     {
       "name": "Carla Helena",
-      "points": 7,
+      "points": 8,
       "role": "RBT",
-      "this_week": 7,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Andre Perret Giesecke",
-      "points": 7,
-      "role": "BCBA",
-      "this_week": 7,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Yolanda Rodriguez",
-      "points": 6,
-      "role": "RBT",
-      "this_week": 6,
+      "this_week": 1,
       "bonus_pts": 0
     },
     {
       "name": "Jerzel Alvarado",
       "points": 6,
       "role": "RBT",
-      "this_week": 5,
+      "this_week": 0,
       "bonus_pts": 0
     },
     {
-      "name": "Mimi Theodore",
-      "points": 5,
-      "role": "Leadership",
-      "this_week": 4,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Jessica Blanco",
-      "points": 4,
+      "name": "Jennifer Leiva",
+      "points": 6,
       "role": "RBT",
-      "this_week": 3,
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "LeeAnn (HR)",
+      "points": 4,
+      "role": "Admin",
+      "this_week": 2,
       "bonus_pts": 0
     },
     {
       "name": "Melissa Barrera",
       "points": 4,
       "role": "RBT",
-      "this_week": 3,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Samantha Collazo",
-      "points": 4,
-      "role": "RBT",
-      "this_week": 4,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Jennifer Leiva",
-      "points": 4,
-      "role": "RBT",
-      "this_week": 2,
+      "this_week": 0,
       "bonus_pts": 0
     },
     {
       "name": "Richard Saavedra",
       "points": 4,
       "role": "RBT",
-      "this_week": 2,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Laura Outland",
-      "points": 4,
-      "role": "RBT",
-      "this_week": 4,
+      "this_week": 0,
       "bonus_pts": 0
     },
     {
       "name": "Nicole Burke",
       "points": 2,
       "role": "BCBA",
+      "this_week": 0,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Katie Rivera Salgado",
+      "points": 2,
+      "role": "RBT",
+      "this_week": 2,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Camila Reyes",
+      "points": 1,
+      "role": "RBT",
       "this_week": 1,
       "bonus_pts": 0
     },
     {
-      "name": "LeeAnn (HR)",
-      "points": 2,
-      "role": "Admin",
-      "this_week": 2,
+      "name": "Cristabell A Harrison",
+      "points": 1,
+      "role": "RBT",
+      "this_week": 1,
       "bonus_pts": 0
     },
     {
       "name": "Iris",
       "points": 1,
       "role": "RBT",
-      "this_week": 1,
+      "this_week": 0,
       "bonus_pts": 0
     },
     {
       "name": "Emily Nava",
       "points": 1,
       "role": "RBT",
-      "this_week": 1,
+      "this_week": 0,
       "bonus_pts": 0
     }
   ]
