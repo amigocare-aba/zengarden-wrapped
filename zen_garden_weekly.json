@@ -1,118 +1,118 @@
 {
   "month": "October 2026",
   "current_week": null,
-  "date_range": "Oct 1 – Oct 17",
-  "updated_at": "2026-10-18",
+  "date_range": "Oct 1 – Oct 24",
+  "updated_at": "2026-10-25",
   "weeks": [],
   "cumulative": [
     {
       "name": "Jamie Chavez",
-      "points": 91,
+      "points": 158,
+      "role": "RBT",
+      "this_week": 67,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jerusha Daniel",
+      "points": 121,
+      "role": "RBT",
+      "this_week": 47,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Razelle Abogadie",
+      "points": 80,
       "role": "RBT",
       "this_week": 40,
       "bonus_pts": 0
     },
     {
-      "name": "Jerusha Daniel",
-      "points": 74,
-      "role": "RBT",
-      "this_week": 34,
-      "bonus_pts": 0
-    },
-    {
       "name": "Aafia Syed",
-      "points": 43,
+      "points": 73,
       "role": "RBT",
-      "this_week": 24,
+      "this_week": 30,
       "bonus_pts": 0
     },
     {
-      "name": "Razelle Abogadie",
-      "points": 40,
+      "name": "Samantha Collazo",
+      "points": 63,
       "role": "RBT",
-      "this_week": 15,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Pierre",
-      "points": 37,
-      "role": "BCBA",
-      "this_week": 14,
+      "this_week": 43,
       "bonus_pts": 0
     },
     {
       "name": "Lizzie Maldonado",
-      "points": 34,
+      "points": 60,
       "role": "RBT",
-      "this_week": 15,
+      "this_week": 26,
       "bonus_pts": 0
     },
     {
-      "name": "Alex Arevalo",
-      "points": 30,
-      "role": "Leadership",
-      "this_week": 17,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Melitza",
-      "points": 24,
-      "role": "RBT",
+      "name": "Pierre",
+      "points": 53,
+      "role": "BCBA",
       "this_week": 16,
       "bonus_pts": 0
     },
     {
       "name": "Jessica Blanco",
-      "points": 22,
+      "points": 53,
       "role": "RBT",
-      "this_week": 18,
+      "this_week": 31,
       "bonus_pts": 0
     },
     {
-      "name": "Samantha Collazo",
-      "points": 20,
+      "name": "Alex Arevalo",
+      "points": 49,
+      "role": "Leadership",
+      "this_week": 19,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Melitza",
+      "points": 37,
       "role": "RBT",
-      "this_week": 16,
+      "this_week": 13,
       "bonus_pts": 0
     },
     {
       "name": "Kimberly Lemus",
-      "points": 16,
+      "points": 23,
       "role": "BCBA",
       "this_week": 7,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Jeffrey Nsubuga",
+      "points": 13,
+      "role": "RBT",
+      "this_week": 3,
       "bonus_pts": 0
     },
     {
       "name": "Laura Outland",
       "points": 13,
       "role": "RBT",
-      "this_week": 9,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Jeffrey Nsubuga",
-      "points": 10,
-      "role": "RBT",
-      "this_week": 2,
+      "this_week": 0,
       "bonus_pts": 0
     },
     {
       "name": "Mimi Theodore",
-      "points": 9,
+      "points": 13,
       "role": "Leadership",
       "this_week": 4,
       "bonus_pts": 0
     },
     {
       "name": "Yolanda Rodriguez",
-      "points": 9,
+      "points": 12,
       "role": "RBT",
       "this_week": 3,
       "bonus_pts": 0
     },
     {
       "name": "Andre Perret Giesecke",
-      "points": 9,
+      "points": 11,
       "role": "BCBA",
       "this_week": 2,
       "bonus_pts": 0
@@ -128,7 +128,21 @@
       "name": "Carla Helena",
       "points": 8,
       "role": "RBT",
-      "this_week": 1,
+      "this_week": 0,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Melissa Barrera",
+      "points": 7,
+      "role": "RBT",
+      "this_week": 3,
+      "bonus_pts": 0
+    },
+    {
+      "name": "Nicole Burke",
+      "points": 6,
+      "role": "BCBA",
+      "this_week": 4,
       "bonus_pts": 0
     },
     {
@@ -142,21 +156,21 @@
       "name": "Jennifer Leiva",
       "points": 6,
       "role": "RBT",
-      "this_week": 2,
+      "this_week": 0,
       "bonus_pts": 0
     },
     {
       "name": "LeeAnn (HR)",
-      "points": 4,
+      "points": 5,
       "role": "Admin",
-      "this_week": 2,
+      "this_week": 1,
       "bonus_pts": 0
     },
     {
-      "name": "Melissa Barrera",
+      "name": "Cristabell A Harrison",
       "points": 4,
       "role": "RBT",
-      "this_week": 0,
+      "this_week": 3,
       "bonus_pts": 0
     },
     {
@@ -167,31 +181,24 @@
       "bonus_pts": 0
     },
     {
-      "name": "Nicole Burke",
+      "name": "Camila Morales",
       "points": 2,
       "role": "BCBA",
-      "this_week": 0,
+      "this_week": 2,
       "bonus_pts": 0
     },
     {
       "name": "Katie Rivera Salgado",
       "points": 2,
       "role": "RBT",
-      "this_week": 2,
+      "this_week": 0,
       "bonus_pts": 0
     },
     {
       "name": "Camila Reyes",
       "points": 1,
       "role": "RBT",
-      "this_week": 1,
-      "bonus_pts": 0
-    },
-    {
-      "name": "Cristabell A Harrison",
-      "points": 1,
-      "role": "RBT",
-      "this_week": 1,
+      "this_week": 0,
       "bonus_pts": 0
     },
     {
