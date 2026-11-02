@@ -9,9 +9,9 @@ name: Zen Garden Daily Runner
 on:
   schedule:
     # Every day at 12pm ET
-    # DST note: change to '0 17 * * *' after Nov 1, 2026 (when EST starts).
-    #           change back to '0 16 * * *' after Mar 8, 2027 (when EDT resumes).
-    - cron: '0 16 * * *'  # 16:00 UTC = 12pm EDT
+    # DST note: change back to '0 16 * * *' after Mar 8, 2027 (when EDT resumes).
+    #           then '0 17 * * *' again after Nov 7, 2027 (when EST returns).
+    - cron: '0 17 * * *'  # 17:00 UTC = 12pm EST
   workflow_dispatch:
     inputs:
       simulate_date:

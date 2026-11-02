@@ -398,9 +398,9 @@ body::before {
     <div class="faq-item">
       <button class="faq-q">Daylight saving time? <span class="faq-arrow">&rsaquo;</span></button>
       <div class="faq-a">
-        The Sunday cron runs at 16:00 UTC = 12pm ET <strong>during EDT (March–November)</strong>.<br><br>
-        After Nov 1, 2026 (when EST starts), Gardy will post at <strong>11am ET</strong> instead. To keep it at noon, edit <a href="https://github.com/amigocare-aba/zengarden-wrapped/blob/main/.github/workflows/weekly-points.yml" target="_blank">weekly-points.yml</a> and change <code>'0 16 * * 0'</code> to <code>'0 17 * * 0'</code>.<br><br>
-        Switch back in March 2027.
+        The daily cron is set per season so Gardy posts at <strong>12pm ET year-round</strong>. Current setting: <code>'0 17 * * *'</code> (17:00 UTC = 12pm EST, switched Nov 2, 2026).<br><br>
+        After Mar 8, 2027 (when EDT resumes), edit <a href="https://github.com/amigocare-aba/zengarden-wrapped/blob/main/.github/workflows/weekly-points.yml" target="_blank">weekly-points.yml</a> and change <code>'0 17 * * *'</code> back to <code>'0 16 * * *'</code>. Switch to 17 again in November 2027.<br><br>
+        <em>Note: GitHub often delays scheduled runs by a few hours during busy periods — a post landing mid-afternoon instead of noon is normal, not an error.</em>
       </div>
     </div>
   </div>
