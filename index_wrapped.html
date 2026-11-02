@@ -799,7 +799,9 @@ window.getAvatarEmoji = function(name) {
 const styleLabel={'Pure Engager':'🤝 Supporter','Engager':'💬 Connector','Balanced':'⚖️ All-Rounder','Broadcaster':'📢 Poster','Heavy Broadcaster':'📡 Megaphone'};
 function initials(n){const p=n.trim().split(' ');return p.length>1?(p[0][0]+p[p.length-1][0]).toUpperCase():n.slice(0,2).toUpperCase();}
 function haptic(p){ if(navigator.vibrate) navigator.vibrate(p||12); }
-var AWARD_MAP = {"Jerusha": ["\u{1F3C6}", "Longest Streak"], "Jocelyn": ["\u{1F331}", "Most Improved"], "Kimberly": ["\u{1F917}", "Most Loved"], "Razelle": ["\u{1F33F}", "Wellness Champ"], "Alex": ["\u{1FAE3}", "Unsung Hero"], "Eleana": ["\u{1F91D}", "Support Pillar"], "Katherin": ["\u{1F4F8}", "Photo Star"]};
+// Rebuilt from each month's computed award winners after the cards render —
+// a hardcoded list here once showed long-departed people on person cards.
+var AWARD_MAP = {};
 // WRAPPED_DATA is derived from D.all_active after fetch
 function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1);}
 
@@ -1080,7 +1082,15 @@ const loved=[...D.all_active].sort((a,b)=>b.conn-a.conn)[0];
 const hype=[...D.all_active].sort((a,b)=>b.encourage-a.encourage)[0];
 const motiv=[...D.all_active].sort((a,b)=>b.wellness-a.wellness)[0];
 const unsung=[...D.all_active].filter(r=>r.pts<80&&r.conn>15).sort((a,b)=>b.conn-a.conn)[0]||D.all_active[8];
-const photoLeaders=[{name:'Jocelyn',count:15},{name:'Katherin',count:15}];
+// Photo Energy — computed from this month's data (was hardcoded once; never again)
+const photoSorted=[...D.all_active].filter(r=>(r.photos_shared||0)>0).sort((a,b)=>(b.photos_shared||0)-(a.photos_shared||0));
+const photoLeaders=photoSorted.slice(0,2).map(r=>({name:r.name,count:r.photos_shared||0}));
+const photoTie=photoLeaders.length===2&&photoLeaders[0].count===photoLeaders[1].count;
+const photoAward=photoTie
+  ?[{name:photoLeaders[0].name+' & '+photoLeaders[1].name},'tied with '+photoLeaders[0].count+' photo posts each.']
+  :(photoLeaders.length>0
+    ?[{name:photoLeaders[0].name},'shared '+photoLeaders[0].count+' photos this month.']
+    :[{name:'—'},'no photos this month.']);
 const support=[...D.all_active].filter(r=>r.pts>=50).sort((a,b)=>b.conn-a.conn)[0];
 const duoPair=[...D.all_active].sort((a,b)=>b.conn-a.conn);
 
@@ -1091,7 +1101,7 @@ const awards=[
   [hype,'left '+hype.encourage+' uplifting comments on teammates\' posts.'],
   [motiv,'wrote the most wellness content of anyone this month.'],
   [unsung,'quiet but connected — reached '+unsung.conn+' teammates with low spotlight.'],
-  [{name:photoLeaders[0].name+' & '+photoLeaders[1].name},'tied with '+photoLeaders[0].count+' photo posts each.'],
+  photoAward,
   [support,'highest connection count among top-tier posters.'],
   [{name:duoPair[0].name.split(' ')[0]+' & '+duoPair[1].name.split(' ')[0]},'most mutually reactive pair in the channel.'],
 ];
@@ -1101,6 +1111,25 @@ awards.forEach(([person,detail],i)=>{
   const name=person.name||'—';
   document.getElementById('aw'+idx+'-name').textContent=firstName(name);
   document.getElementById('aw'+idx+'-detail').textContent=detail;
+});
+
+// Rebuild AWARD_MAP from THIS month's winners (keys = capitalized first name,
+// matching the person-card lookup). Duo awards map both people.
+window.AWARD_MAP = {};
+awards.forEach(function(entry, i){
+  var person = entry[0];
+  if (!person || !person.name || person.name === '—') return;
+  var nameEl = document.getElementById('aw' + (i + 1) + '-name');
+  var cardEl = nameEl && nameEl.closest ? nameEl.closest('.award-card') : null;
+  if (!cardEl) return;
+  var emojiEl = cardEl.querySelector('.award-emoji');
+  var labelEl = cardEl.querySelector('.award-label');
+  var emoji = emojiEl ? emojiEl.textContent.trim() : '';
+  var label = labelEl ? labelEl.textContent.trim() : '';
+  String(person.name).split(' & ').forEach(function(nm){
+    var fn = firstName(nm.trim());
+    if (fn && fn !== '—' && !window.AWARD_MAP[fn]) window.AWARD_MAP[fn] = [emoji, label];
+  });
 });
 
 // ── AWARD CARDS — sequential auto-reveal + tap replay ───────────
