@@ -732,7 +732,9 @@ def run_monthly_recap(args, config, target_month, today, posting_enabled):
     wrapped_url = "https://amigocare-aba.github.io/zengarden-wrapped/index_wrapped.html"
     form_url = config.get("exchange_form_url", "")
     month_short = target_month.split()[0]
-    close_dt = today + timedelta(days=7)
+    # Advertise the same close date the deadline-day reminder (and the Apps
+    # Script that actually closes the form) are driven by.
+    close_dt = today.replace(day=_exchange_deadline_day(config))
     close_str = close_dt.strftime("%A %B %-d")
 
     monthly_msg = (
@@ -798,6 +800,54 @@ def run_monthly_recap(args, config, target_month, today, posting_enabled):
     print(f"\n✅ Done — {target_month} recap posted")
 
 
+def _exchange_deadline_day(config):
+    """Day-of-month the exchange form closes (clamped 2–28 so it exists in every month)."""
+    try:
+        day = int(config.get("exchange_deadline_day", 8))
+    except (TypeError, ValueError):
+        day = 8
+    return max(2, min(28, day))
+
+
+def maybe_post_exchange_reminder(args, config, today, posting_enabled):
+    """On the exchange deadline day, post a last-call reminder for the form.
+
+    Runs in addition to whatever else the day does — the deadline day can
+    land on a Sunday (e.g. Nov 8, 2026), in which case the weekly leaderboard
+    posts first and this follows it. The form itself is closed at end of day
+    by the Apps Script attached to the Google Form (see
+    exchange_form_apps_script.gs), which also emails HR.
+
+    Returns True if today is the deadline day.
+    """
+    if today.day != _exchange_deadline_day(config):
+        return False
+    form_url = config.get("exchange_form_url", "")
+    if not form_url:
+        print("⚠️  exchange_form_url missing from config — skipping exchange reminder")
+        return False
+    # The month being redeemed is the one that just wrapped (Nov 8 → October points).
+    prev_month = _current_month_label(today.replace(day=1) - timedelta(days=1), config)
+    label = f"{prev_month.split()[0]} " if prev_month else ""
+    reminder_msg = (
+        f"⏰ *Last call — the {label}point exchange form closes tonight!* 🎁\n\n"
+        f"Haven't cashed in your {label}points yet? Submit before midnight → <{form_url}|Exchange Form>\n"
+        f"Bonuses land on the following paycheck 💸"
+    )
+    print("\n" + "─" * 60)
+    print(reminder_msg)
+    print("─" * 60)
+    if args.dry_run:
+        print("🧪 DRY RUN — exchange reminder not sent")
+        return True
+    if posting_enabled:
+        post_to_slack(reminder_msg)
+        print("✅ Exchange-form last-call reminder posted")
+    else:
+        print("🔇 Exchange reminder SUPPRESSED (--no-post or --simulate-date)")
+    return True
+
+
 def main():
     parser = argparse.ArgumentParser(description="Zen Garden — daily runner (weekly leaderboards + monthly recaps)")
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing files or posting")
@@ -832,6 +882,27 @@ def main():
         action = "weekly"
         target_month = _current_month_label(today, config)
     else:
+        # Not a posting day — but the exchange-form deadline may still fall here.
+        try:
+            reminded = maybe_post_exchange_reminder(args, config, today, posting_enabled)
+        except Exception as e:
+            print(f"\n❌ exchange reminder failed: {e}")
+            write_status({
+                "last_run": datetime.now().isoformat(timespec="seconds"),
+                "status": "error",
+                "action": "exchange_reminder",
+                "date": today_str,
+                "errors": [f"{type(e).__name__}: {e}"],
+            })
+            sys.exit(1)
+        if reminded:
+            write_status({
+                "last_run": datetime.now().isoformat(timespec="seconds"),
+                "status": "success" if posting_enabled else ("dry_run" if args.dry_run else "no_post"),
+                "action": "exchange_reminder",
+                "date": today_str,
+            })
+            return
         print(f"📅 {today_str} is neither Sunday nor the 1st of a month — no post today.")
         write_status({
             "last_run": datetime.now().isoformat(timespec="seconds"),
@@ -859,6 +930,8 @@ def main():
             run_monthly_recap(args, config, target_month, today, posting_enabled)
         else:
             run_weekly_leaderboard(args, config, target_month, today, posting_enabled)
+        # Deadline day can coincide with a Sunday — leaderboard first, then last call.
+        maybe_post_exchange_reminder(args, config, today, posting_enabled)
     except SystemExit:
         raise
     except Exception as e:

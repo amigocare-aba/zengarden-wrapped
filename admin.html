@@ -403,6 +403,17 @@ body::before {
         <em>Note: GitHub often delays scheduled runs by a few hours during busy periods — a post landing mid-afternoon instead of noon is normal, not an error.</em>
       </div>
     </div>
+
+    <div class="faq-item">
+      <button class="faq-q">How does the point exchange form cycle work? <span class="faq-arrow">&rsaquo;</span></button>
+      <div class="faq-a">
+        The monthly redemption window is the <strong>1st through the 8th</strong> (<code>exchange_deadline_day</code> in weekly_config.json):<br><br>
+        <strong>Day 1</strong> — a Google Apps Script on the form reopens it (~6am), and the Wrapped post links to it at noon.<br>
+        <strong>Day 8</strong> — Gardy posts a last-call reminder in #zengarden (part of the daily runner).<br>
+        <strong>Day 9, ~midnight</strong> — the Apps Script closes the form and emails hr@ + Alex the submission count and responses link for payroll.<br><br>
+        The Apps Script lives in Alex's Google account (script.google.com → "Zen Garden Exchange"); a reference copy is <code>exchange_form_apps_script.gs</code> in this repo. If you change the deadline day, change it in <em>both</em> weekly_config.json and the script, then rerun the script's <code>setup()</code>.
+      </div>
+    </div>
   </div>
 </div>
 

@@ -3,6 +3,7 @@
   "week_start_day": "sunday",
   "channel": "zengarden",
   "exchange_form_url": "https://docs.google.com/forms/d/e/1FAIpQLSdWxjbnvPqlmxKQO2IAYVQV52zsCEJZ9a2QIZNl0FUmjwKCmQ/viewform",
+  "exchange_deadline_day": 8,
   "_note": "NEW MODEL (from July 2026 onward): months are strict calendar months. Points reset on the 1st. Monthly recap posts on day 1 of the next month. Weekly leaderboards on Sundays only include days within the current calendar month. Weeks list is retained for legacy/manual runs but the runtime derives windows from `months`.",
   "months": {
     "April 2026":     { "start": "2026-04-05", "end": "2026-05-02", "wrapped_post_date": "2026-05-03" },
