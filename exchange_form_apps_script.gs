@@ -43,6 +43,8 @@ var FORM_ID = 'PASTE_FORM_EDIT_ID_HERE';
 var EMAIL_TO = 'hr@amigocareaba.com,alex.arevalo@amigocareaba.com';
 var DEADLINE_DAY = 8;              // keep in sync with weekly_config.json
 var NOTIFY_EACH_SUBMISSION = false; // true = HR also gets an email per submission
+// Exact responses tab HR reviews (overrides auto-detection, which can't pick the right tab):
+var RESPONSES_URL = 'https://docs.google.com/spreadsheets/d/1xdi8dhIRpUIsKFcPb27pi2WVO5eQt3-fmYoWl9g5hNs/edit?resourcekey=&gid=7713254#gid=7713254';
 // ----------------------------------------------------------------------
 
 /** Run once after pasting: installs the monthly triggers (idempotent). */
@@ -79,8 +81,9 @@ function reopenForm() {
     subject: '🌱 Zen Garden exchange form is OPEN — ' + m + ' redemptions',
     body: 'The point exchange form just reopened for ' + m + ' redemptions.\n\n' +
       'It closes automatically at the end of the day on the ' + DEADLINE_DAY +
-      'th, and you’ll get a follow-up email with the submission count and the responses link.\n\n' +
-      'Form: ' + form.getPublishedUrl() + '\n\n' +
+      'th, and you’ll get a follow-up email with the submission count.\n\n' +
+      'Form (what the team fills out): ' + form.getPublishedUrl() + '\n' +
+      'Responses sheet (for HR, fills up live): ' + responsesLink(form) + '\n\n' +
       '(automated — Zen Garden Exchange script)'
   });
   Logger.log('✓ Form reopened for ' + m);
@@ -128,13 +131,21 @@ function onNewSubmission(e) {
   });
 }
 
-/** Link HR should check: the linked response sheet if one exists, else the form's Responses tab. */
+/** Link HR should check: the exact configured tab, else the linked sheet, else the form's Responses tab. */
 function responsesLink(form) {
+  if (RESPONSES_URL) return RESPONSES_URL;
   try {
     var destId = form.getDestinationId();
     if (destId) return 'https://docs.google.com/spreadsheets/d/' + destId;
   } catch (err) {}
   return form.getEditUrl() + '#responses';
+}
+
+/** Harmless check: logs the links the emails will use (does NOT open/close anything). */
+function previewLinks() {
+  var form = getForm();
+  Logger.log('Form (team fills out): ' + form.getPublishedUrl());
+  Logger.log('Responses (HR reviews): ' + responsesLink(form));
 }
 
 /** Name of the month being redeemed (the one that just ended). */
