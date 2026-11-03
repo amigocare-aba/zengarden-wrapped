@@ -13,24 +13,28 @@
  *                       submission count and the responses link
  *
  * ---------------------------------------------------------------------
- * ONE-TIME SETUP (~5 minutes, do this signed in as alex.arevalo@):
- *   1. Open the form in EDIT mode (you need edit access — if Shelby owns
- *      it, have her share it with you as collaborator).
- *      Copy the ID from the edit URL:
- *      https://docs.google.com/forms/d/THIS_LONG_ID/edit
- *   2. Go to https://script.google.com → New project → paste this whole
- *      file, replacing the default code. Name it "Zen Garden Exchange".
- *   3. Paste the ID into FORM_ID below.
- *   4. Project Settings (gear icon) → confirm time zone is
+ * ONE-TIME SETUP (~5 minutes):
+ *   1. Open the form in EDIT mode → ⋮ (top right) → Script editor.
+ *      (This REPLACES the old "Auto-Open/Close" schedule script that
+ *      lives there — select all of its code and delete it.)
+ *   2. Paste this whole file. Save (Cmd+S).
+ *      Bound this way, the script finds the form by itself — you can
+ *      leave FORM_ID untouched.
+ *   3. Project Settings (gear icon) → confirm time zone is
  *      "(GMT-05:00) Eastern Time".
- *   5. In the toolbar, select the function `reopenNow` → Run → approve
+ *   4. In the toolbar, select the function `reopenNow` → Run → approve
  *      the permissions prompt. This reopens the form immediately
  *      (fixes the "form isn't available" problem same-day).
- *   6. Select the function `setup` → Run. This installs the monthly
- *      triggers. Done — it runs itself from now on.
+ *   5. Select the function `setup` → Run. This installs the monthly
+ *      triggers AND removes the old script's trigger if one exists.
+ *
+ * (Alternative: paste into a standalone project at script.google.com —
+ *  then you must also set FORM_ID to the long id from the form's edit
+ *  URL, docs.google.com/forms/d/THIS_LONG_ID/edit.)
  *
  * To verify later: Triggers (clock icon) should show reopenForm (day 1)
- * and closeFormAndEmail (day 9). Emails come from whoever ran setup.
+ * and closeFormAndEmail (day 9) — and NOT dailyCheck. Emails come from
+ * whoever ran setup.
  * ---------------------------------------------------------------------
  */
 
@@ -43,7 +47,8 @@ var NOTIFY_EACH_SUBMISSION = false; // true = HR also gets an email per submissi
 
 /** Run once after pasting: installs the monthly triggers (idempotent). */
 function setup() {
-  var handlers = ['reopenForm', 'closeFormAndEmail', 'onNewSubmission'];
+  // 'dailyCheck' = the legacy 2026 schedule script this replaces; purge its trigger too.
+  var handlers = ['reopenForm', 'closeFormAndEmail', 'onNewSubmission', 'dailyCheck'];
   ScriptApp.getProjectTriggers().forEach(function (t) {
     if (handlers.indexOf(t.getHandlerFunction()) !== -1) ScriptApp.deleteTrigger(t);
   });
@@ -57,6 +62,10 @@ function setup() {
 }
 
 function getForm() {
+  try {
+    var bound = FormApp.getActiveForm();
+    if (bound) return bound;
+  } catch (err) {}
   return FormApp.openById(FORM_ID);
 }
 
