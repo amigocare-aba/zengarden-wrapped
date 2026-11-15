@@ -92,11 +92,16 @@ function reopenForm() {
 /** Day 9, 12–1am: close the form and tell HR what came in. */
 function closeFormAndEmail() {
   var form = getForm();
-  form.setCustomClosedMessage(
-    'The exchange window for this month has closed 🌱 ' +
-    'It reopens on the 1st with the next Wrapped. Questions? Message Shelby or HR.'
-  );
   form.setAcceptingResponses(false);
+  // Cosmetic only — newer Forms don't support it, and it must never block the close+email.
+  try {
+    form.setCustomClosedMessage(
+      'The exchange window for this month has closed 🌱 ' +
+      'It reopens on the 1st with the next Wrapped. Questions? Message Shelby or HR.'
+    );
+  } catch (err) {
+    Logger.log('(custom closed message not supported on this form — skipped)');
+  }
 
   var now = new Date();
   var windowStart = new Date(now.getFullYear(), now.getMonth(), 1); // the 1st, 00:00
