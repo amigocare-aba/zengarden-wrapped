@@ -98,57 +98,50 @@ function onNewSubmission(e) {
 
 // ── Email builders ────────────────────────────────────────────────────
 
-/** The "window opened" heads-up for HR (sent the 1st). No action needed yet. */
+/** The "form is open" email (sent the 1st). */
 function buildOpenEmail_(form) {
   var m = wrappedMonthName();
   var win = windowLabel_();
   var formUrl = form.getPublishedUrl();
   var sheetUrl = responsesLink(form);
   return {
-    subject: '🌱 Zen Garden window open — ' + m + ' redemptions (no action yet)',
-    body: 'Heads up: the ' + m + ' redemption window just opened (' + win + ').\n\n' +
-      'The team submits their bonus requests this week. Nothing for you to do yet — ' +
-      'you’ll get the payroll email with the final list when it closes on the ' + DEADLINE_DAY + 'th.\n\n' +
-      'Watch submissions come in: ' + sheetUrl + '\n' +
-      'The form, in case anyone asks for the link: ' + formUrl + '\n\n' +
+    subject: '🌱 Zen Garden exchange form is open — ' + m,
+    body: 'The exchange form is open for ' + m + ' redemptions.\n' +
+      'Window: ' + win + '.\n\n' +
+      'Responses sheet: ' + sheetUrl + '\n' +
+      'Form: ' + formUrl + '\n\n' +
       '(automated — Zen Garden Exchange script)',
     html: emailCard_({
-      chip: 'HEADS UP · NO ACTION', chipBg: '#9FE1CB', chipColor: '#04342C',
-      headline: m + ' redemption window is open',
-      headlineSize: '23px',
-      subline: 'The team is submitting bonus requests this week. Nothing for you to do yet.',
-      rows: [['Month redeemed', m], ['Window', win], ['Your action', 'None — payroll email comes on the ' + (DEADLINE_DAY + 1) + 'th']],
-      buttonText: 'Watch submissions come in', buttonUrl: sheetUrl,
-      secondaryText: 'The form itself, in case anyone asks for the link →', secondaryUrl: formUrl,
-      note: 'When the window closes, you’ll get one email with the final count and the list to process.',
-      footer: 'window closes at midnight on the ' + DEADLINE_DAY + 'th'
+      chip: 'FORM OPEN', chipBg: '#9FE1CB', chipColor: '#04342C',
+      headline: 'Form is open',
+      headlineSize: '26px',
+      subline: m + ' redemptions · ' + win,
+      buttonText: 'View submissions sheet', buttonUrl: sheetUrl,
+      secondaryText: 'Form link →', secondaryUrl: formUrl,
+      footer: 'closes at midnight on the ' + DEADLINE_DAY + 'th'
     })
   };
 }
 
-/** The "window closed — process payroll" action email for HR (sent the 9th). */
+/** The "form is closed" email (sent the 9th). */
 function buildCloseEmail_(form, count) {
   var m = wrappedMonthName();
-  var win = windowLabel_();
   var sheetUrl = responsesLink(form);
-  var plural = count === 1 ? '' : 'es';
-  var subPlural = count === 1 ? '' : 's';
+  var plural = count === 1 ? '' : 's';
   return {
-    subject: '💸 Payroll action: add ' + count + ' Zen Garden bonus' + plural + ' — ' + m,
-    body: 'The ' + m + ' redemption window (' + win + ') is closed. These go on the next paycheck.\n\n' +
-      'Submissions to process: ' + count + '\n' +
+    subject: '✅ Zen Garden exchange form closed — ' + count + ' ' + m + ' submission' + plural,
+    body: 'The exchange form is closed.\n\n' +
+      m + ' submissions: ' + count + '\n' +
       'Review them here: ' + sheetUrl + '\n\n' +
-      'Tip: mark each row as processed in the sheet so nothing gets missed.\n\n' +
+      'Bonuses go on the next paycheck.\n\n' +
       '(automated — Zen Garden Exchange script)',
     html: emailCard_({
-      chip: 'ACTION NEEDED', chipBg: '#FAC775', chipColor: '#412402',
-      headline: count + ' bonus' + plural + ' to add to payroll',
-      headlineSize: '27px',
-      subline: 'The ' + m + ' window is closed — this is the final list. They go on the next paycheck.',
-      rows: [['Month redeemed', m], ['Window', win], ['Submission' + subPlural, String(count)], ['Add to', 'Next paycheck']],
-      buttonText: 'Review & process the ' + count + ' submission' + subPlural, buttonUrl: sheetUrl,
-      note: 'Tip: mark each row as processed in the sheet so nothing gets missed.',
-      footer: 'the window reopens on the 1st'
+      chip: 'FORM CLOSED', chipBg: '#ffffff', chipColor: '#0F6E56',
+      headline: 'Form is closed',
+      headlineSize: '26px',
+      subline: count + ' ' + m + ' submission' + plural + ' — bonuses go on the next paycheck.',
+      buttonText: 'Review submissions', buttonUrl: sheetUrl,
+      footer: 'reopens on the 1st'
     })
   };
 }
@@ -165,6 +158,12 @@ function emailCard_(o) {
   var secondary = o.secondaryText
     ? '<p style="margin:14px 0 0;font-size:13px;"><a href="' + o.secondaryUrl + '" style="color:#0F6E56;font-weight:600;text-decoration:none;">' + o.secondaryText + '</a></p>'
     : '';
+  var rowsTable = rows
+    ? '<table style="width:100%;border-collapse:collapse;border-top:1px solid #e5e7eb;">' + rows + '</table>'
+    : '';
+  var note = o.note
+    ? '<p style="margin:16px 0 0;font-size:13px;color:#374151;">' + o.note + '</p>'
+    : '';
   return '<div style="background:#f3f4f1;padding:28px 12px;font-family:Arial,Helvetica,sans-serif;">' +
     '<div style="max-width:520px;margin:0 auto;background:#ffffff;border-radius:14px;border:1px solid #e5e7eb;overflow:hidden;">' +
       '<table style="width:100%;border-collapse:collapse;background:#0F6E56;"><tr>' +
@@ -174,10 +173,10 @@ function emailCard_(o) {
       '<div style="padding:26px;">' +
         '<p style="margin:0;font-size:' + (o.headlineSize || '26px') + ';font-weight:700;color:#111827;">' + o.headline + '</p>' +
         '<p style="margin:6px 0 18px;font-size:14px;color:#6b7280;">' + o.subline + '</p>' +
-        '<table style="width:100%;border-collapse:collapse;border-top:1px solid #e5e7eb;">' + rows + '</table>' +
+        rowsTable +
         '<div style="margin:22px 0 6px;"><a href="' + o.buttonUrl + '" style="display:inline-block;background:#1D9E75;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:999px;">' + o.buttonText + '</a></div>' +
       secondary +
-      '<p style="margin:16px 0 0;font-size:13px;color:#374151;">' + o.note + '</p>' +
+      note +
       '</div>' +
       '<div style="padding:12px 26px;background:#fafaf8;border-top:1px solid #eef0ec;font-size:11px;color:#9ca3af;">Automated · Zen Garden Exchange script · ' + o.footer + '</div>' +
     '</div>' +
