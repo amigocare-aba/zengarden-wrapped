@@ -8,10 +8,11 @@ name: Zen Garden Daily Runner
 
 on:
   schedule:
-    # Every day at 12pm ET
-    # DST note: change back to '0 16 * * *' after Mar 8, 2027 (when EDT resumes).
-    #           then '0 17 * * *' again after Nov 7, 2027 (when EST returns).
-    - cron: '0 17 * * *'  # 17:00 UTC = 12pm EST
+    # Every day at ~12pm ET. Minute :07 on purpose — GitHub's :00 slots are the
+    # most congested and get the worst scheduling delays.
+    # DST note: change to '7 16 * * *' after Mar 8, 2027 (when EDT resumes),
+    #           then back to '7 17 * * *' after Nov 7, 2027 (when EST returns).
+    - cron: '7 17 * * *'  # 17:07 UTC = 12:07pm EST
   workflow_dispatch:
     inputs:
       simulate_date:
