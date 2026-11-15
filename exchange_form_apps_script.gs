@@ -12,30 +12,8 @@
  *   Day 9,  12–1am ET → form CLOSES + email to HR & Alex with the
  *                       submission count and the responses link
  *
- * ---------------------------------------------------------------------
- * ONE-TIME SETUP (~5 minutes):
- *   1. Open the form in EDIT mode → ⋮ (top right) → Script editor.
- *      (This REPLACES the old "Auto-Open/Close" schedule script that
- *      lives there — select all of its code and delete it.)
- *   2. Paste this whole file. Save (Cmd+S).
- *      Bound this way, the script finds the form by itself — you can
- *      leave FORM_ID untouched.
- *   3. Project Settings (gear icon) → confirm time zone is
- *      "(GMT-05:00) Eastern Time".
- *   4. In the toolbar, select the function `reopenNow` → Run → approve
- *      the permissions prompt. This reopens the form immediately
- *      (fixes the "form isn't available" problem same-day).
- *   5. Select the function `setup` → Run. This installs the monthly
- *      triggers AND removes the old script's trigger if one exists.
- *
- * (Alternative: paste into a standalone project at script.google.com —
- *  then you must also set FORM_ID to the long id from the form's edit
- *  URL, docs.google.com/forms/d/THIS_LONG_ID/edit.)
- *
- * To verify later: Triggers (clock icon) should show reopenForm (day 1)
- * and closeFormAndEmail (day 9) — and NOT dailyCheck. Emails come from
- * whoever ran setup.
- * ---------------------------------------------------------------------
+ * Emails are branded HTML cards (plain-text fallback included).
+ * Run sendTestEmail to preview both designs — it emails only YOU.
  */
 
 // ⚙️ CONFIG ------------------------------------------------------------
@@ -75,18 +53,9 @@ function getForm() {
 function reopenForm() {
   var form = getForm();
   form.setAcceptingResponses(true);
-  var m = wrappedMonthName();
-  MailApp.sendEmail({
-    to: EMAIL_TO,
-    subject: '🌱 Zen Garden exchange form is OPEN — ' + m + ' redemptions',
-    body: 'The point exchange form just reopened for ' + m + ' redemptions.\n\n' +
-      'It closes automatically at the end of the day on the ' + DEADLINE_DAY +
-      'th, and you’ll get a follow-up email with the submission count.\n\n' +
-      'Form (what the team fills out): ' + form.getPublishedUrl() + '\n' +
-      'Responses sheet (for HR, fills up live): ' + responsesLink(form) + '\n\n' +
-      '(automated — Zen Garden Exchange script)'
-  });
-  Logger.log('✓ Form reopened for ' + m);
+  var mail = buildOpenEmail_(form);
+  MailApp.sendEmail({ to: EMAIL_TO, subject: mail.subject, body: mail.body, htmlBody: mail.html });
+  Logger.log('✓ Form reopened for ' + wrappedMonthName());
 }
 
 /** Day 9, 12–1am: close the form and tell HR what came in. */
@@ -109,17 +78,8 @@ function closeFormAndEmail() {
     return r.getTimestamp() >= windowStart;
   }).length;
 
-  var m = wrappedMonthName();
-  MailApp.sendEmail({
-    to: EMAIL_TO,
-    subject: '✅ Zen Garden exchange form CLOSED — ' + count + ' ' + m + ' submission' +
-      (count === 1 ? '' : 's') + ' ready for payroll',
-    body: 'The ' + m + ' point exchange window (1st–' + DEADLINE_DAY + 'th) just closed.\n\n' +
-      'Submissions this window: ' + count + '\n' +
-      'Review them here: ' + responsesLink(form) + '\n\n' +
-      'Bonuses go on the following paycheck.\n\n' +
-      '(automated — Zen Garden Exchange script)'
-  });
+  var mail = buildCloseEmail_(form, count);
+  MailApp.sendEmail({ to: EMAIL_TO, subject: mail.subject, body: mail.body, htmlBody: mail.html });
   Logger.log('✓ Form closed, ' + count + ' submissions, email sent to ' + EMAIL_TO);
 }
 
@@ -135,6 +95,100 @@ function onNewSubmission(e) {
       '(automated — Zen Garden Exchange script)'
   });
 }
+
+// ── Email builders ────────────────────────────────────────────────────
+
+/** The "form is OPEN" email (sent the 1st). */
+function buildOpenEmail_(form) {
+  var m = wrappedMonthName();
+  var win = windowLabel_();
+  var formUrl = form.getPublishedUrl();
+  var sheetUrl = responsesLink(form);
+  return {
+    subject: '🌱 Zen Garden exchange form is OPEN — ' + m + ' redemptions',
+    body: 'The point exchange form just reopened for ' + m + ' redemptions.\n\n' +
+      'It closes automatically at the end of the day on the ' + DEADLINE_DAY + 'th.\n\n' +
+      'Form (what the team fills out): ' + formUrl + '\n' +
+      'Responses sheet (for HR, fills up live): ' + sheetUrl + '\n\n' +
+      '(automated — Zen Garden Exchange script)',
+    html: emailCard_({
+      chip: 'FORM OPEN', chipBg: '#9FE1CB', chipColor: '#04342C',
+      headline: m + ' redemptions are open',
+      headlineSize: '24px',
+      subline: 'Cash in your Zen Garden points — closes end of day on the ' + DEADLINE_DAY + 'th.',
+      rows: [['Month redeemed', m], ['Window', win], ['Closes', 'Midnight on the ' + DEADLINE_DAY + 'th']],
+      buttonText: 'Open the exchange form', buttonUrl: formUrl,
+      secondaryText: 'Watch submissions arrive (responses sheet) →', secondaryUrl: sheetUrl,
+      note: 'You’ll get a follow-up email with the final submission count when the window closes.',
+      footer: 'closes automatically at midnight on the ' + DEADLINE_DAY + 'th'
+    })
+  };
+}
+
+/** The "form is CLOSED — payroll" email (sent the 9th). */
+function buildCloseEmail_(form, count) {
+  var m = wrappedMonthName();
+  var win = windowLabel_();
+  var sheetUrl = responsesLink(form);
+  var plural = count === 1 ? '' : 's';
+  return {
+    subject: '✅ Zen Garden exchange form CLOSED — ' + count + ' ' + m + ' submission' + plural + ' ready for payroll',
+    body: 'The ' + m + ' point exchange window (' + win + ') just closed.\n\n' +
+      'Submissions this window: ' + count + '\n' +
+      'Review them here: ' + sheetUrl + '\n\n' +
+      'Bonuses go on the following paycheck.\n\n' +
+      '(automated — Zen Garden Exchange script)',
+    html: emailCard_({
+      chip: 'FORM CLOSED', chipBg: '#ffffff', chipColor: '#0F6E56',
+      headline: count + ' submission' + plural,
+      headlineSize: '30px',
+      subline: 'The ' + m + ' exchange window has closed — ready for payroll.',
+      rows: [['Month redeemed', m], ['Window', win], ['Bonuses land', 'Next paycheck']],
+      buttonText: 'Review the ' + count + ' submission' + plural, buttonUrl: sheetUrl,
+      note: 'Bonuses go on the following paycheck. 💸',
+      footer: 'the form reopens on the 1st'
+    })
+  };
+}
+
+/** Shared branded HTML card. Inline styles only (email clients ignore everything else). */
+function emailCard_(o) {
+  var rows = (o.rows || []).map(function (r, i) {
+    var line = i === 0 ? '' : 'border-top:1px solid #f3f4f6;';
+    return '<tr>' +
+      '<td style="padding:8px 0;color:#6b7280;font-size:13px;' + line + '">' + r[0] + '</td>' +
+      '<td style="padding:8px 0;color:#111827;font-size:13px;font-weight:700;text-align:right;' + line + '">' + r[1] + '</td>' +
+      '</tr>';
+  }).join('');
+  var secondary = o.secondaryText
+    ? '<p style="margin:14px 0 0;font-size:13px;"><a href="' + o.secondaryUrl + '" style="color:#0F6E56;font-weight:600;text-decoration:none;">' + o.secondaryText + '</a></p>'
+    : '';
+  return '<div style="background:#f3f4f1;padding:28px 12px;font-family:Arial,Helvetica,sans-serif;">' +
+    '<div style="max-width:520px;margin:0 auto;background:#ffffff;border-radius:14px;border:1px solid #e5e7eb;overflow:hidden;">' +
+      '<table style="width:100%;border-collapse:collapse;background:#0F6E56;"><tr>' +
+        '<td style="padding:16px 26px;color:#ffffff;font-size:14px;font-weight:700;letter-spacing:1.5px;">🌱 ZEN GARDEN</td>' +
+        '<td style="padding:16px 26px;text-align:right;"><span style="background:' + o.chipBg + ';color:' + o.chipColor + ';font-size:10.5px;font-weight:700;letter-spacing:1px;padding:4px 12px;border-radius:999px;">' + o.chip + '</span></td>' +
+      '</tr></table>' +
+      '<div style="padding:26px;">' +
+        '<p style="margin:0;font-size:' + (o.headlineSize || '26px') + ';font-weight:700;color:#111827;">' + o.headline + '</p>' +
+        '<p style="margin:6px 0 18px;font-size:14px;color:#6b7280;">' + o.subline + '</p>' +
+        '<table style="width:100%;border-collapse:collapse;border-top:1px solid #e5e7eb;">' + rows + '</table>' +
+        '<div style="margin:22px 0 6px;"><a href="' + o.buttonUrl + '" style="display:inline-block;background:#1D9E75;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:999px;">' + o.buttonText + '</a></div>' +
+      secondary +
+      '<p style="margin:16px 0 0;font-size:13px;color:#374151;">' + o.note + '</p>' +
+      '</div>' +
+      '<div style="padding:12px 26px;background:#fafaf8;border-top:1px solid #eef0ec;font-size:11px;color:#9ca3af;">Automated · Zen Garden Exchange script · ' + o.footer + '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/** "Nov 1 – Nov 8" for the current month's window. */
+function windowLabel_() {
+  var mon = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'MMM');
+  return mon + ' 1 – ' + mon + ' ' + DEADLINE_DAY;
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────
 
 /** Link HR should check: the exact configured tab, else the linked sheet, else the form's Responses tab. */
 function responsesLink(form) {
@@ -161,11 +215,24 @@ function wrappedMonthName() {
 }
 
 // 🔧 Manual helpers — run from the toolbar any time:
+
+/** Preview BOTH email designs — sends them to YOU ONLY (not HR), subjects prefixed [TEST]. */
+function sendTestEmail() {
+  var me = Session.getActiveUser().getEmail() || 'alex.arevalo@amigocareaba.com';
+  var form = getForm();
+  var open = buildOpenEmail_(form);
+  var close = buildCloseEmail_(form, 9);
+  MailApp.sendEmail({ to: me, subject: '[TEST] ' + open.subject, body: open.body, htmlBody: open.html });
+  MailApp.sendEmail({ to: me, subject: '[TEST] ' + close.subject, body: close.body, htmlBody: close.html });
+  Logger.log('✓ Two [TEST] emails sent to ' + me + ' only');
+}
+
 /** Reopen the form right now (e.g. it was left closed mid-window). */
 function reopenNow() {
   getForm().setAcceptingResponses(true);
   Logger.log('✓ Form is now OPEN: ' + getForm().getPublishedUrl());
 }
+
 /** Close the form right now and send HR the summary email. */
 function closeNow() {
   closeFormAndEmail();
