@@ -98,55 +98,57 @@ function onNewSubmission(e) {
 
 // ── Email builders ────────────────────────────────────────────────────
 
-/** The "form is OPEN" email (sent the 1st). */
+/** The "window opened" heads-up for HR (sent the 1st). No action needed yet. */
 function buildOpenEmail_(form) {
   var m = wrappedMonthName();
   var win = windowLabel_();
   var formUrl = form.getPublishedUrl();
   var sheetUrl = responsesLink(form);
   return {
-    subject: '🌱 Zen Garden exchange form is OPEN — ' + m + ' redemptions',
-    body: 'The point exchange form just reopened for ' + m + ' redemptions.\n\n' +
-      'It closes automatically at the end of the day on the ' + DEADLINE_DAY + 'th.\n\n' +
-      'Form (what the team fills out): ' + formUrl + '\n' +
-      'Responses sheet (for HR, fills up live): ' + sheetUrl + '\n\n' +
+    subject: '🌱 Zen Garden window open — ' + m + ' redemptions (no action yet)',
+    body: 'Heads up: the ' + m + ' redemption window just opened (' + win + ').\n\n' +
+      'The team submits their bonus requests this week. Nothing for you to do yet — ' +
+      'you’ll get the payroll email with the final list when it closes on the ' + DEADLINE_DAY + 'th.\n\n' +
+      'Watch submissions come in: ' + sheetUrl + '\n' +
+      'The form, in case anyone asks for the link: ' + formUrl + '\n\n' +
       '(automated — Zen Garden Exchange script)',
     html: emailCard_({
-      chip: 'FORM OPEN', chipBg: '#9FE1CB', chipColor: '#04342C',
-      headline: m + ' redemptions are open',
-      headlineSize: '24px',
-      subline: 'Cash in your Zen Garden points — closes end of day on the ' + DEADLINE_DAY + 'th.',
-      rows: [['Month redeemed', m], ['Window', win], ['Closes', 'Midnight on the ' + DEADLINE_DAY + 'th']],
-      buttonText: 'Open the exchange form', buttonUrl: formUrl,
-      secondaryText: 'Watch submissions arrive (responses sheet) →', secondaryUrl: sheetUrl,
-      note: 'You’ll get a follow-up email with the final submission count when the window closes.',
-      footer: 'closes automatically at midnight on the ' + DEADLINE_DAY + 'th'
+      chip: 'HEADS UP · NO ACTION', chipBg: '#9FE1CB', chipColor: '#04342C',
+      headline: m + ' redemption window is open',
+      headlineSize: '23px',
+      subline: 'The team is submitting bonus requests this week. Nothing for you to do yet.',
+      rows: [['Month redeemed', m], ['Window', win], ['Your action', 'None — payroll email comes on the ' + (DEADLINE_DAY + 1) + 'th']],
+      buttonText: 'Watch submissions come in', buttonUrl: sheetUrl,
+      secondaryText: 'The form itself, in case anyone asks for the link →', secondaryUrl: formUrl,
+      note: 'When the window closes, you’ll get one email with the final count and the list to process.',
+      footer: 'window closes at midnight on the ' + DEADLINE_DAY + 'th'
     })
   };
 }
 
-/** The "form is CLOSED — payroll" email (sent the 9th). */
+/** The "window closed — process payroll" action email for HR (sent the 9th). */
 function buildCloseEmail_(form, count) {
   var m = wrappedMonthName();
   var win = windowLabel_();
   var sheetUrl = responsesLink(form);
-  var plural = count === 1 ? '' : 's';
+  var plural = count === 1 ? '' : 'es';
+  var subPlural = count === 1 ? '' : 's';
   return {
-    subject: '✅ Zen Garden exchange form CLOSED — ' + count + ' ' + m + ' submission' + plural + ' ready for payroll',
-    body: 'The ' + m + ' point exchange window (' + win + ') just closed.\n\n' +
-      'Submissions this window: ' + count + '\n' +
+    subject: '💸 Payroll action: add ' + count + ' Zen Garden bonus' + plural + ' — ' + m,
+    body: 'The ' + m + ' redemption window (' + win + ') is closed. These go on the next paycheck.\n\n' +
+      'Submissions to process: ' + count + '\n' +
       'Review them here: ' + sheetUrl + '\n\n' +
-      'Bonuses go on the following paycheck.\n\n' +
+      'Tip: mark each row as processed in the sheet so nothing gets missed.\n\n' +
       '(automated — Zen Garden Exchange script)',
     html: emailCard_({
-      chip: 'FORM CLOSED', chipBg: '#ffffff', chipColor: '#0F6E56',
-      headline: count + ' submission' + plural,
-      headlineSize: '30px',
-      subline: 'The ' + m + ' exchange window has closed — ready for payroll.',
-      rows: [['Month redeemed', m], ['Window', win], ['Bonuses land', 'Next paycheck']],
-      buttonText: 'Review the ' + count + ' submission' + plural, buttonUrl: sheetUrl,
-      note: 'Bonuses go on the following paycheck. 💸',
-      footer: 'the form reopens on the 1st'
+      chip: 'ACTION NEEDED', chipBg: '#FAC775', chipColor: '#412402',
+      headline: count + ' bonus' + plural + ' to add to payroll',
+      headlineSize: '27px',
+      subline: 'The ' + m + ' window is closed — this is the final list. They go on the next paycheck.',
+      rows: [['Month redeemed', m], ['Window', win], ['Submission' + subPlural, String(count)], ['Add to', 'Next paycheck']],
+      buttonText: 'Review & process the ' + count + ' submission' + subPlural, buttonUrl: sheetUrl,
+      note: 'Tip: mark each row as processed in the sheet so nothing gets missed.',
+      footer: 'the window reopens on the 1st'
     })
   };
 }
