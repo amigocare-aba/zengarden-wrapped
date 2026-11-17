@@ -239,6 +239,7 @@ body {
     <div class="section-title">TOP 10, EVERY MONTH</div>
     <div class="section-note">Each month starts fresh — these are the final standings (and the month in progress).</div>
     <div class="months-grid" id="monthsGrid"></div>
+    <div class="section-note" style="margin-top:12px;">February &amp; March 2026 are the official final boards from the hand-tracked era — April onward is computed automatically from Slack.</div>
 
   </div>
 
@@ -427,7 +428,7 @@ function render(all, live, weekly) {
     statTile(Object.keys(champions).length, 'Champions');
 
   // Cumulative board
-  document.getElementById('cumTag').textContent = 'APRIL → TODAY';
+  document.getElementById('cumTag').textContent = (first.month + ' → today').toUpperCase();
   document.getElementById('cumNote').textContent =
     'Every point from every month, added up' + (live ? ' — including ' + live.label + ' so far.' : '.');
   var boardEl = document.getElementById('board');
