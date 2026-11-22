@@ -32,14 +32,21 @@ import time
 import urllib.request
 from collections import defaultdict
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
+
+# All "what day is it?" decisions happen in Eastern time, NOT the runner's
+# clock (GitHub runners are UTC). This is what makes a run that fires late
+# in the evening still count as "today" — UTC flips to tomorrow at 7pm ET.
+ET = ZoneInfo("America/New_York")
 
 # ── PATHS ───────────────────────────────────────────────────────────
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE = os.path.join(SCRIPT_DIR, "weekly_config.json")
 JSON_FILE = os.path.join(SCRIPT_DIR, "zen_garden_weekly.json")
 STATUS_FILE = os.path.join(SCRIPT_DIR, "run_status.json")
+STATE_FILE = os.path.join(SCRIPT_DIR, "posted_state.json")
 SUMMARY_FILE = os.path.join(SCRIPT_DIR, "weekly_summary.txt")
 REPORTS_DIR = os.path.join(SCRIPT_DIR, "weekly_reports")
 
@@ -413,6 +420,68 @@ def write_status(status_data):
 
 # ── MAIN ───────────────────────────────────────────────────────────
 
+def load_posted_state():
+    """What has actually been posted to Slack, surviving across runs.
+
+    GitHub's scheduler can fire us late, twice, or not at all (their docs:
+    schedule events are delayed under load and can be dropped entirely).
+    So every run decides from THIS state — "what's missing?" — instead of
+    trusting that it was woken up exactly once, on time, on the right day.
+    """
+    try:
+        with open(STATE_FILE) as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def save_posted_state(**updates):
+    state = load_posted_state()
+    state.update(updates)
+    with open(STATE_FILE, "w") as f:
+        json.dump(state, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+
+
+def most_recent_sunday(today):
+    """The Sunday of the current week (today itself when today is Sunday)."""
+    return today - timedelta(days=(today.weekday() + 1) % 7)
+
+
+def decide_action(today, state, config):
+    """Pure decision from date + posted state: (action, target_month, reason).
+
+    Rules, in priority order:
+      1. Monthly recap — due on the 1st; healed through day 3 if a run
+         never landed on the 1st.
+      2. Weekly leaderboard — due on Sunday; healed on Monday if no run
+         landed all Sunday. (Beyond Monday the data window would bleed
+         into the new week, so we stop chasing.)
+      3. Otherwise nothing is due (the exchange reminder is decided
+         separately — it is day-of-month based, not backlog based).
+
+    Extra ticks on a day something was already posted fall through to
+    "nothing due", which is what makes multiple daily cron slots safe.
+    """
+    if today.day <= 3:
+        prev_day = today.replace(day=1) - timedelta(days=1)
+        prev_label = _current_month_label(prev_day, config)
+        if prev_label and state.get("last_monthly") != prev_label:
+            reason = "scheduled" if today.day == 1 else "catch-up — no run landed on the 1st"
+            return "monthly", prev_label, reason
+
+    sunday = most_recent_sunday(today)
+    if (today - sunday).days <= 1:
+        label = _current_month_label(sunday, config)
+        if label:
+            if str(state.get("last_weekly_sunday", "")) >= sunday.isoformat():
+                return None, None, f"weekly_already_posted_{sunday.isoformat()}"
+            reason = "scheduled" if today == sunday else "catch-up — no run landed on Sunday"
+            return "weekly", label, reason
+
+    return None, None, "nothing_due"
+
+
 def _current_month_label(today, config):
     """Find the month whose start/end date range includes `today`."""
     for label, info in config.get("months", {}).items():
@@ -616,7 +685,7 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
     if args.dry_run:
         print("\n🧪 DRY RUN — no files written, no post sent")
         write_status({
-            "last_run": datetime.now().isoformat(timespec="seconds"),
+            "last_run": datetime.now(ET).isoformat(timespec="seconds"),
             "status": "dry_run",
             "action": "weekly",
             "month": target_month,
@@ -683,7 +752,7 @@ def run_weekly_leaderboard(args, config, target_month, today, posting_enabled):
         print("\n🔇 Slack post SUPPRESSED (--no-post or --simulate-date)")
 
     write_status({
-        "last_run": datetime.now().isoformat(timespec="seconds"),
+        "last_run": datetime.now(ET).isoformat(timespec="seconds"),
         "status": "success" if posting_enabled else "no_post",
         "action": "weekly",
         "month": target_month,
@@ -709,7 +778,7 @@ def run_monthly_recap(args, config, target_month, today, posting_enabled):
         print("⚠️  Wrapped extraction failed:")
         print(result.stderr)
         write_status({
-            "last_run": datetime.now().isoformat(timespec="seconds"),
+            "last_run": datetime.now(ET).isoformat(timespec="seconds"),
             "status": "error",
             "action": "monthly",
             "month": target_month,
@@ -752,7 +821,7 @@ def run_monthly_recap(args, config, target_month, today, posting_enabled):
     if args.dry_run:
         print("\n🧪 DRY RUN — no post sent")
         write_status({
-            "last_run": datetime.now().isoformat(timespec="seconds"),
+            "last_run": datetime.now(ET).isoformat(timespec="seconds"),
             "status": "dry_run",
             "action": "monthly",
             "month": target_month,
@@ -790,7 +859,7 @@ def run_monthly_recap(args, config, target_month, today, posting_enabled):
     print(f"\n♻️  Reset {JSON_FILE} for new month")
 
     write_status({
-        "last_run": datetime.now().isoformat(timespec="seconds"),
+        "last_run": datetime.now(ET).isoformat(timespec="seconds"),
         "status": "success" if posting_enabled else "no_post",
         "action": "monthly",
         "month": target_month,
@@ -822,6 +891,10 @@ def maybe_post_exchange_reminder(args, config, today, posting_enabled):
     """
     if today.day != _exchange_deadline_day(config):
         return False
+    # With several cron slots a day, only the first tick posts the reminder.
+    if load_posted_state().get("last_reminder_date") == today.isoformat():
+        print("⏭️  Exchange reminder already posted today — skipping")
+        return False
     form_url = config.get("exchange_form_url", "")
     if not form_url:
         print("⚠️  exchange_form_url missing from config — skipping exchange reminder")
@@ -842,6 +915,7 @@ def maybe_post_exchange_reminder(args, config, today, posting_enabled):
         return True
     if posting_enabled:
         post_to_slack(reminder_msg)
+        save_posted_state(last_reminder_date=today.isoformat())
         print("✅ Exchange-form last-call reminder posted")
     else:
         print("🔇 Exchange reminder SUPPRESSED (--no-post or --simulate-date)")
@@ -860,35 +934,36 @@ def main():
     # Load & validate config
     config = load_and_validate_config()
 
-    today_str = args.simulate_date if args.simulate_date else datetime.now().date().isoformat()
+    # "Today" is decided in Eastern time — a run that GitHub fires hours late
+    # (even at 11pm ET) still sees the right day. UTC would flip at 7pm ET.
+    today_str = args.simulate_date if args.simulate_date else datetime.now(ET).date().isoformat()
     today = datetime.strptime(today_str, "%Y-%m-%d").date()
     posting_enabled = not (args.no_post or args.simulate_date)
 
     if args.simulate_date:
         print(f"🎭 SIMULATING TODAY = {today_str}\n")
 
-    # Determine action
+    # Determine action — forced flags bypass the state check (explicit human
+    # intent), everything else asks "what hasn't been posted yet?"
+    state = load_posted_state()
+    decide_reason = "forced"
     if args.force_monthly:
         action = "monthly"
         target_month = args.force_monthly
     elif args.force_weekly:
         action = "weekly"
         target_month = _current_month_label(today, config)
-    elif today.day == 1:
-        action = "monthly"
-        prev_day = today - timedelta(days=1)
-        target_month = _current_month_label(prev_day, config)
-    elif today.weekday() == 6:  # Sunday
-        action = "weekly"
-        target_month = _current_month_label(today, config)
     else:
+        action, target_month, decide_reason = decide_action(today, state, config)
+
+    if action is None:
         # Not a posting day — but the exchange-form deadline may still fall here.
         try:
             reminded = maybe_post_exchange_reminder(args, config, today, posting_enabled)
         except Exception as e:
             print(f"\n❌ exchange reminder failed: {e}")
             write_status({
-                "last_run": datetime.now().isoformat(timespec="seconds"),
+                "last_run": datetime.now(ET).isoformat(timespec="seconds"),
                 "status": "error",
                 "action": "exchange_reminder",
                 "date": today_str,
@@ -897,17 +972,17 @@ def main():
             sys.exit(1)
         if reminded:
             write_status({
-                "last_run": datetime.now().isoformat(timespec="seconds"),
+                "last_run": datetime.now(ET).isoformat(timespec="seconds"),
                 "status": "success" if posting_enabled else ("dry_run" if args.dry_run else "no_post"),
                 "action": "exchange_reminder",
                 "date": today_str,
             })
             return
-        print(f"📅 {today_str} is neither Sunday nor the 1st of a month — no post today.")
+        print(f"📅 {today_str}: nothing due ({decide_reason}) — no post this run.")
         write_status({
-            "last_run": datetime.now().isoformat(timespec="seconds"),
+            "last_run": datetime.now(ET).isoformat(timespec="seconds"),
             "status": "no_op",
-            "reason": "not_sunday_or_first",
+            "reason": decide_reason,
             "date": today_str,
         })
         return
@@ -915,7 +990,7 @@ def main():
     if not target_month:
         print(f"❌ Could not resolve target month for {today_str}. Check weekly_config.json.")
         write_status({
-            "last_run": datetime.now().isoformat(timespec="seconds"),
+            "last_run": datetime.now(ET).isoformat(timespec="seconds"),
             "status": "error",
             "action": action,
             "date": today_str,
@@ -923,13 +998,25 @@ def main():
         })
         sys.exit(1)
 
-    print(f"📅 {today_str} → {action.upper()} for {target_month}\n")
+    print(f"📅 {today_str} → {action.upper()} for {target_month} ({decide_reason})\n")
 
     try:
         if action == "monthly":
             run_monthly_recap(args, config, target_month, today, posting_enabled)
         else:
             run_weekly_leaderboard(args, config, target_month, today, posting_enabled)
+        # Record what just went out so extra cron ticks (and tomorrow's
+        # catch-up check) know there's nothing left to do.
+        if posting_enabled and not args.dry_run:
+            sunday_iso = most_recent_sunday(today).isoformat()
+            if action == "monthly":
+                # The Wrapped covers the whole month, so a missed Sunday from
+                # that month is satisfied by it too.
+                prev = str(load_posted_state().get("last_weekly_sunday", ""))
+                save_posted_state(last_monthly=target_month,
+                                  last_weekly_sunday=max(prev, sunday_iso))
+            else:
+                save_posted_state(last_weekly_sunday=sunday_iso)
         # Deadline day can coincide with a Sunday — leaderboard first, then last call.
         maybe_post_exchange_reminder(args, config, today, posting_enabled)
     except SystemExit:
@@ -939,7 +1026,7 @@ def main():
         # run_status.json even when this script exits non-zero).
         print(f"\n❌ {action} run failed: {e}")
         write_status({
-            "last_run": datetime.now().isoformat(timespec="seconds"),
+            "last_run": datetime.now(ET).isoformat(timespec="seconds"),
             "status": "error",
             "action": action,
             "month": target_month,

@@ -8,11 +8,19 @@ name: Zen Garden Daily Runner
 
 on:
   schedule:
-    # Every day at ~12pm ET. Minute :07 on purpose — GitHub's :00 slots are the
-    # most congested and get the worst scheduling delays.
-    # DST note: change to '7 16 * * *' after Mar 8, 2027 (when EDT resumes),
-    #           then back to '7 17 * * *' after Nov 7, 2027 (when EST returns).
-    - cron: '7 17 * * *'  # 17:07 UTC = 12:07pm EST
+    # Four chances a day, staggered off the congested :00 slots (GitHub's
+    # docs: schedule events are delayed under load and can be DROPPED
+    # entirely — we lost Sunday Nov 15 to exactly that).
+    # The script decides what's due from posted_state.json ("has this
+    # Sunday / this month been posted yet?"), so extra ticks are harmless
+    # no-ops, whichever tick lands first posts, and Monday's ticks heal a
+    # fully dead Sunday. Days are computed in Eastern time inside the
+    # script, so late-evening ticks still count as today and DST needs no
+    # cron edits — posts simply land ~1h earlier in summer.
+    - cron: '7 16 * * *'   # 11:07am EST / 12:07pm EDT
+    - cron: '37 18 * * *'  # 1:37pm EST / 2:37pm EDT
+    - cron: '7 21 * * *'   # 4:07pm EST / 5:07pm EDT
+    - cron: '37 23 * * *'  # 6:37pm EST / 7:37pm EDT
   workflow_dispatch:
     inputs:
       simulate_date:
@@ -33,6 +41,13 @@ on:
         description: 'Force a monthly recap for this month label (e.g. "July 2026")'
         required: false
         type: string
+
+# Never run two ticks at once — a delayed tick and the next scheduled one
+# queue up behind each other, so the second always sees the first's
+# committed posted_state.json and no-ops instead of double-posting.
+concurrency:
+  group: zen-garden-daily
+  cancel-in-progress: false
 
 jobs:
   extract:
@@ -122,7 +137,7 @@ jobs:
         run: |
           git config user.name "Zen Garden Bot"
           git config user.email "bot@amigocareaba.com"
-          git add zen_garden_weekly.json run_status.json weekly_reports/ || true
+          git add zen_garden_weekly.json run_status.json posted_state.json weekly_reports/ || true
           [ -f zen_garden_wrapped_data.json ] && git add zen_garden_wrapped_data.json || true
           [ -d monthly_reports ] && git add monthly_reports/ || true
           if git diff --cached --quiet; then

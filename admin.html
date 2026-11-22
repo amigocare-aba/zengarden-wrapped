@@ -396,11 +396,12 @@ body::before {
     </div>
 
     <div class="faq-item">
-      <button class="faq-q">Daylight saving time? <span class="faq-arrow">&rsaquo;</span></button>
+      <button class="faq-q">When do posts go out? (schedule &amp; reliability) <span class="faq-arrow">&rsaquo;</span></button>
       <div class="faq-a">
-        The daily cron is set per season so Gardy posts at <strong>~12pm ET year-round</strong>. Current setting: <code>'7 17 * * *'</code> (17:07 UTC = 12:07pm EST; the :07 minute avoids GitHub's congested top-of-hour slot, switched Nov 15, 2026).<br><br>
-        After Mar 8, 2027 (when EDT resumes), edit <a href="https://github.com/amigocare-aba/zengarden-wrapped/blob/main/.github/workflows/weekly-points.yml" target="_blank">weekly-points.yml</a> and change <code>'7 17 * * *'</code> to <code>'7 16 * * *'</code>. Switch back to 17 in November 2027.<br><br>
-        <em>Note: GitHub often delays scheduled runs by a few hours during busy periods — a post landing mid-afternoon instead of noon is normal, not an error.</em>
+        The runner gets <strong>four chances a day</strong> — 11:07am, 1:37pm, 4:07pm and 6:37pm ET (one hour later in winter is normal). Each run asks <em>"has this Sunday's board / this month's Wrapped been posted yet?"</em> (tracked in <code>posted_state.json</code>) — whichever tick lands first posts, the rest quietly do nothing, so nothing ever posts twice.<br><br>
+        <strong>Why four?</strong> GitHub's scheduler runs everyone's jobs in one shared queue — their docs say scheduled runs can be delayed under load or dropped entirely (that's what skipped Sunday Nov 15, 2026). With four staggered ticks plus catch-up, a missed tick costs minutes, and even a fully dead Sunday is auto-healed by Monday's first run.<br><br>
+        <strong>Daylight saving:</strong> no action needed anymore — the script decides "what day is it?" in Eastern time, so late-evening runs still count as today and the cron never needs seasonal edits.<br><br>
+        <em>A post landing mid-afternoon instead of 11am is GitHub being busy, not an error. Truly stuck? Run the workflow manually: <a href="https://github.com/amigocare-aba/zengarden-wrapped/actions/workflows/weekly-points.yml" target="_blank">Actions → Run workflow</a>.</em>
       </div>
     </div>
 
