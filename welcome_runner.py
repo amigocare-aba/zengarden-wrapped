@@ -209,7 +209,7 @@ def main() -> None:
             local = json.load(f)
         for b in spec["batches"]:
             people = [local["people"][k] for k in b["local_keys"]]
-            text, flags, _ = compose_message(people, None)
+            text, flags, _ = compose_message(people, None, b.get("opener"))
             print(f"== batch {b['id']} ({b['date']}) ==\n{text}\n")
             for fl in flags:
                 print(f"  ⚠ {fl}")
