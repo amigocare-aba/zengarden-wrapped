@@ -180,11 +180,13 @@ OPENERS = {
     1: "A new amigo just joined — welcome them!! \U0001f389",
     2: "Two new amigos just joined — welcome them!! \U0001f389",
     3: "Three new amigos just joined — welcome them!! \U0001f389",
+    4: "Four new amigos just joined — welcome them!! \U0001f389",
 }
 
 
 def compose_batch(people: list[dict], heritage_on: bool = True) -> tuple[str, list[str]]:
-    opener = OPENERS.get(len(people), OPENERS[3])
+    n = len(people)
+    opener = OPENERS.get(n, f"{n} new amigos just joined — welcome them!! \U0001f389")
     blocks, all_flags = [], []
     for p in people:
         lines, flags = compose_person(p, heritage_on)

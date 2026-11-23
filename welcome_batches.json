@@ -16,14 +16,8 @@
     {
       "id": "3",
       "date": "2026-12-04",
-      "people": ["317", "321"],
-      "local_keys": ["vivi", "jaylan"]
-    },
-    {
-      "id": "4",
-      "date": "2026-12-08",
-      "people": ["320", "318"],
-      "local_keys": ["cristian", "roxy"]
+      "people": ["317", "321", "320", "318"],
+      "local_keys": ["vivi", "jaylan", "cristian", "roxy"]
     }
   ],
   "pins": {
