@@ -156,7 +156,9 @@ def build_person(eeid: str, widget_by_id: dict, directory: dict, pins: dict) -> 
     return person
 
 
-def compose_message(people: list[dict], names_to_id: dict | None) -> tuple[str, list[str], list[str]]:
+def compose_message(
+    people: list[dict], names_to_id: dict | None, opener: str | None = None
+) -> tuple[str, list[str], list[str]]:
     blocks, flags, unresolved = [], [], []
     for p in people:
         lines, pflags = compose_person(p)
@@ -167,7 +169,8 @@ def compose_message(people: list[dict], names_to_id: dict | None) -> tuple[str, 
             lines[0] = lines[0].replace(f"@{p['display_name']}", mention, 1)
         blocks.append("\n".join(lines))
         flags += [f"eeid {p.get('eeid', p['first_name'])}: {f}" for f in pflags]
-    opener = OPENERS.get(len(people), OPENERS[3])
+    n = len(people)
+    opener = opener or OPENERS.get(n, f"{n} new amigos just joined — welcome them!! \U0001f389")
     text = f"\U0001f389 *{opener}*\n\n" + "\n\n".join(blocks) + "\n\nSay hi below \U0001f44b"
     return text, flags, unresolved
 
@@ -226,10 +229,18 @@ def main() -> None:
         if due is None:
             sys.exit(f"no batch {args.batch} in {BATCHES_FILE}")
     else:
+        now_hm = datetime.now(ET).strftime("%H:%M")
         for b in spec["batches"]:  # oldest due first
-            if b["id"] not in done and date.fromisoformat(b["date"]) <= today:
-                due = b
-                break
+            if b["id"] in done:
+                continue
+            if date.fromisoformat(b["date"]) > today:
+                continue
+            # "after" gates a batch to its engagement window (ET, HH:MM);
+            # on a later catch-up day any tick qualifies.
+            if b["date"] == today.isoformat() and now_hm < b.get("after", "00:00"):
+                continue
+            due = b
+            break
 
     if due is None or due["id"] in done:
         print(f"welcome no_op: nothing due (done={sorted(done)})")
@@ -256,7 +267,7 @@ def main() -> None:
 
     bot, user_client = slack_clients()
     names_to_id = slack_user_map(user_client)
-    text, flags, unresolved = compose_message(people, names_to_id)
+    text, flags, unresolved = compose_message(people, names_to_id, due.get("opener"))
 
     # Sanitized log only — counts and labels, never answer text.
     print(f"batch {due['id']}: {len(people)} people composed, {len(dropped)} dropped")

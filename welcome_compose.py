@@ -184,9 +184,11 @@ OPENERS = {
 }
 
 
-def compose_batch(people: list[dict], heritage_on: bool = True) -> tuple[str, list[str]]:
+def compose_batch(
+    people: list[dict], heritage_on: bool = True, opener: str | None = None
+) -> tuple[str, list[str]]:
     n = len(people)
-    opener = OPENERS.get(n, f"{n} new amigos just joined — welcome them!! \U0001f389")
+    opener = opener or OPENERS.get(n, f"{n} new amigos just joined — welcome them!! \U0001f389")
     blocks, all_flags = [], []
     for p in people:
         lines, flags = compose_person(p, heritage_on)

@@ -10,11 +10,14 @@ name: Zen Garden Welcomes
 
 on:
   schedule:
-    # Four daily chances, offset from the leaderboard runner's ticks.
-    - cron: '11 16 * * *'  # 11:11am EST
-    - cron: '41 18 * * *'  # 1:41pm EST
-    - cron: '11 21 * * *'  # 4:11pm EST
-    - cron: '41 23 * * *'  # 6:41pm EST
+    # Two engagement windows measured from real #zengarden reply activity
+    # (analyzed 2026-11-22): lunch ~1pm ET and evening ~7pm ET. One
+    # primary tick per window plus a healing tick 45 min later; batches
+    # carry an "after" time so the evening batch never posts at lunch.
+    - cron: '7 18 * * *'   # 1:07pm EST (2:07pm EDT)
+    - cron: '52 18 * * *'  # 1:52pm EST heal
+    - cron: '7 0 * * *'    # 7:07pm EST (fires next UTC day; runner uses ET)
+    - cron: '52 0 * * *'   # 7:52pm EST heal
   workflow_dispatch:
     inputs:
       batch:
