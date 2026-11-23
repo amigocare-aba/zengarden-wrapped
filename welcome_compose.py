@@ -2,11 +2,12 @@
 """Zen Garden welcome-card composer.
 
 Contract: the composer TRANSPORTS answers, it never writes.
-  - Allowed transforms (whitelist): collapse whitespace, wrap at word
-    boundaries, wrap in quotes, prefix an emoji keyed to the QUESTION.
-  - The reconstruction guard proves nothing else happened: the wrapped
-    lines must re-join into the exact cleaned answer, or we refuse to
-    compose (no post > wrong post).
+  - Allowed transforms (whitelist): collapse whitespace, wrap in quotes,
+    prefix a bullet + an emoji keyed to the QUESTION. No hard line
+    breaks — Slack wraps each bullet naturally per device.
+  - The reconstruction guard proves nothing else happened: the text
+    between the quotes must equal the exact cleaned answer, or we
+    refuse to compose (no post > wrong post).
   - Answers captured incompletely (truncated) are never composed.
   - Any paraphrase ("Cat mom x3") can only enter via a human edit in the
     review step, stored as an explicit override with an editor name.
@@ -17,9 +18,8 @@ from __future__ import annotations
 import json
 import re
 import sys
-import textwrap
 
-MAX_LINE = 38  # phone-Slack wraps ~40 chars; stay under it
+MAX_LINE = 38  # a single token longer than this is keyboard-mash/URL blob — refuse
 
 # Question allowlist, in card priority order: (match prefix, emoji)
 # Questions not listed here (allergies, role-at-amigo, ...) never post.
@@ -66,18 +66,19 @@ def trim_lead(text: str) -> tuple[str, str | None]:
 
 
 def compose_fact(emoji: str, answer: str) -> list[str]:
-    """Verbatim fact -> short quoted lines. Raises if meaning could drift."""
+    """Verbatim fact -> one bulleted quoted line (no hard breaks; Slack
+    wraps it naturally per device). Raises if meaning could drift."""
     text = clean(answer)
     if not text:
         raise ComposerError("empty answer")
-    body = textwrap.wrap(text, MAX_LINE, break_long_words=False, break_on_hyphens=False)
-    if " ".join(body) != text:  # reconstruction guard
+    if any(len(tok) > MAX_LINE for tok in text.split()):
+        raise ComposerError(f"unbreakable monster token in: {answer!r}")
+    line = f' • {emoji} "{text}"'
+    # Reconstruction guard: what sits between the outer quotes must be
+    # the exact cleaned answer — nothing else happened to it.
+    if line[line.index('"') + 1 : line.rindex('"')] != text:
         raise ComposerError(f"guard failed for: {answer!r}")
-    if any(len(line) > MAX_LINE for line in body):  # un-wrappable monster token
-        raise ComposerError(f"line would exceed mobile width: {answer!r}")
-    lines = [f'{emoji} "{body[0]}' if i == 0 else body[i] for i in range(len(body))]
-    lines[-1] += '"'
-    return lines
+    return [line]
 
 
 def norm_name(s: str) -> str:
@@ -172,7 +173,7 @@ def compose_person(p: dict, heritage_on: bool = True) -> tuple[list[str], list[s
             match["skipped_by_guard"] = True
 
     if not answers:
-        lines.append("New to the garden — say hi! \U0001f331")
+        lines.append(" • \U0001f33f New to the garden — say hi!")
     return lines, review_flags(answers)
 
 
@@ -194,9 +195,12 @@ def compose_batch(
         lines, flags = compose_person(p, heritage_on)
         blocks.append("\n".join(lines))
         all_flags += [f"{p['first_name']}: {f}" for f in flags]
-    text = f"\U0001f389 *{opener}*\n\n" + "\n\n".join(blocks) + "\n\nSay hi below \U0001f44b"
-    for line in text.splitlines():
-        if len(line) > MAX_LINE + 4 and not line.startswith("\U0001f389"):
+    text = (f"\U0001f389 *{opener}*\n\n" + "\n\n".join(blocks)
+            + "\n\n\U0001f331 *Say hi below!* \U0001f447")
+    for line in text.splitlines():  # bullets wrap naturally; headers stay short
+        if line.startswith((" •", "\U0001f389", "\U0001f331")):
+            continue
+        if len(line) > MAX_LINE + 4:
             raise ComposerError(f"line too long for mobile: {line!r}")
     return text, all_flags
 

@@ -188,7 +188,8 @@ def compose_message(
         flags += [f"eeid {p.get('eeid', p['first_name'])}: {f}" for f in pflags]
     n = len(people)
     opener = opener or OPENERS.get(n, f"{n} new amigos just joined — welcome them!! \U0001f389")
-    text = f"\U0001f389 *{opener}*\n\n" + "\n\n".join(blocks) + "\n\nSay hi below \U0001f44b"
+    text = (f"\U0001f389 *{opener}*\n\n" + "\n\n".join(blocks)
+            + "\n\n\U0001f331 *Say hi below!* \U0001f447")
     return text, flags, unresolved
 
 

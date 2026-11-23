@@ -125,8 +125,10 @@ def main() -> None:
     check("allergy answer never posts", "Peanuts" not in text)
     check("empty answer skipped", '""' not in text)
     check("title suffix stripped", "(BT)" not in text and "(RBT)" not in text)
-    bad = [l for l in text.splitlines() if len(l) > wr.MAX_LINE + 4 and not l.startswith("\U0001f389")]
-    check("every line fits a phone", not bad, f"long lines: {bad[:2]}")
+    bad = [l for l in text.splitlines()
+           if len(l) > wr.MAX_LINE + 4
+           and not l.startswith((" •", "\U0001f389", "\U0001f331"))]
+    check("headers fit a phone (bullets wrap naturally)", not bad, f"long lines: {bad[:2]}")
     check("log sanitized (no answer text)", "Río-Grande" not in out and "Peanuts" not in out)
     with open(wr.STATE_FILE) as f:
         state = json.load(f)
