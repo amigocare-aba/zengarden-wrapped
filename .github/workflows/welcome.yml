@@ -14,6 +14,8 @@ on:
     # (analyzed 2026-11-22): lunch ~1pm ET and evening ~7pm ET. One
     # primary tick per window plus a healing tick 45 min later; batches
     # carry an "after" time so the evening batch never posts at lunch.
+    - cron: '31 14 * * *'  # 9:31am EST (morning window / experiment)
+    - cron: '1 15 * * *'   # 10:01am EST heal
     - cron: '7 18 * * *'   # 1:07pm EST (2:07pm EDT)
     - cron: '52 18 * * *'  # 1:52pm EST heal
     - cron: '7 0 * * *'    # 7:07pm EST (fires next UTC day; runner uses ET)

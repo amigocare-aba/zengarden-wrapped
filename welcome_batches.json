@@ -4,7 +4,7 @@
     {
       "id": "1",
       "date": "2026-11-23",
-      "after": "13:00",
+      "after": "09:30",
       "people": ["314", "313"],
       "local_keys": ["ricardo", "kat"]
     },
