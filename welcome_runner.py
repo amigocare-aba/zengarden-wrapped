@@ -78,6 +78,23 @@ def slack_clients():
     return WebClient(token=bot), WebClient(token=user)
 
 
+def post_card(text: str) -> None:
+    """Post via the incoming webhook bound to #zengarden — the same proven
+    path the daily leaderboard uses (the bot token lacks chat:write)."""
+    url = os.environ.get("SLACK_WEBHOOK_URL", "")
+    if not url:
+        sys.exit("SLACK_WEBHOOK_URL not set")
+    payload = json.dumps({"text": text}).encode("utf-8")
+    req = urllib.request.Request(
+        url, data=payload, headers={"Content-Type": "application/json"}
+    )
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        status = resp.status
+        body = resp.read().decode("utf-8", errors="replace").strip()
+    if status != 200 or body.lower() != "ok":
+        raise RuntimeError(f"webhook post failed: HTTP {status}, body={body!r}")
+
+
 def norm(s: str) -> str:
     return " ".join("".join(c for c in s.lower() if c.isalnum() or c.isspace()).split())
 
@@ -265,7 +282,7 @@ def main() -> None:
         save_state(welcome_batches_done=sorted(done | {due['id']}))
         return
 
-    bot, user_client = slack_clients()
+    _bot, user_client = slack_clients()
     names_to_id = slack_user_map(user_client)
     text, flags, unresolved = compose_message(people, names_to_id, due.get("opener"))
 
@@ -300,7 +317,7 @@ def main() -> None:
         print("DRY RUN: nothing posted")
         return
 
-    bot.chat_postMessage(channel=CHANNEL_ID, text=text, unfurl_links=False)
+    post_card(text)
     welcomed = state.get("welcomed", {})
     for p in people:
         welcomed[p["eeid"]] = today.isoformat()

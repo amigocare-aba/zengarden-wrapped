@@ -63,6 +63,7 @@ jobs:
           BAMBOOHR_API_KEY: ${{ secrets.BAMBOOHR_API_KEY }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_USER_TOKEN: ${{ secrets.SLACK_USER_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           ARGS=""
           if [ -n "${{ inputs.batch }}" ]; then

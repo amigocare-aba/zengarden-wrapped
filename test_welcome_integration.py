@@ -71,6 +71,7 @@ def install_fixtures(tmp: str, armed: bool = True) -> None:
     wr.fetch_widget = lambda: WIDGET
     wr.fetch_directory = lambda: {k: dict(v) for k, v in DIRECTORY.items()}
     wr.slack_clients = lambda: (FakeBot(), object())
+    wr.post_card = lambda text: POSTS.append({"text": text})
     wr.slack_user_map = lambda _c: dict(SLACK_NAMES)
     wr.STATE_FILE = os.path.join(tmp, "state.json")
     wr.BATCHES_FILE = os.path.join(tmp, "batches.json")
