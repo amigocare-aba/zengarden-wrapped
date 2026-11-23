@@ -246,6 +246,18 @@ def main() -> None:
 
     # Sanitized log only — counts and labels, never answer text.
     print(f"batch {due['id']}: {len(people)} people composed, {len(dropped)} dropped")
+    print(f"  widget: {len(widget_by_id)} hires returned")
+    sample = next(iter(widget_by_id.values()), None)
+    if sample is not None:
+        print(f"  widget item keys: {sorted(sample.keys())}")
+        gtky = sample.get("getToKnowYou")
+        print(f"  sample getToKnowYou type: {type(gtky).__name__}, "
+              f"len: {len(gtky) if isinstance(gtky, list) else 'n/a'}")
+        if isinstance(gtky, list) and gtky:
+            print(f"  sample Q&A keys: {sorted(gtky[0].keys())}")
+    for p in people:
+        print(f"  eeid {p['eeid']}: {len(p['answers'])} answers, "
+              f"in_widget={p['eeid'] in widget_by_id}")
     for eeid in dropped:
         print(f"  dropped (not active): eeid {eeid}")
     for eeid in unresolved:
