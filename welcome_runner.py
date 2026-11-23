@@ -103,9 +103,12 @@ def slack_user_map(user_client) -> dict[str, str]:
 
 def resolve_mention(person: dict, names_to_id: dict[str, str]) -> tuple[str, bool]:
     """-> (mention text, resolved?)  Tries preferred+last, first+last."""
+    last_word = person["last_name"].split()[-1] if person["last_name"] else ""
     for cand in (
         f"{person['first_name']} {person['last_name']}",
         f"{person.get('legal_first', '')} {person['last_name']}",
+        f"{person['first_name']} {last_word}",
+        f"{person.get('legal_first', '')} {last_word}",
         person["display_name"],
     ):
         uid = names_to_id.get(norm(cand))
@@ -127,10 +130,16 @@ def build_person(eeid: str, widget_by_id: dict, directory: dict, pins: dict) -> 
     w = widget_by_id.get(eeid, {})
     first = (d.get("preferredName") or w.get("preferredFirstName") or d.get("firstName") or "").strip()
     last = (d.get("lastName") or w.get("lastName") or "").strip()
+    # NOTE: BambooHR marks every GTKY item hidden:true by default even
+    # while displaying the answers on the company-wide home widget, so
+    # the flag carries no opt-out signal (verified 2026-11-22: 19/19
+    # items hidden across people whose answers the widget shows). We
+    # therefore accept answered items; the question allowlist in
+    # welcome_compose.py remains the real privacy gate.
     answers = {}
     for item in (w.get("getToKnowYou") or []):
         q, a = item.get("question", ""), (item.get("employeeResponse") or "").strip()
-        if q and a and not item.get("hidden"):
+        if q and a:
             answers[q] = {"text": a}
     person = {
         "eeid": eeid,
