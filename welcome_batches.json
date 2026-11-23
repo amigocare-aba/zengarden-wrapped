@@ -4,18 +4,24 @@
     {
       "id": "1",
       "date": "2026-11-23",
-      "people": ["314", "313", "316"],
-      "local_keys": ["ricardo", "kat", "amy"]
+      "people": ["314", "313"],
+      "local_keys": ["ricardo", "kat"]
     },
     {
       "id": "2",
       "date": "2026-12-02",
-      "people": ["315", "317", "321"],
-      "local_keys": ["mafer", "vivi", "jaylan"]
+      "people": ["316", "315"],
+      "local_keys": ["amy", "mafer"]
     },
     {
       "id": "3",
       "date": "2026-12-04",
+      "people": ["317", "321"],
+      "local_keys": ["vivi", "jaylan"]
+    },
+    {
+      "id": "4",
+      "date": "2026-12-08",
       "people": ["320", "318"],
       "local_keys": ["cristian", "roxy"]
     }
