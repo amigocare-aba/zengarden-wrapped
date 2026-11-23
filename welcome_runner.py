@@ -256,8 +256,15 @@ def main() -> None:
         if isinstance(gtky, list) and gtky:
             print(f"  sample Q&A keys: {sorted(gtky[0].keys())}")
     for p in people:
-        print(f"  eeid {p['eeid']}: {len(p['answers'])} answers, "
-              f"in_widget={p['eeid'] in widget_by_id}")
+        items = widget_by_id.get(p["eeid"], {}).get("getToKnowYou") or []
+        hidden = sum(1 for i in items if i.get("hidden"))
+        answered = sum(1 for i in items if (i.get("employeeResponse") or "").strip())
+        print(f"  eeid {p['eeid']}: usable={len(p['answers'])} "
+              f"(items={len(items)}, hidden={hidden}, answered={answered})")
+    for eeid, h in widget_by_id.items():
+        g = h.get("getToKnowYou")
+        n = len(g) if isinstance(g, list) else -1
+        print(f"  widget eeid {eeid}: hireDate={h.get('hireDate')}, gtky_items={n}")
     for eeid in dropped:
         print(f"  dropped (not active): eeid {eeid}")
     for eeid in unresolved:
