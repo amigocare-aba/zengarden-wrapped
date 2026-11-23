@@ -1,5 +1,13 @@
 {
   "last_weekly_sunday": "2026-11-22",
   "last_monthly": "October 2026",
-  "last_reminder_date": "2026-11-08"
+  "last_reminder_date": "2026-11-08",
+  "welcomed": {
+    "314": "2026-11-23",
+    "313": "2026-11-23"
+  },
+  "welcome_batches_done": [
+    "1"
+  ],
+  "last_welcome_post": "2026-11-23T09:52:17-05:00"
 }
