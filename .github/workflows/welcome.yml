@@ -50,6 +50,9 @@ jobs:
       - name: Install dependencies
         run: pip install slack_sdk
 
+      - name: Integration test gate (offline fixtures, posts nothing)
+        run: python test_welcome_integration.py
+
       - name: Run welcome runner
         env:
           BAMBOOHR_API_KEY: ${{ secrets.BAMBOOHR_API_KEY }}

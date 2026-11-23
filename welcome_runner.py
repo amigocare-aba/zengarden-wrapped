@@ -195,6 +195,7 @@ def main() -> None:
     ap.add_argument("--batch", help="batch id from welcome_batches.json")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--offline", help="local answers JSON (local preview only)")
+    ap.add_argument("--simulate-date", help="YYYY-MM-DD, pretend today is this date")
     args = ap.parse_args()
 
     with open(BATCHES_FILE) as f:
@@ -211,7 +212,11 @@ def main() -> None:
                 print(f"  ⚠ {fl}")
         return
 
-    today = datetime.now(ET).date()
+    today = (
+        date.fromisoformat(args.simulate_date)
+        if args.simulate_date
+        else datetime.now(ET).date()
+    )
     state = load_state()
     done = set(state.get("welcome_batches_done", []))
 
