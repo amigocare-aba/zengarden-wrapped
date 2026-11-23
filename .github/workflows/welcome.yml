@@ -1,0 +1,80 @@
+name: Zen Garden Welcomes
+
+# Posts new-gardener welcome cards to #zengarden.
+#   - Scheduled batches come from welcome_batches.json (ids + dates only;
+#     answers are fetched from BambooHR at post time — never committed).
+#   - State-driven like the daily runner: extra ticks no-op, a dropped
+#     tick heals at the next one, a posted batch can never double-post.
+#   - "armed" in welcome_batches.json gates the scheduled lane; manual
+#     dispatch with an explicit batch id works regardless (for tests).
+
+on:
+  schedule:
+    # Four daily chances, offset from the leaderboard runner's ticks.
+    - cron: '11 16 * * *'  # 11:11am EST
+    - cron: '41 18 * * *'  # 1:41pm EST
+    - cron: '11 21 * * *'  # 4:11pm EST
+    - cron: '41 23 * * *'  # 6:41pm EST
+  workflow_dispatch:
+    inputs:
+      batch:
+        description: 'Batch id to post now (e.g. "1"); blank = whatever is due'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run (compose + sanitized log, post nothing)'
+        required: false
+        type: boolean
+        default: false
+
+# Share the daily runner's group so state commits never race.
+concurrency:
+  group: zen-garden-daily
+  cancel-in-progress: false
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install slack_sdk
+
+      - name: Run welcome runner
+        env:
+          BAMBOOHR_API_KEY: ${{ secrets.BAMBOOHR_API_KEY }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_USER_TOKEN: ${{ secrets.SLACK_USER_TOKEN }}
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.batch }}" ]; then
+            ARGS="$ARGS --batch ${{ inputs.batch }}"
+          fi
+          if [ "${{ inputs.dry_run }}" == "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          eval "python welcome_runner.py $ARGS"
+
+      - name: Commit state
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          git config user.name "Zen Garden Bot"
+          git config user.email "bot@amigocareaba.com"
+          git add posted_state.json || true
+          if git diff --cached --quiet; then
+            echo "No state changes to commit"
+          else
+            git commit -m "Zen Garden: welcome state"
+            git pull --rebase
+            git push
+          fi

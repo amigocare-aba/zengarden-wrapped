@@ -1,0 +1,26 @@
+{
+  "armed": false,
+  "batches": [
+    {
+      "id": "1",
+      "date": "2026-11-23",
+      "people": ["314", "313", "316"],
+      "local_keys": ["ricardo", "kat", "amy"]
+    },
+    {
+      "id": "2",
+      "date": "2026-12-02",
+      "people": ["315", "317", "321"],
+      "local_keys": ["mafer", "vivi", "jaylan"]
+    },
+    {
+      "id": "3",
+      "date": "2026-12-04",
+      "people": ["320", "318"],
+      "local_keys": ["cristian", "roxy"]
+    }
+  ],
+  "pins": {
+    "313": ["tell us a little about your cultural"]
+  }
+}

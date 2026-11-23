@@ -16,3 +16,4 @@ __pycache__/
 # macOS
 .DS_Store
 party/
+welcome_queue.json
