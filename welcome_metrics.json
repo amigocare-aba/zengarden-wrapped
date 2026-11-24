@@ -1,0 +1,30 @@
+{
+  "comment": "Per-batch engagement for the welcome-card send-time experiment. Counts only — no answer text. Responses = thread replies + channel messages that mention the new hires.",
+  "baseline": "typical #zengarden member post (Nov 16-22 analysis): 1-3 reactions, 2-5 replies spread over ~24h",
+  "batch_1": {
+    "window": "A — Mon Nov 23, 9:30 AM target",
+    "posted": "2026-11-23T09:52:17-05:00",
+    "posted_late_min": 22,
+    "t0_ts": "1795445537.831629",
+    "first_response_min": 6.5,
+    "first_response_kind": "channel-level welcome mentioning both hires",
+    "first_thread_reply_min": 45.7,
+    "thread_replies": 2,
+    "channel_welcomes": 1,
+    "responses_total": 3,
+    "reactions_total": 8,
+    "reactions_by_emoji": {
+      "raised_hands": 4,
+      "flag-sv": 2,
+      "flag-ve": 2
+    },
+    "unique_engagers": 7,
+    "seeds_engaged": {
+      "alex": "thread reply at +45.7 min, 3 reactions",
+      "pierre": "2 reactions",
+      "kimberly": "1 reaction"
+    },
+    "new_hires_replied": false,
+    "notes": "GitHub ticks never fired (new-cron registration lag) — manual dispatch posted 22 min past target. Heritage line drove the flag reactions; the organic first response came channel-level at +6 min, so B/C must count channel welcomes too. Competing organic post 45 min later drew 8 replies. Neither new hire replied day-of."
+  }
+}
